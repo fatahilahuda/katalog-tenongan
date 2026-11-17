@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katalog Tenongan</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#92400e">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tenongan">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf5ec;
+    --ink: #1f2937;
+    --muted: #4b5563;
+    --brand: #c8772a;      /* tombol Lihat Keranjang, + Tambah */
+    --brand-dark: #92400e; /* kategori aktif, judul */
+    --price: #b45309;
+    --yellow: #fde68a;
+    --pink: #fee2e2;
+    --danger: #dc2626;
+    --wa: #4ea54f;
+    --line: #e5e7eb;
+    --in: #16a34a;      /* penanda produk sudah di keranjang */
+    --in-dark: #166534;
+    --in-bg: #ecfdf5;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 13px; background: var(--bg); color: var(--ink); }
+  button { font-family: inherit; cursor: pointer; border: 0; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 14px 12px; color: #fff; border-radius: 0 0 12px 12px;
+    background: linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)), url('images/hero.jpg') center/cover;
+  }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.35; margin-bottom: 4px; }
+  .hero p { font-size: 13px; }
+  .hero { position: relative; }
+  .install {
+    position: absolute; top: 8px; right: 8px; height: 26px; padding: 0 10px; border-radius: 13px;
+    background: rgba(255,255,255,.92); color: var(--brand-dark); font-size: 12px; font-weight: 700;
+  }
+  .install[hidden] { display: none; }
+
+  /* ---------- Bar atas (sticky) ---------- */
+  .sticky { position: sticky; top: 0; z-index: 5; background: #fff; box-shadow: 0 1px 0 var(--line); }
+  .topbar { display: flex; align-items: center; gap: 8px; padding: 5px 8px; position: relative; }
+  .search { flex: 1; min-width: 0; height: 28px; border: 1px solid #d1d5db; border-radius: 8px; padding: 0 10px; font: 13px 'DM Sans', sans-serif; outline: none; background: #fff; }
+  .search:focus { border-color: #f0b429; box-shadow: 0 0 0 1px #f6d27a; }
+  .badge { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--danger); color: #fff; font-size: 11px; font-weight: 700; display: none; align-items: center; justify-content: center; }
+  .badge.show { display: inline-flex; }
+  .btn-cart { height: 28px; padding: 0 14px; border-radius: 8px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 700; white-space: nowrap; }
+
+  .results { position: absolute; left: 8px; top: 38px; width: min(calc(100% - 16px), 300px); max-height: 60vh; overflow: auto; background: #fff; border-radius: 0 0 8px 8px; box-shadow: 0 6px 18px rgba(0,0,0,.22); display: none; z-index: 20; }
+  .results.open { display: block; }
+  html.search-open main, html.search-open .chips, html.search-open .cats,
+  html.search-open .btn-cart, html.search-open .btn-col, html.search-open .badge { pointer-events: none; }
+  .res { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-bottom: 1px solid #f1f1f1; }
+  .res img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; flex: 0 0 auto; }
+  .res .info { flex: 1; min-width: 0; }
+  .res .name { font-size: 15px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .res .pr { font-size: 10px; font-weight: 700; color: var(--brand-dark); }
+  .res.in-cart { background: var(--in-bg); box-shadow: inset 4px 0 0 var(--in); }
+  .res.in-cart .name { font-weight: 700; color: var(--in-dark); }
+  .res .incart { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 9px; background: var(--in); color: #fff; font-size: 11px; font-weight: 700; }
+  .btn-add-sm { background: var(--brand); color: #fff; font-weight: 700; font-size: 10.5px; height: 23px; padding: 0 10px; border-radius: 5px; white-space: nowrap; }
+  .noresult { padding: 10px; color: var(--muted); }
+
+  /* chip keranjang */
+  .chips { display: none; gap: 5px; padding: 5px 8px 6px; overflow-x: auto; border-top: 1px solid #f3f3f3; scrollbar-width: none; }
+  .chips.show { display: flex; }
+  .chip { flex: 0 0 auto; display: flex; align-items: center; gap: 5px; border: 1px solid var(--brand); border-radius: 6px; padding: 4px 5px; background: #fff; }
+  .chip img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; }
+  .chip .t { font-weight: 700; font-size: 9.5px; line-height: 1.35; }
+  .chip .p { font-weight: 700; font-size: 9.5px; line-height: 1.35; color: var(--price); }
+  .chip .q { font-size: 8px; color: var(--muted); }
+  .chip .x { width: 16px; height: 15px; margin-left: 3px; border-radius: 3px; background: var(--danger); color: #fff; font-size: 9px; line-height: 1; padding: 0; }
+
+  /* kategori */
+  .cats { display: flex; gap: 5px; padding: 8px 8px; overflow-x: auto; border-top: 1px solid #f3f3f3; scrollbar-width: none; }
+  .cat { flex: 0 0 auto; height: 33px; padding: 0 13px; border-radius: 10px; background: #fff; border: 1px solid #d1d5db; font-size: 14px; color: var(--ink); }
+  .cat.active { background: var(--brand-dark); color: #fff; border-color: var(--brand-dark); font-weight: 600; }
+
+  /* ---------- Grid produk ---------- */
+  main { max-width: 960px; margin: 0 auto; padding: 16px 11px 40px; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; }
+  @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+  .card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation; }
+  .card { position: relative; border: 2px solid transparent; transition: box-shadow .15s, border-color .15s; }
+  .card:active { transform: scale(.98); }
+  /* kartu yang sudah ada di keranjang */
+  .card.in-cart { border-color: var(--in); background: var(--in-bg); box-shadow: 0 2px 10px rgba(22,163,74,.3); }
+  .card.in-cart .body { background: var(--in-bg); }
+  .pic { position: relative; }
+  .qbadge { position: absolute; top: 6px; left: 6px; min-width: 24px; height: 24px; padding: 0 7px; border-radius: 12px; background: var(--in); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+  .qbadge::before { content: "✓ "; font-weight: 700; margin-right: 2px; }
+  .zoom { position: absolute; top: 6px; right: 6px; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.92); color: var(--ink); display: flex; align-items: center; justify-content: center; padding: 0; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+  .zoom svg { width: 15px; height: 15px; }
+  .card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; pointer-events: none; }
+  .card .body { padding: 8px 8px 9px; }
+  .card h3 { font-size: 13px; font-weight: 500; line-height: 1.3; margin-bottom: 4px; }
+  .card .price { font-size: 13px; font-weight: 700; line-height: 1.3; color: var(--price); margin-bottom: 8px; }
+  .ctrl { display: flex; align-items: center; gap: 9px; }
+  .ctrl .n { min-width: 10px; text-align: center; font-size: 13px; font-weight: 500; }
+  .b-minus, .b-plus, .b-del { height: 26px; border-radius: 6px; font-size: 13px; font-weight: 700; }
+  .b-minus, .b-plus { width: 25px; }
+  .b-minus { background: #e5e7eb; color: var(--ink); }
+  .b-plus { background: var(--yellow); color: var(--ink); }
+  .b-del { margin-left: auto; width: 48px; background: var(--pink); color: #ef4444; font-weight: 400; }
+  .b-add { width: 100%; height: 26px; border-radius: 6px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 700; }
+  .empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 30px 0; }
+
+  /* ---------- Toast ---------- */
+  /* popup pratinjau produk */
+  .pv { position: relative; max-width: 380px; }
+  #pv-body { overflow-y: auto; overscroll-behavior: contain; }
+  .pv-img { width: 100%; aspect-ratio: 1 / 1; max-height: 52vh; max-height: 52dvh; object-fit: cover; display: block; background: #eee; }
+  .pv-close { position: absolute; top: 8px; right: 8px; z-index: 2; width: 30px; height: 30px; background: rgba(255,255,255,.92); box-shadow: 0 1px 4px rgba(0,0,0,.3); font-size: 14px; }
+  .pv-info { padding: 12px 14px 14px; }
+  .pv-info h3 { font-size: 18px; font-weight: 600; line-height: 1.25; }
+  .pv-cat { display: inline-block; margin-top: 4px; padding: 2px 9px; border-radius: 10px; background: #f3f4f6; color: var(--muted); font-size: 11.5px; }
+  .pv-price { font-size: 20px; font-weight: 700; color: var(--price); margin: 6px 0 10px; }
+  .pv-info .b-add { height: 38px; font-size: 14px; }
+  .pv-info .ctrl { gap: 12px; }
+  .pv-info .b-minus, .pv-info .b-plus { height: 38px; width: 42px; }
+  .pv-info .b-del { height: 38px; width: 64px; }
+  .pv-info .ctrl .n { font-size: 16px; font-weight: 600; }
+  .pv-incart { margin: 0 0 10px; padding: 9px 12px; border-radius: 10px; background: var(--in-bg); border: 2px solid var(--in); color: var(--in-dark); }
+  .pv-incart .t { display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 700; }
+  .pv-incart .t .qn { min-width: 34px; height: 30px; padding: 0 10px; border-radius: 15px; background: var(--in); color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+  .pv-incart .s { margin-top: 4px; font-size: 13px; color: var(--ink); }
+  .pv-incart .s b { color: var(--in-dark); font-size: 15px; }
+  .toast { position: fixed; left: 50%; bottom: 16px; transform: translate(-50%, 12px); opacity: 0; pointer-events: none; transition: .25s; background: var(--brand-dark); color: #fff; font-weight: 700; font-size: 13px; height: 32px; display: flex; align-items: center; padding: 0 14px; border-radius: 16px; box-shadow: 0 3px 10px rgba(0,0,0,.3); z-index: 40; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- Modal keranjang (di tengah layar) ---------- */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; z-index: 30; padding: 10px; }
+  .overlay.open { display: flex; }
+  /* Popup maks. 80% tinggi layar (sisanya area gelap untuk menutup). Header & footer tetap; hanya daftar produk yang scroll. */
+  .sheet { background: #fff; width: 100%; max-width: 440px; max-height: 80vh; max-height: 80dvh; display: flex; flex-direction: column; overflow: hidden; border-radius: 13px; }
+  .cc-count { display: none; margin-left: 6px; padding: 2px 9px; border-radius: 10px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 700; vertical-align: middle; }
+  .cc-count.show { display: inline-block; }
+  .close-x { width: 26px; height: 26px; border-radius: 50%; background: #f3f4f6; color: var(--muted); font-size: 13px; line-height: 1; padding: 0; }
+  #lines { flex: 1 1 auto; min-height: 96px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .foot { flex: 0 0 auto; }
+  @media (max-height: 560px) { .foot { flex: 0 1 auto; max-height: calc(80dvh - 44px - 96px); overflow-y: auto; overscroll-behavior: contain; } }
+  .sheet h2 { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 600; padding: 13px 13px; border-bottom: 1px solid var(--line); }
+  .lines { padding: 10px; display: grid; gap: 5px; }
+  .line { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 14px 8px; }
+  .line img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; flex: 0 0 auto; }
+  .line .mid { flex: 1; min-width: 0; }
+  .line .nm { font-size: 15px; line-height: 1.3; }
+  .line .sm { font-size: 12px; color: var(--muted); }
+  .line .sm b { color: var(--brand-dark); font-size: 15px; }
+  .line .tt { font-size: 15px; font-weight: 700; color: var(--price); }
+  .line .cc { display: flex; align-items: center; gap: 7px; }
+  .line .cc .n { font-size: 15px; font-weight: 700; min-width: 16px; text-align: center; color: var(--brand-dark); }
+  .line .b-minus, .line .b-plus, .line .b-x { width: 20px; height: 17px; border-radius: 4px; font-size: 10px; font-weight: 700; padding: 0; }
+  .line .b-x { background: var(--pink); color: var(--danger); font-weight: 400; }
+  .subtotal { display: flex; justify-content: space-between; align-items: center; height: 33px; padding: 0 13px; background: #f8fafc; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 700; }
+  .subtotal span:last-child { color: var(--price); }
+  .paket { margin: 13px 13px 8px; background: #fdf8e6; border-radius: 9px; padding: 7px 8px 8px; }
+  .paket label { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: var(--brand-dark); }
+  .paket input[type=checkbox] { width: 14px; height: 14px; margin: 0; accent-color: #2563eb; }
+  .paket .opts { display: none; margin-top: 4px; }
+  .paket.on .opts { display: block; }
+  .jml { display: flex; align-items: center; gap: 5px; font-size: 14px; }
+  .jml input { width: 40px; height: 28px; border: 1px solid #d1d5db; border-radius: 6px; padding: 0 6px; font: 14px 'DM Sans', sans-serif; }
+  .quick { display: flex; flex-wrap: wrap; gap: 6px; margin: 7px 0 8px; }
+  .quick button { height: 21px; padding: 0 8px; border-radius: 11px; background: #f1f1f1; font-size: 12px; }
+  .quick button.on { background: #fde9b8; color: var(--brand-dark); }
+  .paket label.addon { font-weight: 400; font-size: 12.5px; color: var(--muted); margin-top: 7px; }
+  .paket .total { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 15px; font-weight: 700; }
+  .paket .total span:last-child { font-size: 16px; color: var(--price); }
+  .paket.off > label, .paket.off .opts { display: none; }
+  .wa { display: flex; align-items: center; justify-content: center; gap: 6px; width: calc(100% - 26px); margin: 0 13px 13px; height: 39px; border-radius: 8px; background: var(--wa); color: #fff; font-size: 15px; font-weight: 700; }
+  .wa:disabled { opacity: .5; }
+  .wa svg { width: 19px; height: 19px; fill: #fff; }
+  .empty-cart { padding: 22px 13px; text-align: center; color: var(--muted); }
+
+  /* ---------- Koleksi katalog (unduh PDF/JPEG) ---------- */
+  .btn-col { position: relative; height: 28px; padding: 0 9px; border-radius: 8px; background: #fff; border: 1px solid var(--brand-dark); color: var(--brand-dark); font-size: 12.5px; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+  .btn-col svg { width: 14px; height: 14px; }
+  .btn-col .cn { display: none; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px; background: var(--brand-dark); color: #fff; font-size: 10.5px; align-items: center; justify-content: center; }
+  .btn-col .cn.show { display: inline-flex; }
+  .colbtn { position: absolute; bottom: 6px; right: 6px; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.92); color: var(--brand-dark); display: flex; align-items: center; justify-content: center; padding: 0; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+  .colbtn svg { width: 15px; height: 15px; }
+  .colbtn.on { background: var(--brand-dark); color: #fff; }
+  .pv-col { width: 100%; height: 34px; margin-top: 8px; border-radius: 6px; background: #fff; border: 1px solid var(--brand-dark); color: var(--brand-dark); font-size: 13px; font-weight: 700; }
+  .pv-col.on { background: #fdf8e6; }
+  .col-sheet { max-width: 480px; }
+  #col-body { flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; padding: 10px 13px 4px; }
+  .col-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .col-quick button { height: 26px; padding: 0 10px; border-radius: 13px; background: #f3f4f6; color: var(--ink); font-size: 12px; font-weight: 600; }
+  .col-quick button.clear { background: var(--pink); color: var(--danger); }
+  .col-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 6px; }
+  .col-it { position: relative; border-radius: 6px; overflow: hidden; background: #fff; border: 1px solid var(--line); }
+  .col-it img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+  .col-it .nm { font-size: 10px; line-height: 1.2; padding: 3px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .col-it .x { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--danger); color: #fff; font-size: 9px; line-height: 1; padding: 0; }
+  .col-empty { padding: 14px 4px; text-align: center; color: var(--muted); line-height: 1.5; }
+  .col-opts { flex: 0 0 auto; border-top: 1px solid var(--line); padding: 10px 13px 13px; display: grid; gap: 8px; }
+  .opt { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .opt > span { width: 76px; flex: 0 0 auto; color: var(--muted); font-weight: 600; line-height: 1.2; }
+  .opt[hidden] { display: none; }
+  .col-set { display: grid; gap: 8px; margin: 14px 0 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .col-set h4 { font-size: 13px; font-weight: 700; color: var(--brand-dark); margin-top: 4px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pills label { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border: 1px solid #d1d5db; border-radius: 15px; font-size: 12.5px; background: #fff; cursor: pointer; }
+  .pills label:has(input:checked) { border-color: var(--brand-dark); background: #fdf8e6; color: var(--brand-dark); font-weight: 600; }
+  .pills input { width: 14px; height: 14px; margin: 0; accent-color: var(--brand-dark); }
+  .col-in { width: 100%; height: 32px; border: 1px solid #d1d5db; border-radius: 8px; padding: 0 10px; font: 13px 'DM Sans', sans-serif; outline: none; }
+  .col-in:focus, #col-foot:focus { border-color: #f0b429; box-shadow: 0 0 0 1px #f6d27a; }
+  .col-link { justify-self: start; background: none; padding: 0; color: var(--brand-dark); font-size: 12px; font-weight: 600; text-decoration: underline; }
+  #col-foot { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; font: 13px/1.4 'DM Sans', sans-serif; resize: vertical; outline: none; }
+  #col-text { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; font: 13px/1.4 'DM Sans', sans-serif; resize: vertical; outline: none; }
+  #col-text:focus { border-color: #f0b429; box-shadow: 0 0 0 1px #f6d27a; }
+  .col-imgrow { display: flex; align-items: center; gap: 10px; }
+  .up { height: 30px; padding: 0 12px; border-radius: 8px; border: 1px dashed var(--brand-dark); color: var(--brand-dark); font-size: 12.5px; font-weight: 600; display: inline-flex; align-items: center; cursor: pointer; }
+  .col-img { position: relative; }
+  .col-img img { display: block; width: 56px; height: 56px; object-fit: contain; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  .col-img .x { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%; background: var(--danger); color: #fff; font-size: 9px; line-height: 1; padding: 0; }
+  .col-hint { font-size: 11.5px; color: var(--muted); }
+  .seg { display: flex; flex: 1; border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; }
+  .seg button { flex: 1; height: 30px; background: #fff; font-size: 12.5px; color: var(--ink); border-left: 1px solid #d1d5db; }
+  .seg button:first-child { border-left: 0; }
+  .seg button.on { background: var(--brand-dark); color: #fff; font-weight: 700; }
+  .opt label { display: flex; align-items: center; gap: 6px; color: var(--ink); }
+  .col-info { font-size: 12px; color: var(--muted); }
+  .dl { width: 100%; height: 39px; border-radius: 8px; background: var(--brand); color: #fff; font-size: 15px; font-weight: 700; }
+  .dl:disabled { opacity: .55; }
+
+  /* ---------- Invoice (di modal keranjang) ---------- */
+  .inv { margin: 0 13px 10px; display: grid; gap: 6px; }
+  .inv input { height: 32px; border: 1px solid #d1d5db; border-radius: 8px; padding: 0 10px; font: 13px 'DM Sans', sans-serif; outline: none; }
+  .inv input:focus { border-color: #f0b429; box-shadow: 0 0 0 1px #f6d27a; }
+  .inv-btns { display: flex; gap: 6px; }
+  .inv-btns button { flex: 1; height: 34px; border-radius: 8px; background: #fff; border: 1px solid var(--brand-dark); color: var(--brand-dark); font-size: 13px; font-weight: 700; }
+  .inv-btns button:disabled { opacity: .5; }
+</style>
+</head>
+<body>
+
+<header class="hero" id="hero">
+  <button class="install" id="install" hidden>Pasang Aplikasi</button>
+  <h1 id="shop-title"></h1>
+  <p id="shop-subtitle"></p>
+</header>
+
+<div class="sticky">
+  <div class="topbar">
+    <input class="search" id="search" type="text" placeholder="Cari jajanan..." autocomplete="off">
+    <button class="btn-col" id="open-col" title="Koleksi katalog (unduh PDF/JPEG)" aria-label="Koleksi katalog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Katalog<span class="cn" id="col-count">0</span>
+    </button>
+    <span class="badge" id="badge">0</span>
+    <button class="btn-cart" id="open-cart">Lihat Keranjang</button>
+    <div class="results" id="results"></div>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="cats" id="cats"></div>
+</div>
+
+<main>
+  <div class="grid" id="grid"><p class="empty">Memuat katalog…</p></div>
+</main>
+
+<div class="overlay" id="preview">
+  <div class="sheet pv">
+    <button class="close-x pv-close" id="close-pv" aria-label="Tutup">✕</button>
+    <div id="pv-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✓ Ditambahkan ke keranjang</div>
+
+<div class="overlay" id="col-overlay">
+  <div class="sheet col-sheet">
+    <h2><span>Koleksi Katalog <span class="cc-count" id="col-count2"></span></span> <button class="close-x" id="close-col" aria-label="Tutup">✕</button></h2>
+    <div id="col-body">
+      <div class="col-quick">
+        <button data-colq="all">+ Semua produk</button>
+        <button data-colq="cat" id="colq-cat">+ Kategori ini</button>
+        <button data-colq="cart">+ Isi keranjang</button>
+        <button data-colq="clear" class="clear">Kosongkan</button>
+      </div>
+      <div id="col-list"></div>
+      <div class="col-set">
+        <h4>Tampilan</h4>
+        <div class="opt"><span>Kolom</span><div class="seg" data-opt="cols"><button data-v="2">2 kolom</button><button data-v="3">3 kolom</button></div></div>
+        <div class="opt"><span>Urutan</span><div class="seg" data-opt="group"><button data-v="none">Seperti website</button><button data-v="cat">Per kategori</button></div></div>
+        <div class="opt"><span>Halaman</span><div class="seg" data-opt="mode"><button data-v="single">Satu halaman</button><button data-v="multi">Multi halaman</button></div></div>
+        <div class="opt" id="row-page"><span>Rasio halaman</span><div class="seg" data-opt="page"><button data-v="a4">A4</button><button data-v="1:1">1:1</button><button data-v="4:5">4:5</button><button data-v="9:16">9:16</button></div></div>
+        <div class="opt" id="row-photo"><span>Rasio foto</span><div class="seg" data-opt="photo"><button data-v="1:1">1:1</button><button data-v="4:5">4:5</button><button data-v="4:3">4:3</button></div></div>
+        <div class="opt"><span>Format</span><div class="seg" data-opt="fmt"><button data-v="pdf">PDF</button><button data-v="jpg">JPEG</button></div></div>
+        <h4>Teks header</h4>
+        <input class="col-in" id="col-title" type="text" maxlength="80" aria-label="Judul header" placeholder="Judul (kosongkan untuk menyembunyikan)">
+        <input class="col-in" id="col-sub" type="text" maxlength="140" aria-label="Subjudul header" placeholder="Subjudul / tagline (opsional)">
+        <button class="col-link" id="col-head-reset" type="button">Pakai judul &amp; subjudul toko</button>
+        <h4>Isi katalog</h4>
+        <div class="pills">
+          <label><input type="checkbox" data-show="photo"> Foto</label>
+          <label><input type="checkbox" data-show="name"> Nama produk</label>
+          <label><input type="checkbox" data-show="price"> Harga</label>
+          <label><input type="checkbox" data-show="cat"> Kategori</label>
+          <label><input type="checkbox" data-show="head"> Header toko</label>
+          <label><input type="checkbox" data-show="wa"> Kontak WA</label>
+        </div>
+        <h4><label for="col-text">Info tambahan</label></h4>
+        <textarea id="col-text" rows="4" placeholder="Alamat, jam buka, cara pesan, rekening, dll.&#10;Contoh: Pesan H-1 sebelum jam 15.00"></textarea>
+        <div class="col-imgrow">
+          <label class="up">+ Gambar (QRIS, logo, dll.)<input type="file" id="col-file" accept="image/*" hidden></label>
+          <div class="col-img" id="col-img"></div>
+        </div>
+        <p class="col-hint">Info dan gambar ini tampil di bagian akhir katalog, dan juga di invoice.</p>
+        <h4><label for="col-foot">Footer</label></h4>
+        <textarea id="col-foot" rows="2" placeholder="Tampil di bawah setiap halaman (maks. 3 baris)&#10;Contoh: Instagram @tenongan · Harga berlaku s/d 31 Oktober"></textarea>
+        <p class="col-hint">Teks header dan footer juga dipakai di invoice.</p>
+      </div>
+    </div>
+    <div class="col-opts">
+      <div class="col-info" id="col-info"></div>
+      <button class="dl" id="col-dl">Unduh Katalog</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <h2><span>Keranjang Anda <span class="cc-count" id="cart-count"></span></span> <button class="close-x" id="close-cart" aria-label="Tutup">✕</button></h2>
+    <div id="lines"></div>
+    <div class="foot">
+    <div class="subtotal"><span>Subtotal</span><span id="subtotal">Rp0</span></div>
+    <div class="paket" id="paket">
+      <label><input type="checkbox" id="paket-on"> <span id="paket-label">Pembelian Paket</span></label>
+      <div class="opts">
+        <div class="jml">Jumlah Paket: <input type="number" id="paket-qty" min="1" value="1" inputmode="numeric"></div>
+        <div class="quick" id="quick"></div>
+        <div id="addons"></div>
+      </div>
+      <div class="total"><span>Estimasi Total</span><span id="total">Rp0</span></div>
+    </div>
+    <div class="inv">
+      <input id="inv-name" type="text" maxlength="60" placeholder="Nama pemesan (untuk invoice, opsional)" autocomplete="name">
+      <div class="inv-btns">
+        <button data-inv="pdf">🧾 Invoice PDF</button>
+        <button data-inv="jpg">🧾 Invoice JPEG</button>
+      </div>
+    </div>
+    <button class="wa" id="wa">
+      <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24s8.24 3.7 8.24 8.24-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>
+      Pesan via WhatsApp
+    </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Data (produk, kategori, paket, pengaturan) dikelola lewat halaman admin dan dimuat dari /api/data */
+const $ = id => document.getElementById(id);
+const rp = n => "Rp" + n.toLocaleString("id-ID");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+let DATA = { settings: {}, categories: [], products: [], paket: { enabled: false, quickQty: [], addons: [] } };
+const cart = {};            // id produk -> jumlah
+const addonSel = new Set(); // id tambahan paket yang dicentang
+let activeCat = "all";
+let toastTimer;
+
+const byId = id => DATA.products.find(p => p.id === String(id));
+
+/* ---------- state helpers ---------- */
+function add(id) { cart[id] = (cart[id] || 0) + 1; toast(); render(); }
+function change(id, d) { cart[id] = (cart[id] || 0) + d; if (cart[id] <= 0) delete cart[id]; render(); }
+function remove(id) { delete cart[id]; render(); }
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg || "✓ Ditambahkan ke keranjang"; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1500);
+}
+const cartItems = () => Object.keys(cart).map(id => ({ p: byId(id), q: cart[id] })).filter(i => i.p);
+const subtotal = () => cartItems().reduce((s, { p, q }) => s + p.price * q, 0);
+const paketOn = () => DATA.paket.enabled && $("paket-on").checked;
+const paketQty = () => Math.max(1, parseInt($("paket-qty").value, 10) || 1);
+function totals() {
+  const sub = subtotal();
+  if (!paketOn()) return { sub, total: sub, n: 0, addons: [] };
+  const n = paketQty();
+  const addons = DATA.paket.addons.filter(a => addonSel.has(a.id));
+  return { sub, n, addons, total: (sub + addons.reduce((s, a) => s + a.price, 0)) * n };
+}
+
+/* ---------- render ---------- */
+function applySettings() {
+  const s = DATA.settings;
+  $("shop-title").textContent = s.title || "";
+  $("shop-subtitle").textContent = s.subtitle || "";
+  document.title = s.title || "Katalog";
+  if (s.heroImage) $("hero").style.backgroundImage = `linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)), url("${encodeURI(s.heroImage)}")`;
+  $("paket").classList.toggle("off", !DATA.paket.enabled);
+  $("paket-label").textContent = DATA.paket.label || "Pembelian Paket";
+}
+
+function renderCats() {
+  const cats = [{ id: "all", name: "Semua" }, ...DATA.categories];
+  $("cats").innerHTML = cats.map(c =>
+    `<button class="cat${c.id === activeCat ? " active" : ""}" data-cat="${esc(c.id)}">${esc(c.name)}</button>`).join("");
+}
+
+const COL_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>`;
+const ZOOM_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>`;
+function renderGrid() {
+  const list = DATA.products.filter(p => activeCat === "all" || p.cat === activeCat);
+  $("grid").innerHTML = list.length ? list.map(p => {
+    const q = cart[p.id] || 0, id = esc(p.id);
+    const ctrl = q
+      ? `<div class="ctrl">
+           <button class="b-minus" data-act="minus" data-id="${id}">-</button>
+           <span class="n">${q}</span>
+           <button class="b-plus" data-act="plus" data-id="${id}">+</button>
+           <button class="b-del" data-act="del" data-id="${id}">Hapus</button>
+         </div>`
+      : `<button class="b-add" data-act="add" data-id="${id}">+ Tambah</button>`;
+    return `<article class="card${q ? " in-cart" : ""}" data-id="${id}">
+      <div class="pic">
+        <img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy">
+        ${q ? `<span class="qbadge">${q}</span>` : ""}
+        <button class="zoom" data-act="preview" data-id="${id}" aria-label="Lihat ${esc(p.name)}" title="Lihat detail">${ZOOM_SVG}</button>
+        <button class="colbtn${inCol(p.id) ? " on" : ""}" data-act="col" data-id="${id}" aria-pressed="${inCol(p.id)}" aria-label="Koleksi katalog: ${esc(p.name)}" title="${inCol(p.id) ? "Hapus dari" : "Tambah ke"} koleksi katalog">${COL_SVG}</button>
+      </div>
+      <div class="body"><h3>${esc(p.name)}</h3><div class="price">${rp(p.price)}</div>${ctrl}</div>
+    </article>`;
+  }).join("") : `<p class="empty">Belum ada produk di kategori ini.</p>`;
+}
+
+function renderTop() {
+  const items = cartItems();
+  const count = items.reduce((s, i) => s + i.q, 0);
+  $("badge").textContent = count;
+  $("badge").classList.toggle("show", count > 0);
+  $("chips").classList.toggle("show", items.length > 0);
+  $("chips").innerHTML = items.map(({ p, q }) => `
+    <div class="chip">
+      <img src="${esc(p.img)}" alt="">
+      <div><div class="t">${esc(p.name)}</div><div class="p">${rp(p.price)}</div><div class="q">x${q}</div></div>
+      <button class="x" data-act="del" data-id="${esc(p.id)}" aria-label="Hapus ${esc(p.name)}">✕</button>
+    </div>`).join("");
+}
+
+function renderModal() {
+  const items = cartItems();
+  $("lines").innerHTML = items.length
+    ? `<div class="lines">${items.map(({ p, q }) => `
+        <div class="line">
+          <img src="${esc(p.img)}" alt="">
+          <div class="mid">
+            <div class="nm">${esc(p.name)}</div>
+            <div class="sm">${rp(p.price)} × <b>${q}</b></div>
+            <div class="tt">${rp(p.price * q)}</div>
+          </div>
+          <div class="cc">
+            <button class="b-minus" data-act="minus" data-id="${esc(p.id)}">-</button>
+            <span class="n">${q}</span>
+            <button class="b-plus" data-act="plus" data-id="${esc(p.id)}">+</button>
+            <button class="b-x" data-act="del" data-id="${esc(p.id)}">✕</button>
+          </div>
+        </div>`).join("")}</div>`
+    : `<p class="empty-cart">Keranjang masih kosong.</p>`;
+  const cnt = items.reduce((s, i) => s + i.q, 0);
+  $("cart-count").textContent = cnt + " item"; $("cart-count").classList.toggle("show", cnt > 0);
+  const t = totals();
+  $("subtotal").textContent = rp(t.sub);
+  $("total").textContent = rp(t.total);
+  $("paket").classList.toggle("on", paketOn());
+  $("quick").innerHTML = DATA.paket.quickQty.map(n =>
+    `<button data-q="${n}" class="${paketOn() && paketQty() === n ? "on" : ""}">${n}</button>`).join("");
+  $("addons").innerHTML = DATA.paket.addons.map(a =>
+    `<label class="addon"><input type="checkbox" data-addon="${esc(a.id)}"${addonSel.has(a.id) ? " checked" : ""}> + ${esc(a.name)} (${rp(a.price)}/paket)</label>`).join("");
+  $("wa").disabled = !items.length;
+  if (!invBusy) document.querySelectorAll("[data-inv]").forEach(b => b.disabled = !items.length);
+}
+
+function render() { renderGrid(); renderTop(); renderModal(); renderPreview(); renderResults(); renderCol(); }
+
+/* ---------- pratinjau produk ---------- */
+let pvId = null;
+function renderPreview() {
+  if (pvId === null) return;
+  const p = byId(pvId);
+  if (!p) { closePreview(); return; }
+  const q = cart[p.id] || 0, id = esc(p.id), cat = DATA.categories.find(c => c.id === p.cat);
+  $("pv-body").innerHTML = `
+    <img class="pv-img" src="${esc(p.img)}" alt="${esc(p.name)}">
+    <div class="pv-info">
+      <h3>${esc(p.name)}</h3>
+      ${cat ? `<span class="pv-cat">${esc(cat.name)}</span>` : ""}
+      <div class="pv-price">${rp(p.price)}</div>
+      ${q ? `<div class="pv-incart"><div class="t"><span>✓ Sudah di keranjang</span><span class="qn">${q}</span></div>
+               <div class="s">${q} × ${rp(p.price)} = <b>${rp(q * p.price)}</b></div></div>
+             <div class="ctrl">
+               <button class="b-minus" data-act="minus" data-id="${id}">-</button>
+               <span class="n">${q}</span>
+               <button class="b-plus" data-act="plus" data-id="${id}">+</button>
+               <button class="b-del" data-act="del" data-id="${id}">Hapus</button>
+             </div>`
+          : `<button class="b-add" data-act="add" data-id="${id}">+ Tambah ke Keranjang</button>`}
+      <button class="pv-col${inCol(p.id) ? " on" : ""}" data-act="col" data-id="${id}">${inCol(p.id) ? "✓ Di koleksi katalog (ketuk untuk hapus)" : "+ Simpan ke Koleksi Katalog"}</button>
+    </div>`;
+}
+
+/* ---------- pencarian ---------- */
+// open=true: buka daftar (dipicu pengguna lewat kolom pencarian). Tanpa open: hanya segarkan isi bila daftar sedang terbuka,
+// supaya perubahan keranjang tidak memunculkan lagi daftar yang sudah ditutup pengguna.
+function setResults(on) {
+  $("results").classList.toggle("open", on);
+  document.documentElement.classList.toggle("search-open", on);
+}
+function renderResults(open) {
+  const q = $("search").value.trim().toLowerCase();
+  const box = $("results");
+  if (!q) { setResults(false); return; }
+  if (open !== true && !box.classList.contains("open")) return;
+  const hits = DATA.products.filter(p => p.name.toLowerCase().includes(q));
+  box.innerHTML = hits.length ? hits.map(p => {
+    const n = cart[p.id] || 0;
+    return `
+    <div class="res${n ? " in-cart" : ""}">
+      <img src="${esc(p.img)}" alt="">
+      <div class="info"><div class="name">${esc(p.name)}</div><div class="pr">${rp(p.price)}${n ? `<span class="incart">✓ ${n} di keranjang</span>` : ""}</div></div>
+      <button class="btn-add-sm" data-act="add" data-id="${esc(p.id)}">+ Tambah</button>
+    </div>`;
+  }).join("") : `<p class="noresult">Jajanan tidak ditemukan.</p>`;
+  setResults(true);
+}
+const showResults = () => renderResults(true);
+$("search").addEventListener("input", showResults);
+// Klik di luar hasil pencarian hanya MENUTUP daftar; klik itu tidak diteruskan ke elemen di bawahnya
+// (mis. kartu produk atau tombol keranjang). Memakai fase capture supaya berjalan sebelum handler lain.
+document.addEventListener("click", e => {
+  const box = $("results");
+  if (!box.classList.contains("open")) return;
+  if (e.target.closest(".results") || e.target === $("search")) return;
+  setResults(false);
+  e.preventDefault(); e.stopPropagation();
+}, true);
+$("search").addEventListener("focus", showResults);
+$("search").addEventListener("click", showResults); // kolom masih fokus tapi daftar sudah ditutup -> ketuk lagi membukanya
+
+/* ---------- event ---------- */
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]");
+  if (b) {
+    const id = b.dataset.id;
+    ({ add: () => add(id), plus: () => change(id, 1), minus: () => change(id, -1), del: () => remove(id), preview: () => openPreview(id), col: () => toggleCol(id) })[b.dataset.act]();
+    return;
+  }
+  const card = e.target.closest(".card[data-id]");
+  if (card) { add(card.dataset.id); return; }
+  const c = e.target.closest("[data-cat]");
+  if (c) { activeCat = c.dataset.cat; renderCats(); renderGrid(); renderCol(); return; }
+  const q = e.target.closest("[data-q]");
+  if (q) { $("paket-qty").value = q.dataset.q; renderModal(); }
+});
+
+// Saat popup terbuka, halaman di belakang tidak boleh ikut scroll. Yang dikunci hanya <html>
+// (bukan <body>) supaya bar atas yang sticky tetap di tempatnya; lebar scrollbar dikompensasi di desktop.
+function lockScroll() {
+  const de = document.documentElement, sb = window.innerWidth - de.clientWidth;
+  de.style.overflow = "hidden";
+  if (sb > 0) document.body.style.paddingRight = sb + "px";
+}
+function unlockScroll() {
+  document.documentElement.style.overflow = "";
+  document.body.style.paddingRight = "";
+}
+function openModal() {
+  renderModal(); lockScroll();
+  $("overlay").classList.add("open");
+  $("lines").scrollTop = 0;
+}
+function closeModal() { $("overlay").classList.remove("open"); unlockScroll(); }
+function openPreview(id) {
+  pvId = String(id); renderPreview(); lockScroll();
+  $("preview").classList.add("open");
+  $("pv-body").scrollTop = 0;
+}
+function closePreview() { pvId = null; $("preview").classList.remove("open"); unlockScroll(); }
+$("open-cart").onclick = openModal;
+$("close-cart").onclick = closeModal;
+$("close-pv").onclick = closePreview;
+$("overlay").onclick = e => { if (e.target === $("overlay")) { e.stopPropagation(); closeModal(); } };
+$("preview").onclick = e => { if (e.target === $("preview")) { e.stopPropagation(); closePreview(); } };
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  if ($("preview").classList.contains("open")) closePreview();
+  else if ($("col-overlay").classList.contains("open")) closeCol();
+  else if ($("overlay").classList.contains("open")) closeModal();
+});
+["paket-on", "paket-qty"].forEach(id => $(id).addEventListener("input", renderModal));
+document.addEventListener("change", e => {
+  const a = e.target.dataset && e.target.dataset.addon;
+  if (a === undefined) return;
+  e.target.checked ? addonSel.add(a) : addonSel.delete(a);
+  renderModal();
+});
+
+$("wa").onclick = () => {
+  const items = cartItems();
+  if (!items.length) return;
+  const wa = (DATA.settings.waNumber || "").replace(/\D/g, "");
+  if (wa.length < 8) { alert("Nomor WhatsApp penjual belum diatur."); return; }
+  const t = totals();
+  let msg = "Halo, saya mau pesan:\n" +
+    items.map(({ p, q }) => `- ${p.name} x${q} (${rp(p.price * q)})`).join("\n") +
+    `\n\nSubtotal: ${rp(t.sub)}`;
+  if (paketOn()) {
+    msg += `\n${DATA.paket.label || "Pembelian Paket"}: ${t.n} paket`;
+    if (t.addons.length) msg += `\nTambahan: ${t.addons.map(a => a.name).join(", ")}`;
+  }
+  msg += `\nEstimasi Total: ${rp(t.total)}`;
+  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, "_blank");
+};
+
+/* ---------- koleksi katalog: unduh PDF / JPEG ---------- */
+// Pengunjung memilih produk ke "koleksi", lalu mengunduhnya sebagai katalog bergambar dengan kartu produk
+// seperti di website (2 atau 3 kolom). Semua digambar di <canvas> lalu disimpan sebagai JPEG,
+// atau dibungkus menjadi PDF (tiap halaman = satu gambar JPEG) tanpa library tambahan.
+const COL_KEY = "katalog-koleksi", OPT_KEY = "katalog-opsi", INFO_IMG_KEY = "katalog-info-img";
+const colSet = new Set(JSON.parse(localStorage.getItem(COL_KEY) || "[]"));
+// Opsi katalog disimpan di browser supaya tidak perlu diatur ulang.
+const COL_DEFAULT = {
+  cols: "2", group: "none", mode: "multi", page: "a4", photo: "1:1", fmt: "pdf", info: "", footer: "",
+  title: null, subtitle: null, // null = ikut judul/subjudul toko dari admin
+  show: { photo: true, name: true, price: true, cat: false, head: true, wa: true },
+};
+const colOpt = (() => {
+  try {
+    const o = JSON.parse(localStorage.getItem(OPT_KEY) || "{}");
+    return { ...COL_DEFAULT, ...o, show: { ...COL_DEFAULT.show, ...(o.show || {}) } };
+  } catch (e) { return { ...COL_DEFAULT, show: { ...COL_DEFAULT.show } }; }
+})();
+let infoImg = localStorage.getItem(INFO_IMG_KEY) || ""; // gambar info tambahan (QRIS, logo, dll.) sebagai data URL
+let colBusy = false;
+const inCol = id => colSet.has(String(id));
+const saveCol = () => localStorage.setItem(COL_KEY, JSON.stringify([...colSet]));
+const saveOpt = () => localStorage.setItem(OPT_KEY, JSON.stringify(colOpt));
+// Urutan katalog mengikuti urutan produk di website; opsi "Per kategori" mengurutkan menurut urutan kategori
+// (produk tanpa kategori di akhir), urutan produk di dalam kategori tetap seperti website.
+const colItems = () => {
+  const items = DATA.products.filter(p => colSet.has(p.id));
+  if (colOpt.group !== "cat") return items;
+  const rank = new Map(DATA.categories.map((c, i) => [c.id, i]));
+  const r = p => rank.has(p.cat) ? rank.get(p.cat) : rank.size;
+  return items.map((p, i) => [p, i]).sort((x, y) => r(x[0]) - r(y[0]) || x[1] - y[1]).map(x => x[0]);
+};
+const groupName = p => (DATA.categories.find(c => c.id === p.cat) || {}).name || "Lainnya";
+
+function toggleCol(id) {
+  id = String(id);
+  if (colSet.has(id)) { colSet.delete(id); toast("Dihapus dari koleksi katalog"); }
+  else { colSet.add(id); toast("✓ Disimpan ke koleksi katalog"); }
+  saveCol(); render();
+}
+function addManyCol(ids) {
+  const before = colSet.size;
+  ids.forEach(id => colSet.add(id));
+  saveCol(); render();
+  toast(`✓ ${colSet.size - before} produk ditambahkan ke koleksi`);
+}
+
+function renderCol() {
+  const items = colItems(), n = items.length;
+  $("col-count").textContent = n; $("col-count").classList.toggle("show", n > 0);
+  $("col-count2").textContent = n + " produk"; $("col-count2").classList.toggle("show", n > 0);
+  const cat = DATA.categories.find(c => c.id === activeCat);
+  $("colq-cat").hidden = !cat;
+  if (cat) $("colq-cat").textContent = "+ " + cat.name;
+  $("col-list").innerHTML = n
+    ? `<div class="col-grid">${items.map(p => `
+        <div class="col-it"><img src="${esc(p.img)}" alt="" loading="lazy"><div class="nm">${esc(p.name)}</div>
+          <button class="x" data-act="col" data-id="${esc(p.id)}" aria-label="Hapus ${esc(p.name)}">✕</button></div>`).join("")}</div>`
+    : `<p class="col-empty">Koleksi masih kosong.<br>Ketuk ikon <b>penanda</b> di pojok foto produk, atau pakai tombol di atas.</p>`;
+  renderColOpts();
+}
+// Bagian opsi & ringkasan (dipisah supaya mengetik info tambahan tidak menggambar ulang daftar foto).
+function renderColOpts() {
+  document.querySelectorAll("#col-overlay .seg").forEach(seg =>
+    seg.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === colOpt[seg.dataset.opt])));
+  document.querySelectorAll("#col-overlay [data-show]").forEach(c => c.checked = !!colOpt.show[c.dataset.show]);
+  $("row-page").hidden = colOpt.mode !== "multi";
+  $("row-photo").hidden = !colOpt.show.photo;
+  if ($("col-text").value !== colOpt.info) $("col-text").value = colOpt.info;
+  if ($("col-foot").value !== colOpt.footer) $("col-foot").value = colOpt.footer;
+  const ht = headText();
+  if ($("col-title").value !== ht.title) $("col-title").value = ht.title;
+  if ($("col-sub").value !== ht.subtitle) $("col-sub").value = ht.subtitle;
+  $("col-head-reset").hidden = colOpt.title === null && colOpt.subtitle === null;
+  $("col-img").innerHTML = infoImg
+    ? `<img src="${infoImg}" alt="Gambar info"><button class="x" id="col-img-del" aria-label="Hapus gambar">✕</button>`
+    : "";
+  const items = colItems(), n = items.length;
+  const pages = n ? catalogLayout(items, colOpt, estimateInfoH()).pages.length : 0;
+  $("col-info").textContent = n
+    ? `${n} produk · ${colOpt.cols} kolom · ${pages} halaman` + (colOpt.fmt === "jpg" && pages > 1 ? ` (${pages} file JPEG)` : "")
+    : "";
+  if (!colBusy) $("col-dl").disabled = !n;
+}
+
+function openCol() { renderCol(); lockScroll(); $("col-overlay").classList.add("open"); $("col-body").scrollTop = 0; }
+function closeCol() { $("col-overlay").classList.remove("open"); unlockScroll(); }
+$("open-col").onclick = openCol;
+$("close-col").onclick = closeCol;
+$("col-overlay").onclick = e => {
+  if (e.target === $("col-overlay")) { e.stopPropagation(); closeCol(); return; }
+  const q = e.target.closest("[data-colq]");
+  if (q) {
+    const k = q.dataset.colq;
+    if (k === "all") addManyCol(DATA.products.map(p => p.id));
+    else if (k === "cat") addManyCol(DATA.products.filter(p => p.cat === activeCat).map(p => p.id));
+    else if (k === "cart") addManyCol(cartItems().map(i => i.p.id));
+    else if (k === "clear" && colSet.size && confirm("Kosongkan koleksi katalog?")) { colSet.clear(); saveCol(); render(); }
+    return;
+  }
+  if (e.target.id === "col-img-del") { infoImg = ""; localStorage.removeItem(INFO_IMG_KEY); renderColOpts(); return; }
+  const b = e.target.closest(".seg button");
+  if (b) { colOpt[b.closest(".seg").dataset.opt] = b.dataset.v; saveOpt(); renderColOpts(); }
+};
+$("col-overlay").addEventListener("change", e => {
+  const k = e.target.dataset.show;
+  if (!k) return;
+  colOpt.show[k] = e.target.checked;
+  // kartu tidak boleh kosong: minimal foto, nama, atau harga
+  if (!colOpt.show.photo && !colOpt.show.name && !colOpt.show.price) {
+    colOpt.show[k] = true; toast("Pilih minimal foto, nama, atau harga");
+  }
+  saveOpt(); renderColOpts();
+});
+$("col-text").addEventListener("input", e => { colOpt.info = e.target.value; saveOpt(); renderColOpts(); });
+$("col-foot").addEventListener("input", e => { colOpt.footer = e.target.value; saveOpt(); renderColOpts(); });
+$("col-title").addEventListener("input", e => { colOpt.title = e.target.value; saveOpt(); renderColOpts(); });
+$("col-sub").addEventListener("input", e => { colOpt.subtitle = e.target.value; saveOpt(); renderColOpts(); });
+$("col-head-reset").onclick = () => { colOpt.title = colOpt.subtitle = null; saveOpt(); renderColOpts(); };
+$("col-file").addEventListener("change", async e => {
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (!f) return;
+  const url = URL.createObjectURL(f), img = await loadImg(url);
+  URL.revokeObjectURL(url);
+  if (!img) { alert("Gambar tidak bisa dibaca. Coba file JPG atau PNG."); return; }
+  // perkecil (maks. 800 px) agar muat disimpan di browser; PNG dipertahankan supaya QR tetap tajam
+  const k = Math.min(1, 800 / Math.max(img.naturalWidth, img.naturalHeight)), cv = document.createElement("canvas");
+  cv.width = Math.round(img.naturalWidth * k); cv.height = Math.round(img.naturalHeight * k);
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height); ctx.drawImage(img, 0, 0, cv.width, cv.height);
+  infoImg = f.type === "image/png" ? cv.toDataURL("image/png") : cv.toDataURL("image/jpeg", 0.92);
+  try { localStorage.setItem(INFO_IMG_KEY, infoImg); } catch (err) { toast("Gambar dipakai, tapi terlalu besar untuk disimpan"); }
+  renderColOpts();
+});
+
+/* --- tata letak (satuan px pada lebar 1240 = A4 150 dpi) --- */
+const PG = { w: 1240, pad: 48, gap: 30, head: 340, foot: 76 };
+const PAGE_H = { a4: 1754, "1:1": 1240, "4:5": 1550, "9:16": 2204 }; // tinggi halaman per rasio (lebar tetap 1240)
+const PHOTO_R = { "1:1": 1, "4:5": 1.25, "4:3": 0.75 };             // tinggi foto / lebar foto
+// Ukuran kartu, sebanding dengan lebarnya. maxH = tinggi maksimum kartu (multi halaman), kartu diperkecil bila perlu.
+function cardSize(cols, opt, maxH) {
+  const sh = opt.show, fr = cols === 2 ? 0.078 : 0.09;     // ukuran huruf relatif lebar kartu
+  const slots = { cat: sh.cat ? 0.75 * 1.45 : 0, name: sh.name ? 1.28 * 2 : 0, price: sh.price ? 1.5 : 0 };
+  const text = slots.cat + slots.name + slots.price, pad = text ? 0.75 : 0;
+  const tall = (sh.photo ? PHOTO_R[opt.photo] : 0) + fr * (text + pad * 2);
+  const full = (PG.w - PG.pad * 2 - PG.gap * (cols - 1)) / cols, w = Math.min(full, maxH ? maxH / tall : full), f = w * fr;
+  return { w, f, full, slots, bp: f * pad, ph: sh.photo ? w * PHOTO_R[opt.photo] : 0, h: w * tall, r: w * 0.075,
+    x0: (PG.w - (w * cols + PG.gap * (cols - 1))) / 2 };
+}
+// Baris-baris katalog: { kind: "cards", a, b } = produk items[a..b) dalam satu baris kartu;
+// { kind: "sec", name } = judul kategori (hanya bila opsi "Per kategori").
+function catalogRows(items, opt) {
+  const cols = +opt.cols, rows = [];
+  for (let a = 0; a < items.length;) {
+    let end = items.length;
+    if (opt.group === "cat") {
+      const name = groupName(items[a]);
+      rows.push({ kind: "sec", name });
+      end = a; while (end < items.length && groupName(items[end]) === name) end++;
+    }
+    for (; a < end; a += cols) rows.push({ kind: "cards", a, b: Math.min(end, a + cols) });
+  }
+  return rows;
+}
+// Judul kategori: tinggi baris, jarak ke kartu di bawahnya, dan jarak tambahan dari kartu di atasnya.
+const SEC = { h: 58, fs: 40, gap: 16, before: 12 };
+// Susunan halaman -> { c, height, pages: [{ rows: [{ ...baris, y }], infoY }] } (infoY = posisi kotak info, null bila tidak di halaman itu).
+// Multi halaman: kartu dibuat sebesar mungkin selama tidak menyusut di bawah 72% lebar penuh.
+// Tanpa pengelompokan, isi halaman diletakkan di tengah secara vertikal (seperti sebelumnya). Dengan pengelompokan, isi rata atas
+// dan ukuran kartu dipilih dari beberapa kemungkinan (jumlah baris x ruang untuk 1-2 judul) yang menghasilkan halaman paling sedikit.
+function catalogLayout(items, opt, infoH) {
+  const cols = +opt.cols, top = opt.show.head ? PG.head : PG.pad, foot = footH(), rows = catalogRows(items, opt);
+  if (opt.mode !== "multi") {
+    const c = cardSize(cols, opt), pages = packRows(rows, c, { top, off: 0, limit: Infinity, infoH });
+    return { c, pages, height: Math.ceil(pages.end + foot - PG.gap) };
+  }
+  const H = PAGE_H[opt.page] || PAGE_H.a4, avail = H - top - foot;
+  const fits = (r, secs) => cardSize(cols, opt, (avail - secs * (SEC.h + SEC.gap + SEC.before) + PG.gap) / r - PG.gap);
+  const ok = t => t.w >= t.full * 0.72;
+  const pack = (c, off) => packRows(rows, c, { top, off, limit: H - foot + 0.5, infoH }); // +0.5: toleransi pembulatan
+  let best;
+  if (opt.group !== "cat") {
+    let perPage = 1, c = fits(1, 0);
+    for (let r = 2; r <= 8; r++) { const t = fits(r, 0); if (!ok(t)) break; perPage = r; c = t; }
+    best = { c, pages: pack(c, Math.max(0, (avail - (perPage * (c.h + PG.gap) - PG.gap)) / 2)) };
+  } else {
+    for (let secs = 1; secs <= 2; secs++) for (let r = 1; r <= 8; r++) {
+      const c = fits(r, secs);
+      if (r > 1 && !ok(c)) break;
+      const pages = pack(c, 0);
+      if (!best || pages.length < best.pages.length || (pages.length === best.pages.length && c.w > best.c.w)) best = { c, pages };
+    }
+  }
+  return { c: best.c, pages: best.pages, height: H };
+}
+// Menempatkan baris ke halaman. Judul kategori tidak dibiarkan sendirian di bawah halaman, dan kategori yang
+// berlanjut ke halaman baru diberi judul "(lanjutan)". Kotak info ditaruh setelah produk terakhir, atau di halaman baru.
+function packRows(rows, c, { top, off, limit, infoH }) {
+  const pages = [];
+  let page, y, sec = null;
+  const newPage = () => { page = { rows: [], infoY: null }; pages.push(page); y = top + off; };
+  const put = (row, h, gap) => { page.rows.push({ ...row, y }); y += h + gap; };
+  newPage();
+  for (const row of rows) {
+    if (row.kind === "sec") {
+      sec = row.name;
+      const pre = page.rows.length ? SEC.before : 0;
+      if (y + pre + SEC.h + SEC.gap + c.h > limit) newPage(); else y += pre;
+      put(row, SEC.h, SEC.gap);
+    } else {
+      if (y + c.h > limit) {
+        newPage();
+        if (sec !== null) put({ kind: "sec", name: sec + " (lanjutan)" }, SEC.h, SEC.gap);
+      }
+      put(row, c.h, PG.gap);
+    }
+  }
+  if (infoH) {
+    if (y + infoH > limit) newPage();
+    page.infoY = page.rows.length ? y : top;
+    y += infoH + PG.gap;
+  }
+  pages.end = y;
+  return pages;
+}
+
+function loadImg(src, bust) {
+  return new Promise(res => {
+    if (!src) return res(null);
+    const img = new Image();
+    if (!/^(data|blob):/.test(src)) img.crossOrigin = "anonymous"; // foto di Supabase Storage (domain lain) wajib CORS agar canvas bisa diekspor
+    img.onload = () => res(img);
+    img.onerror = () => bust || /^(data|blob):/.test(src) ? res(null) : loadImg(src + (src.includes("?") ? "&" : "?") + "cors=1", true).then(res);
+    img.src = src;
+  });
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function drawCover(ctx, img, x, y, w, h) {
+  const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+  const sw = w / s, sh = h / s;
+  ctx.drawImage(img, (img.naturalWidth - sw) / 2, (img.naturalHeight - sh) / 2, sw, sh, x, y, w, h);
+}
+// Memotong teks ke maks. `max` baris; baris terakhir diberi elipsis bila kepanjangan.
+function wrapText(ctx, text, width, max) {
+  const words = text.split(/\s+/), lines = [];
+  let cur = "";
+  for (const w of words) {
+    const t = cur ? cur + " " + w : w;
+    if (ctx.measureText(t).width <= width || !cur) cur = t; else { lines.push(cur); cur = w; }
+  }
+  if (cur) lines.push(cur);
+  if (lines.length > max) {
+    let last = lines.slice(max - 1).join(" ");
+    while (last.length > 1 && ctx.measureText(last + "…").width > width) last = last.slice(0, -1);
+    lines.length = max - 1; lines.push(last.trimEnd() + "…");
+  }
+  return lines;
+}
+
+// Teks header katalog/invoice: hasil ubahan pengunjung, atau judul & subjudul toko bila belum diubah.
+const headText = () => ({
+  title: colOpt.title ?? (DATA.settings.title || ""),
+  subtitle: colOpt.subtitle ?? (DATA.settings.subtitle || ""),
+});
+// Header seperti hero website: foto gelap + judul toko. hh = tinggi hero (katalog besar, invoice lebih pendek).
+function drawHeader(ctx, hero, hh) {
+  const s = headText(), ts = Math.min(84, Math.round(hh * 0.3)), ss = Math.max(26, Math.round(hh * 0.115));
+  ctx.save(); roundRect(ctx, 0, -40, PG.w, hh + 40, Math.round(hh * 0.12)); ctx.clip();
+  ctx.fillStyle = "#92400e"; ctx.fillRect(0, 0, PG.w, hh);
+  if (hero) drawCover(ctx, hero, 0, 0, PG.w, hh);
+  ctx.fillStyle = "rgba(0,0,0,.45)"; ctx.fillRect(0, 0, PG.w, hh);
+  ctx.restore();
+  const title = s.title.trim(), sub = s.subtitle.trim();
+  const block = (title ? ts : 0) + (sub ? ss * (title ? 1.7 : 1) : 0), y0 = (hh - block) / 2;
+  ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+  ctx.font = `700 ${ts}px "Playfair Display", serif`;
+  if (title) ctx.fillText(wrapText(ctx, title, PG.w - 120, 1)[0], PG.w / 2, y0 + ts * 0.85);
+  if (sub) {
+    ctx.font = `400 ${ss}px "DM Sans", sans-serif`;
+    ctx.fillText(wrapText(ctx, sub, PG.w - 120, 1)[0], PG.w / 2, title ? y0 + ts + ss * 1.45 : y0 + ss * 0.85);
+  }
+}
+// Footer: teks bebas (maks. 3 baris, rata tengah) di atas baris kontak WA (kiri) & nomor halaman (kanan).
+const FT = { fs: 24, lh: 34, max: 3 };
+function footerLines() {
+  measureCtx.font = `500 ${FT.fs}px "DM Sans", sans-serif`;
+  return colOpt.footer.trim().split("\n").filter(l => l.trim())
+    .flatMap(l => wrapText(measureCtx, l.trim(), PG.w - PG.pad * 2, FT.max)).slice(0, FT.max);
+}
+const footH = () => { const n = footerLines().length; return PG.foot + (n ? n * FT.lh + 22 : 0); };
+function drawFooter(ctx, height, pageNo, pageCount, showWa = true) {
+  const lines = footerLines(), fy = height - PG.foot / 2 + 9, wa = (DATA.settings.waNumber || "").replace(/\D/g, "");
+  if (lines.length) {
+    const top = height - footH() + 8;
+    ctx.fillStyle = "#e7d3bb"; ctx.fillRect(PG.pad, top, PG.w - PG.pad * 2, 2);
+    ctx.textAlign = "center"; ctx.fillStyle = "#92400e"; ctx.font = `500 ${FT.fs}px "DM Sans", sans-serif`;
+    lines.forEach((l, i) => ctx.fillText(l, PG.w / 2, top + 22 + FT.lh * i + FT.fs * 0.8));
+  }
+  ctx.font = `600 24px "DM Sans", sans-serif`; ctx.fillStyle = "#4b5563";
+  if (wa && showWa) { ctx.textAlign = "left"; ctx.fillText("Pesan via WhatsApp: +" + wa, PG.pad, fy); }
+  if (pageCount > 1) { ctx.textAlign = "right"; ctx.fillText(`Hal. ${pageNo}/${pageCount}`, PG.w - PG.pad, fy); }
+}
+function newCanvas(height, scale) {
+  const cv = document.createElement("canvas");
+  cv.width = Math.round(PG.w * scale); cv.height = Math.round(height * scale);
+  const ctx = cv.getContext("2d");
+  ctx.scale(scale, scale);
+  return { cv, ctx };
+}
+
+/* --- kotak info tambahan: teks bebas + gambar (QRIS, logo, dll.) di sebelah kanan --- */
+const IB = { pad: 36, fs: 30, lh: 44, img: 300, maxLines: 20 };
+const measureCtx = document.createElement("canvas").getContext("2d");
+// img boleh berupa ukuran kira-kira { naturalWidth, naturalHeight } (untuk menghitung jumlah halaman sebelum gambar dimuat).
+function infoLayout(w, text, img) {
+  text = (text || "").trim();
+  if (!text && !img) return null;
+  const iw = img ? IB.img : 0, ih = img ? Math.min(IB.img * 1.4, IB.img * img.naturalHeight / img.naturalWidth) : 0;
+  const tw = w - IB.pad * 2 - (img ? iw + 36 : 0);
+  measureCtx.font = `400 ${IB.fs}px "DM Sans", sans-serif`;
+  const lines = text ? text.split("\n").flatMap(l => l.trim() ? wrapText(measureCtx, l.trim(), tw, 6) : [""]).slice(0, IB.maxLines) : [];
+  return { w, lines, img, iw, ih, h: IB.pad * 2 + Math.max(lines.length * IB.lh, ih) };
+}
+const estimateInfoH = () => (infoLayout(PG.w - PG.pad * 2, colOpt.info, infoImg ? { naturalWidth: 1, naturalHeight: 1 } : null) || { h: 0 }).h;
+function drawInfo(ctx, x, y, L) {
+  ctx.fillStyle = "#fff"; roundRect(ctx, x, y, L.w, L.h, 26); ctx.fill();
+  ctx.strokeStyle = "#f0d9bd"; ctx.lineWidth = 2; ctx.stroke();
+  ctx.textAlign = "left"; ctx.fillStyle = "#1f2937"; ctx.font = `400 ${IB.fs}px "DM Sans", sans-serif`;
+  L.lines.forEach((line, i) => ctx.fillText(line, x + IB.pad, y + IB.pad + i * IB.lh + IB.fs * 0.95));
+  if (L.img) ctx.drawImage(L.img, x + L.w - IB.pad - L.iw, y + IB.pad, L.iw, L.ih);
+}
+
+function drawCard(ctx, p, img, x, y, c, show) {
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,.10)"; ctx.shadowBlur = 14; ctx.shadowOffsetY = 3;
+  ctx.fillStyle = "#fff"; roundRect(ctx, x, y, c.w, c.h, c.r); ctx.fill();
+  ctx.restore();
+  if (show.photo) {
+    ctx.save(); roundRect(ctx, x, y, c.w, c.h, c.r); ctx.clip();
+    ctx.fillStyle = "#eee"; ctx.fillRect(x, y, c.w, c.ph);
+    if (img) drawCover(ctx, img, x, y, c.w, c.ph);
+    ctx.restore();
+  }
+  const tx = x + c.bp, tw = c.w - c.bp * 2, f = c.f;
+  let ty = y + c.ph + c.bp;
+  ctx.textAlign = "left";
+  if (show.cat) {
+    const cat = DATA.categories.find(k => k.id === p.cat), fs = f * 0.75;
+    ctx.fillStyle = "#92400e"; ctx.font = `600 ${fs}px "DM Sans", sans-serif`;
+    if (cat) ctx.fillText(wrapText(ctx, cat.name, tw, 1)[0], tx, ty + fs * 1.05);
+    ty += f * c.slots.cat;
+  }
+  if (show.name) {
+    ctx.fillStyle = "#1f2937"; ctx.font = `500 ${f}px "DM Sans", sans-serif`;
+    wrapText(ctx, p.name, tw, 2).forEach((line, i) => ctx.fillText(line, tx, ty + f * 1.28 * i + f * 1.0));
+  }
+  if (show.price) {
+    ctx.fillStyle = "#b45309"; ctx.font = `700 ${f * 1.05}px "DM Sans", sans-serif`;
+    ctx.fillText(rp(p.price), tx, y + c.h - c.bp - f * 0.3);
+  }
+}
+
+// Judul kategori: nama kategori + garis tipis sampai tepi kanan area kartu.
+function drawSection(ctx, name, x, y, w) {
+  ctx.font = `700 ${SEC.fs}px "Playfair Display", serif`; ctx.textAlign = "left"; ctx.fillStyle = "#92400e";
+  const text = wrapText(ctx, name, w * 0.8, 1)[0], base = y + SEC.h - 14;
+  ctx.fillText(text, x, base);
+  const lx = x + ctx.measureText(text).width + 22;
+  if (lx < x + w) { ctx.fillStyle = "#e7d3bb"; ctx.fillRect(lx, base - SEC.fs * 0.3, x + w - lx, 2); }
+}
+
+function drawPage({ items, imgs, hero, L, page, infoL, pageNo, pageCount, scale }) {
+  const { cv, ctx } = newCanvas(L.height, scale), show = colOpt.show, c = L.c, rowW = PG.w - c.x0 * 2;
+  ctx.fillStyle = "#fdf5ec"; ctx.fillRect(0, 0, PG.w, L.height);
+  if (show.head) drawHeader(ctx, hero, PG.head - PG.gap);
+  for (const r of page.rows) {
+    if (r.kind === "sec") { drawSection(ctx, r.name, c.x0, r.y, rowW); continue; }
+    for (let i = r.a; i < r.b; i++) drawCard(ctx, items[i], imgs[i], c.x0 + (i - r.a) * (c.w + PG.gap), r.y, c, show);
+  }
+  if (page.infoY !== null && infoL) drawInfo(ctx, PG.pad, page.infoY, infoL);
+  drawFooter(ctx, L.height, pageNo, pageCount, show.wa);
+  return cv;
+}
+
+const canvasJpeg = cv => new Promise((res, rej) =>
+  cv.toBlob(b => b ? res(b) : rej(new Error("toBlob")), "image/jpeg", 0.9));
+
+// PDF minimal: tiap halaman berisi satu gambar JPEG penuh (filter DCTDecode). Lebar halaman = lebar A4.
+async function buildPdf(pages) {
+  const enc = new TextEncoder(), parts = [], offs = [];
+  let len = 0;
+  const put = x => { const u = typeof x === "string" ? enc.encode(x) : x; parts.push(u); len += u.length; };
+  const obj = (n, body) => { offs[n] = len; put(`${n} 0 obj\n`); body(); put("\nendobj\n"); };
+  const n = pages.length, kids = pages.map((_, i) => `${3 + i * 3} 0 R`).join(" ");
+  put("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+  obj(1, () => put("<< /Type /Catalog /Pages 2 0 R >>"));
+  obj(2, () => put(`<< /Type /Pages /Kids [${kids}] /Count ${n} >>`));
+  for (let i = 0; i < n; i++) {
+    const { jpeg, w, h } = pages[i], id = 3 + i * 3;
+    // lebar A4; halaman tunggal yang sangat panjang dipersempit agar tinggi <= 14400 pt (batas Adobe Reader)
+    const pw = +Math.min(595.28, 14400 * w / h).toFixed(2), ph = +(pw * h / w).toFixed(2);
+    const data = new Uint8Array(await jpeg.arrayBuffer());
+    const draw = `q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`;
+    obj(id, () => put(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${id + 2} 0 R >> >> /Contents ${id + 1} 0 R >>`));
+    obj(id + 1, () => put(`<< /Length ${draw.length} >>\nstream\n${draw}\nendstream`));
+    obj(id + 2, () => {
+      put(`<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${data.length} >>\nstream\n`);
+      put(data); put("\nendstream");
+    });
+  }
+  const xref = len, total = 3 + n * 3;
+  put(`xref\n0 ${total}\n0000000000 65535 f \n`);
+  for (let i = 1; i < total; i++) put(String(offs[i]).padStart(10, "0") + " 00000 n \n");
+  put(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+  return new Blob(parts, { type: "application/pdf" });
+}
+
+function saveBlob(blob, name) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+
+const loadFonts = () => Promise.all(['500 20px "DM Sans"', '700 20px "DM Sans"', '600 20px "DM Sans"', '700 20px "Playfair Display"']
+  .map(f => document.fonts.load(f).catch(() => {})));
+const shopSlug = () => (DATA.settings.title || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "toko";
+// out = [{ jpeg, w, h }] per halaman -> satu PDF, atau satu file JPEG per halaman.
+async function saveOutput(out, fmt, base) {
+  if (fmt === "pdf") { saveBlob(await buildPdf(out), base + ".pdf"); return; }
+  for (let i = 0; i < out.length; i++) {
+    saveBlob(out[i].jpeg, out.length > 1 ? `${base}-${i + 1}.jpg` : base + ".jpg");
+    if (i < out.length - 1) await new Promise(r => setTimeout(r, 500)); // beri jeda agar browser mau mengunduh beberapa file
+  }
+}
+
+async function downloadCatalog() {
+  const items = colItems();
+  if (!items.length || colBusy) return;
+  const btn = $("col-dl");
+  colBusy = true; btn.disabled = true;
+  try {
+    btn.textContent = "Memuat foto…";
+    await loadFonts();
+    const [hero, info, ...imgs] = await Promise.all([
+      colOpt.show.head ? loadImg(DATA.settings.heroImage || "images/hero.jpg") : null,
+      loadImg(infoImg),
+      ...items.map(p => colOpt.show.photo ? loadImg(p.img) : null)]);
+    const infoL = infoLayout(PG.w - PG.pad * 2, colOpt.info, info);
+    const L = catalogLayout(items, colOpt, infoL ? infoL.h : 0), out = [];
+    // batasi ukuran canvas (Safari iOS maks. ±16 juta piksel) untuk katalog satu halaman yang panjang
+    const scale = Math.min(1.5, Math.sqrt(16e6 / (PG.w * L.height)), 32000 / L.height);
+    for (let i = 0; i < L.pages.length; i++) {
+      btn.textContent = `Menyusun halaman ${i + 1}/${L.pages.length}…`;
+      const pg = L.pages[i];
+      const cv = drawPage({ items, imgs, hero, L, page: pg, infoL,
+        pageNo: i + 1, pageCount: L.pages.length, scale });
+      out.push({ jpeg: await canvasJpeg(cv), w: cv.width, h: cv.height });
+      cv.width = cv.height = 0; // bebaskan memori canvas
+      await new Promise(r => setTimeout(r));
+    }
+    await saveOutput(out, colOpt.fmt, shopSlug() + "-katalog");
+    toast("✓ Katalog diunduh");
+  } catch (e) {
+    alert("Katalog gagal dibuat. Coba lagi, atau kurangi jumlah produk / pilih Multi halaman.");
+  } finally {
+    colBusy = false; btn.textContent = "Unduh Katalog"; renderColOpts();
+  }
+}
+$("col-dl").onclick = downloadCatalog;
+
+/* ---------- invoice dari isi keranjang (PDF / JPEG) ---------- */
+// Nota pesanan berukuran A4: header toko, nomor & tanggal, nama pemesan, tabel produk, subtotal, paket, total.
+const INV = { hero: 164, top1: 420, topN: 200, th: 54, row: 96, h: 1754 };
+const invEnd = () => INV.h - footH() - 16;
+let invBusy = false;
+$("inv-name").value = localStorage.getItem("katalog-nama") || "";
+$("inv-name").addEventListener("input", e => localStorage.setItem("katalog-nama", e.target.value.trim()));
+
+// Baris ringkasan di bawah tabel, sesuai perhitungan totals() di keranjang.
+function invSummary(t) {
+  const lines = [["Subtotal", rp(t.sub)]];
+  if (t.n) {
+    t.addons.forEach(a => lines.push([`+ ${a.name} (per paket)`, rp(a.price)]));
+    lines.push([`${DATA.paket.label || "Pembelian Paket"}`, `× ${t.n} paket`]);
+  }
+  return lines;
+}
+// tinggi ringkasan total + catatan (+ kotak info tambahan bila ada)
+const invSummaryH = (t, infoH) => invSummary(t).length * 44 + 30 + 70 + 110 + (infoH ? infoH + 10 : 0);
+
+// Membagi baris tabel ke halaman A4; ringkasan total harus muat di halaman terakhir.
+function planInvoice(n, t, infoH) {
+  const pages = [];
+  let i = 0;
+  const end = invEnd();
+  for (;;) {
+    const top = (pages.length ? INV.topN : INV.top1) + INV.th;
+    const cap = Math.floor((end - top) / INV.row), take = Math.min(cap, n - i);
+    if (i + take === n && top + take * INV.row + invSummaryH(t, infoH) <= end) { pages.push([i, n, true]); return pages; }
+    if (i + take === n && take === 0) { pages.push([i, n, true]); return pages; }
+    // sisakan baris terakhir untuk halaman berikut supaya ringkasan tidak sendirian
+    const k = i + take === n ? Math.max(take - 1, 0) : take;
+    pages.push([i, i + k, false]); i += k;
+    if (k === 0) { pages.push([i, n, true]); return pages; }
+  }
+}
+
+function drawInvoicePage({ items, imgs, hero, t, info, infoL, first, last, pageNo, pageCount, startNo }) {
+  const height = INV.h, { cv, ctx } = newCanvas(height, 1.5), L = PG.pad, R = PG.w - PG.pad;
+  ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, PG.w, height);
+  drawHeader(ctx, hero, INV.hero);
+  ctx.textBaseline = "alphabetic";
+  let y;
+  if (first) {
+    ctx.textAlign = "left"; ctx.fillStyle = "#92400e"; ctx.font = `700 54px "Playfair Display", serif`;
+    ctx.fillText("INVOICE", L, 262);
+    ctx.fillStyle = "#4b5563"; ctx.font = `400 24px "DM Sans", sans-serif`; ctx.fillText("Kepada", L, 318);
+    ctx.fillStyle = "#1f2937"; ctx.font = `700 30px "DM Sans", sans-serif`;
+    ctx.fillText(wrapText(ctx, info.name || "-", 560, 1)[0], L, 356);
+    ctx.textAlign = "right"; ctx.font = `400 24px "DM Sans", sans-serif`; ctx.fillStyle = "#4b5563";
+    ctx.fillText("No. Invoice", R - 300, 262); ctx.fillText("Tanggal", R - 300, 304);
+    ctx.fillStyle = "#1f2937"; ctx.font = `700 24px "DM Sans", sans-serif`;
+    ctx.fillText(info.no, R, 262); ctx.fillText(info.date, R, 304);
+    y = INV.top1;
+  } else {
+    ctx.textAlign = "left"; ctx.fillStyle = "#4b5563"; ctx.font = `600 24px "DM Sans", sans-serif`;
+    ctx.fillText(`${info.no} (lanjutan)`, L, INV.topN - 16);
+    y = INV.topN;
+  }
+
+  // kepala tabel
+  const col = { no: L + 16, name: L + 70, price: 820, qty: 905, sum: R - 16 };
+  ctx.fillStyle = "#92400e"; roundRect(ctx, L, y, R - L, INV.th, 10); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.font = `700 22px "DM Sans", sans-serif`;
+  const ty = y + INV.th / 2 + 8;
+  ctx.textAlign = "left"; ctx.fillText("No", col.no, ty); ctx.fillText("Produk", col.name, ty);
+  ctx.textAlign = "right"; ctx.fillText("Harga", col.price, ty); ctx.fillText("Jumlah", col.sum, ty);
+  ctx.textAlign = "center"; ctx.fillText("Qty", col.qty, ty);
+  y += INV.th;
+
+  // baris produk
+  items.forEach(({ p, q }, i) => {
+    const ry = y + i * INV.row, my = ry + INV.row / 2 + 9, th = 68;
+    if (i % 2) { ctx.fillStyle = "#fdf8f2"; ctx.fillRect(L, ry, R - L, INV.row); }
+    ctx.fillStyle = "#e5e7eb"; ctx.fillRect(L, ry + INV.row - 1, R - L, 1);
+    ctx.save(); roundRect(ctx, col.name, ry + (INV.row - th) / 2, th, th, 10); ctx.clip();
+    ctx.fillStyle = "#eee"; ctx.fillRect(col.name, ry + (INV.row - th) / 2, th, th);
+    if (imgs[i]) drawCover(ctx, imgs[i], col.name, ry + (INV.row - th) / 2, th, th);
+    ctx.restore();
+    ctx.fillStyle = "#4b5563"; ctx.font = `400 24px "DM Sans", sans-serif`; ctx.textAlign = "left";
+    ctx.fillText(String(startNo + i), col.no, my);
+    ctx.fillStyle = "#1f2937"; ctx.font = `500 26px "DM Sans", sans-serif`;
+    ctx.fillText(wrapText(ctx, p.name, col.price - 150 - (col.name + th + 16), 1)[0], col.name + th + 16, my);
+    ctx.font = `400 24px "DM Sans", sans-serif`; ctx.textAlign = "right"; ctx.fillText(rp(p.price), col.price, my);
+    ctx.textAlign = "center"; ctx.font = `700 26px "DM Sans", sans-serif`; ctx.fillText(String(q), col.qty, my);
+    ctx.textAlign = "right"; ctx.fillStyle = "#b45309"; ctx.fillText(rp(p.price * q), col.sum, my);
+  });
+  y += items.length * INV.row;
+
+  if (last) {
+    y += 30;
+    const lx = 640;
+    invSummary(t).forEach(([k, v]) => {
+      y += 44;
+      ctx.textAlign = "left"; ctx.fillStyle = "#4b5563"; ctx.font = `400 24px "DM Sans", sans-serif`;
+      ctx.fillText(wrapText(ctx, k, R - lx - 200, 1)[0], lx, y);
+      ctx.textAlign = "right"; ctx.fillStyle = "#1f2937"; ctx.font = `700 24px "DM Sans", sans-serif`; ctx.fillText(v, R - 16, y);
+    });
+    y += 24;
+    ctx.fillStyle = "#fdf8e6"; roundRect(ctx, lx - 20, y, R - lx + 20, 70, 12); ctx.fill();
+    ctx.textAlign = "left"; ctx.fillStyle = "#92400e"; ctx.font = `700 28px "DM Sans", sans-serif`;
+    ctx.fillText("Estimasi Total", lx, y + 45);
+    ctx.textAlign = "right"; ctx.fillStyle = "#b45309"; ctx.font = `700 34px "DM Sans", sans-serif`;
+    ctx.fillText(rp(t.total), R - 16, y + 47);
+    ctx.textAlign = "left"; ctx.fillStyle = "#4b5563"; ctx.font = `400 21px "DM Sans", sans-serif`;
+    ctx.fillText("Total masih estimasi. Harga final, ongkir, dan pembayaran dikonfirmasi via WhatsApp.", L, y + 130);
+    if (infoL) drawInfo(ctx, L, y + 160, infoL);
+  }
+  drawFooter(ctx, height, pageNo, pageCount);
+  return cv;
+}
+
+async function downloadInvoice(fmt) {
+  const items = cartItems();
+  if (!items.length || invBusy) return;
+  const btns = [...document.querySelectorAll("[data-inv]")], label = btns.map(b => b.textContent);
+  invBusy = true; btns.forEach(b => { b.disabled = true; b.textContent = "Menyiapkan…"; });
+  try {
+    await loadFonts();
+    const [hero, infoPic, ...imgs] = await Promise.all([loadImg(DATA.settings.heroImage || "images/hero.jpg"), loadImg(infoImg), ...items.map(i => loadImg(i.p.img))]);
+    // info tambahan & gambar (QRIS, dll.) dari pengaturan Katalog ikut tampil di invoice
+    const infoL = infoLayout(PG.w - PG.pad * 2, colOpt.info, infoPic);
+    const now = new Date(), pad = n => String(n).padStart(2, "0");
+    const no = `INV-${String(now.getFullYear()).slice(2)}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const info = { no, name: $("inv-name").value.trim(), date: now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) };
+    const t = totals(), plan = planInvoice(items.length, t, infoL ? infoL.h : 0), out = [];
+    for (let i = 0; i < plan.length; i++) {
+      const [a, b, last] = plan[i];
+      const cv = drawInvoicePage({ items: items.slice(a, b), imgs: imgs.slice(a, b), hero, t, info, infoL, first: i === 0, last,
+        pageNo: i + 1, pageCount: plan.length, startNo: a + 1 });
+      out.push({ jpeg: await canvasJpeg(cv), w: cv.width, h: cv.height });
+      cv.width = cv.height = 0;
+    }
+    await saveOutput(out, fmt, `${shopSlug()}-${no.toLowerCase()}`);
+    toast("✓ Invoice diunduh");
+  } catch (e) {
+    alert("Invoice gagal dibuat. Coba lagi.");
+  } finally {
+    invBusy = false; btns.forEach((b, i) => b.textContent = label[i]); renderModal();
+  }
+}
+$("overlay").addEventListener("click", e => { const b = e.target.closest("[data-inv]"); if (b) downloadInvoice(b.dataset.inv); });
+
+/* ---------- pasang sebagai aplikasi (PWA) ---------- */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+}
+(function installButton() {
+  const btn = $("install");
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  if (standalone) return;
+  let prompt = null;
+  // Android/Chrome: tampilkan dialog pasang bawaan browser.
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); prompt = e; btn.hidden = false; });
+  window.addEventListener("appinstalled", () => { btn.hidden = true; prompt = null; });
+  // iPhone/iPad (Safari) tidak punya dialog pasang, jadi tampilkan petunjuk.
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (ios) btn.hidden = false;
+  btn.onclick = async () => {
+    if (prompt) {
+      prompt.prompt();
+      await prompt.userChoice;
+      prompt = null; btn.hidden = true;
+    } else if (ios) {
+      alert("Cara memasang di iPhone:\n1. Ketuk tombol Bagikan (kotak dengan panah ke atas) di Safari.\n2. Pilih \"Tambah ke Layar Utama\".");
+    }
+  };
+})();
+
+/* ---------- mulai ---------- */
+(async function init() {
+  try {
+    const r = await fetch("https://nyvwnpkhzkdtmbwigfoy.supabase.co/functions/v1/catalog/public", { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    DATA = await r.json();
+  } catch (e) {
+    $("grid").innerHTML = `<p class="empty">Gagal memuat katalog. Coba muat ulang halaman.</p>`;
+    return;
+  }
+  // buang produk koleksi yang sudah tidak ada / tidak aktif
+  [...colSet].forEach(id => { if (!byId(id)) colSet.delete(id); }); saveCol();
+  applySettings();
+  renderCats();
+  render();
+})();
+</script>
+</body>
+</html>

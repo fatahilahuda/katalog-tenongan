@@ -1,0 +1,1296 @@
+{
+  "settings": {
+    "title": "Katalog Tenongan Prapatan Kampung Lele",
+    "subtitle": "Jajanan pasar segar setiap hari — pesan sekarang!",
+    "heroImage": "images/hero.jpg",
+    "waNumber": ""
+  },
+  "categories": [
+    {
+      "id": "kukus",
+      "name": "Jajanan Kukus"
+    },
+    {
+      "id": "gurih-tahu",
+      "name": "Olahan Tahu"
+    },
+    {
+      "id": "panggang-ketan",
+      "name": "Olahan Ketan"
+    },
+    {
+      "id": "kue-basah",
+      "name": "Kue Basah & Bolu"
+    },
+    {
+      "id": "puding",
+      "name": "Puding & Dessert"
+    },
+    {
+      "id": "roti-donat",
+      "name": "Roti & Donat"
+    },
+    {
+      "id": "cake-premium",
+      "name": "Cake Premium"
+    },
+    {
+      "id": "pastel-sosis",
+      "name": "Pastel & Sosis"
+    },
+    {
+      "id": "gorengan",
+      "name": "Gorengan Modern"
+    },
+    {
+      "id": "arem-berat",
+      "name": "Arem & Makanan Berat"
+    },
+    {
+      "id": "snack-kering",
+      "name": "Snack Kering"
+    },
+    {
+      "id": "minuman",
+      "name": "Minuman"
+    },
+    {
+      "id": "musk8cwsfnrf",
+      "name": "Sayur dan Lauk"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "name": "Putu Ayu Kecil",
+      "price": 1000,
+      "cat": "kukus",
+      "img": "images/uploads/musyrgfb-bf48924e.jpg",
+      "active": true
+    },
+    {
+      "id": "p2",
+      "name": "Gemblong",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/gemblong.jpg",
+      "active": true
+    },
+    {
+      "id": "p3",
+      "name": "Putu Ayu Besar",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/putu-ayu-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p4",
+      "name": "Sengkulun",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/sengkulun.jpg",
+      "active": true
+    },
+    {
+      "id": "p5",
+      "name": "Sawut",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/sawut.jpg",
+      "active": true
+    },
+    {
+      "id": "p6",
+      "name": "Mendut Daun Besar",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/mendut.jpg",
+      "active": true
+    },
+    {
+      "id": "p7",
+      "name": "Lapis",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/produk/p7-lapis.jpg",
+      "active": true
+    },
+    {
+      "id": "p8",
+      "name": "Lapis Singkong",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/produk/p8-lapis-singkong.jpg",
+      "active": true
+    },
+    {
+      "id": "p9",
+      "name": "Cantik Manis",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/produk/p9-cantik-manis.jpg",
+      "active": true
+    },
+    {
+      "id": "p10",
+      "name": "Nogosari",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/produk/p10-nogosari.jpg",
+      "active": true
+    },
+    {
+      "id": "p11",
+      "name": "Lepet Jagung",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/produk/p11-lepet-jagung.jpg",
+      "active": true
+    },
+    {
+      "id": "p12",
+      "name": "Timus",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/produk/p12-timus.jpg",
+      "active": true
+    },
+    {
+      "id": "p13",
+      "name": "Mochi Kecil",
+      "price": 1500,
+      "cat": "kukus",
+      "img": "images/produk/p13-mochi-kecil.jpg",
+      "active": true
+    },
+    {
+      "id": "p14",
+      "name": "Mochi Besar",
+      "price": 2000,
+      "cat": "kukus",
+      "img": "images/produk/p14-mochi-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p15",
+      "name": "Klepon",
+      "price": 2000,
+      "cat": "kukus",
+      "img": "images/produk/p15-klepon.jpg",
+      "active": true
+    },
+    {
+      "id": "p16",
+      "name": "Wingko Babat",
+      "price": 2000,
+      "cat": "kukus",
+      "img": "images/produk/p16-wingko-babat.jpg",
+      "active": true
+    },
+    {
+      "id": "p17",
+      "name": "Meniran",
+      "price": 2000,
+      "cat": "kukus",
+      "img": "images/produk/p17-meniran.jpg",
+      "active": true
+    },
+    {
+      "id": "p18",
+      "name": "Tahu Bakso Kecil",
+      "price": 1000,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p18-tahu-bakso-kecil.jpg",
+      "active": true
+    },
+    {
+      "id": "p19",
+      "name": "Rolade",
+      "price": 1000,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p19-rolade.jpg",
+      "active": true
+    },
+    {
+      "id": "p20",
+      "name": "Tahu Bakso Goreng Besar",
+      "price": 1500,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p20-tahu-bakso-goreng-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p21",
+      "name": "Tahu Bakso Besar",
+      "price": 1500,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p21-tahu-bakso-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p22",
+      "name": "Tahu Bulat",
+      "price": 1500,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p22-tahu-bulat.jpg",
+      "active": true
+    },
+    {
+      "id": "p23",
+      "name": "Tahu Segar",
+      "price": 1500,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p23-tahu-segar.jpg",
+      "active": true
+    },
+    {
+      "id": "p24",
+      "name": "Tahu Aci",
+      "price": 1500,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p24-tahu-aci.jpg",
+      "active": true
+    },
+    {
+      "id": "p25",
+      "name": "Sarang Burung",
+      "price": 1500,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p25-sarang-burung.jpg",
+      "active": true
+    },
+    {
+      "id": "p26",
+      "name": "Tahu Ayam",
+      "price": 2000,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p26-tahu-ayam.jpg",
+      "active": true
+    },
+    {
+      "id": "p27",
+      "name": "Tahu Bakso 2000",
+      "price": 2000,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p27-tahu-bakso-2000.jpg",
+      "active": true
+    },
+    {
+      "id": "p28",
+      "name": "Tahu Bacem",
+      "price": 2500,
+      "cat": "gurih-tahu",
+      "img": "images/produk/p28-tahu-bacem.jpg",
+      "active": true
+    },
+    {
+      "id": "p29",
+      "name": "Apem",
+      "price": 1000,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p29-apem.jpg",
+      "active": true
+    },
+    {
+      "id": "p30",
+      "name": "Pukis",
+      "price": 1000,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p30-pukis.jpg",
+      "active": true
+    },
+    {
+      "id": "p31",
+      "name": "Gandos Rangin",
+      "price": 1500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p31-gandos-rangin.jpg",
+      "active": true
+    },
+    {
+      "id": "p32",
+      "name": "Serabi Kecil",
+      "price": 1500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p32-serabi-kecil.jpg",
+      "active": true
+    },
+    {
+      "id": "p33",
+      "name": "Corobikan",
+      "price": 1500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p33-corobikan.jpg",
+      "active": true
+    },
+    {
+      "id": "p34",
+      "name": "Onde-Onde",
+      "price": 1500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p34-onde-onde.jpg",
+      "active": true
+    },
+    {
+      "id": "p35",
+      "name": "Jadah",
+      "price": 1500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p35-jadah.jpg",
+      "active": true
+    },
+    {
+      "id": "p36",
+      "name": "Wajik",
+      "price": 1500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p36-wajik.jpg",
+      "active": true
+    },
+    {
+      "id": "p37",
+      "name": "Serabi Besar",
+      "price": 2000,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p37-serabi-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p38",
+      "name": "Lemper",
+      "price": 2000,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p38-lemper.jpg",
+      "active": true
+    },
+    {
+      "id": "p39",
+      "name": "Lemper Kodok",
+      "price": 2000,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p39-lemper-kodok.jpg",
+      "active": true
+    },
+    {
+      "id": "p40",
+      "name": "Sagon Basah",
+      "price": 2000,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p40-sagon-basah.jpg",
+      "active": true
+    },
+    {
+      "id": "p41",
+      "name": "Karanggesing",
+      "price": 1500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p41-karanggesing.jpg",
+      "active": true
+    },
+    {
+      "id": "p42",
+      "name": "Wajik Isi",
+      "price": 2500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p42-wajik-isi.jpg",
+      "active": true
+    },
+    {
+      "id": "p43",
+      "name": "Ketan",
+      "price": 2500,
+      "cat": "panggang-ketan",
+      "img": "images/produk/p43-ketan.jpg",
+      "active": true
+    },
+    {
+      "id": "p44",
+      "name": "Bolu Kukus Karamel",
+      "price": 1500,
+      "cat": "kue-basah",
+      "img": "images/produk/p44-bolu-kukus-karamel.jpg",
+      "active": true
+    },
+    {
+      "id": "p45",
+      "name": "Bolu Kukus Warna",
+      "price": 1500,
+      "cat": "kue-basah",
+      "img": "images/produk/p45-bolu-kukus-warna.jpg",
+      "active": true
+    },
+    {
+      "id": "p46",
+      "name": "Bolu Legit",
+      "price": 1500,
+      "cat": "kue-basah",
+      "img": "images/produk/p46-bolu-legit.jpg",
+      "active": true
+    },
+    {
+      "id": "p47",
+      "name": "Rainbow Cake",
+      "price": 1500,
+      "cat": "kue-basah",
+      "img": "images/produk/p47-rainbow-cake.jpg",
+      "active": true
+    },
+    {
+      "id": "p48",
+      "name": "Bolu Mawar",
+      "price": 1500,
+      "cat": "kue-basah",
+      "img": "images/produk/p48-bolu-mawar.jpg",
+      "active": true
+    },
+    {
+      "id": "p49",
+      "name": "Kue Lumpur",
+      "price": 1500,
+      "cat": "kue-basah",
+      "img": "images/produk/p49-kue-lumpur.jpg",
+      "active": true
+    },
+    {
+      "id": "p50",
+      "name": "Dadar Kelapa",
+      "price": 1500,
+      "cat": "kue-basah",
+      "img": "images/produk/p50-dadar-kelapa.jpg",
+      "active": true
+    },
+    {
+      "id": "p51",
+      "name": "Mangkring",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p51-mangkring.jpg",
+      "active": true
+    },
+    {
+      "id": "p52",
+      "name": "Putri Mandi",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p52-putri-mandi.jpg",
+      "active": true
+    },
+    {
+      "id": "p53",
+      "name": "Kue Kentang",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p53-kue-kentang.jpg",
+      "active": true
+    },
+    {
+      "id": "p54",
+      "name": "Dadar Coklat",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p54-dadar-coklat.jpg",
+      "active": true
+    },
+    {
+      "id": "p55",
+      "name": "Sarang Semut",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p55-sarang-semut.jpg",
+      "active": true
+    },
+    {
+      "id": "p56",
+      "name": "Bolu Pisang",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p56-bolu-pisang.jpg",
+      "active": true
+    },
+    {
+      "id": "p57",
+      "name": "Prol Tape",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p57-prol-tape.jpg",
+      "active": true
+    },
+    {
+      "id": "p58",
+      "name": "Lapis Sakura",
+      "price": 2000,
+      "cat": "kue-basah",
+      "img": "images/produk/p58-lapis-sakura.jpg",
+      "active": true
+    },
+    {
+      "id": "p59",
+      "name": "Puding",
+      "price": 1500,
+      "cat": "puding",
+      "img": "images/produk/p59-puding.jpg",
+      "active": true
+    },
+    {
+      "id": "p60",
+      "name": "Puding Telur",
+      "price": 1500,
+      "cat": "puding",
+      "img": "images/produk/p60-puding-telur.jpg",
+      "active": true
+    },
+    {
+      "id": "p61",
+      "name": "Puding Ikan",
+      "price": 1500,
+      "cat": "puding",
+      "img": "images/produk/p61-puding-ikan.jpg",
+      "active": true
+    },
+    {
+      "id": "p62",
+      "name": "Jelly Sate",
+      "price": 1500,
+      "cat": "puding",
+      "img": "images/produk/p62-jelly-sate.jpg",
+      "active": true
+    },
+    {
+      "id": "p63",
+      "name": "Puding Lumut",
+      "price": 2000,
+      "cat": "puding",
+      "img": "images/produk/p63-puding-lumut.jpg",
+      "active": true
+    },
+    {
+      "id": "p64",
+      "name": "Puding Waloh",
+      "price": 2000,
+      "cat": "puding",
+      "img": "images/produk/p64-puding-waloh.jpg",
+      "active": true
+    },
+    {
+      "id": "p65",
+      "name": "Puding Besar",
+      "price": 2000,
+      "cat": "puding",
+      "img": "images/produk/p65-puding-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p66",
+      "name": "Puding Gula Jawa",
+      "price": 2000,
+      "cat": "puding",
+      "img": "images/produk/p66-puding-gula-jawa.jpg",
+      "active": true
+    },
+    {
+      "id": "p67",
+      "name": "Coklat Colek",
+      "price": 2000,
+      "cat": "puding",
+      "img": "images/produk/p67-coklat-colek.jpg",
+      "active": true
+    },
+    {
+      "id": "p68",
+      "name": "Roti Semir 1000",
+      "price": 1000,
+      "cat": "roti-donat",
+      "img": "images/produk/p68-roti-semir-1000.jpg",
+      "active": true
+    },
+    {
+      "id": "p69",
+      "name": "Roti Kacang Ijo",
+      "price": 1500,
+      "cat": "roti-donat",
+      "img": "images/produk/p69-roti-kacang-ijo.jpg",
+      "active": true
+    },
+    {
+      "id": "p70",
+      "name": "Roti Pisang Goreng",
+      "price": 1500,
+      "cat": "roti-donat",
+      "img": "images/produk/p70-roti-pisang-goreng.jpg",
+      "active": true
+    },
+    {
+      "id": "p71",
+      "name": "Bakpao",
+      "price": 1500,
+      "cat": "roti-donat",
+      "img": "images/produk/p71-bakpao.jpg",
+      "active": true
+    },
+    {
+      "id": "p72",
+      "name": "Muffin Kukus",
+      "price": 1500,
+      "cat": "roti-donat",
+      "img": "images/produk/p72-muffin-kukus.jpg",
+      "active": true
+    },
+    {
+      "id": "p73",
+      "name": "Pastry",
+      "price": 1500,
+      "cat": "roti-donat",
+      "img": "images/produk/p73-pastry.jpg",
+      "active": true
+    },
+    {
+      "id": "p74",
+      "name": "Roti Goreng Panir Bulat",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p74-roti-goreng-panir-bulat.jpg",
+      "active": true
+    },
+    {
+      "id": "p75",
+      "name": "Roti Pizza",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p75-roti-pizza.jpg",
+      "active": true
+    },
+    {
+      "id": "p76",
+      "name": "Roti Pisang Oven",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p76-roti-pisang-oven.jpg",
+      "active": true
+    },
+    {
+      "id": "p77",
+      "name": "Roti Pisang",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p77-roti-pisang.jpg",
+      "active": true
+    },
+    {
+      "id": "p78",
+      "name": "Roti Selai",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p78-roti-selai.jpg",
+      "active": true
+    },
+    {
+      "id": "p79",
+      "name": "Donat Meses",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p79-donat-meses.jpg",
+      "active": true
+    },
+    {
+      "id": "p80",
+      "name": "Kue Muffin Kecil",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p80-kue-muffin-kecil.jpg",
+      "active": true
+    },
+    {
+      "id": "p81",
+      "name": "Roti Sosis Kecil",
+      "price": 2000,
+      "cat": "roti-donat",
+      "img": "images/produk/p81-roti-sosis-kecil.jpg",
+      "active": true
+    },
+    {
+      "id": "p82",
+      "name": "Roti Gulung Abon",
+      "price": 2500,
+      "cat": "roti-donat",
+      "img": "images/produk/p82-roti-gulung-abon.jpg",
+      "active": true
+    },
+    {
+      "id": "p83",
+      "name": "Donat Kentang",
+      "price": 2500,
+      "cat": "roti-donat",
+      "img": "images/produk/p83-donat-kentang.jpg",
+      "active": true
+    },
+    {
+      "id": "p84",
+      "name": "Kue Muffin",
+      "price": 2500,
+      "cat": "roti-donat",
+      "img": "images/produk/p84-kue-muffin.jpg",
+      "active": true
+    },
+    {
+      "id": "p85",
+      "name": "Bolen 2500",
+      "price": 2500,
+      "cat": "roti-donat",
+      "img": "images/produk/p85-bolen-2500.jpg",
+      "active": true
+    },
+    {
+      "id": "p86",
+      "name": "Roti Sosis Besar",
+      "price": 4000,
+      "cat": "roti-donat",
+      "img": "images/produk/p86-roti-sosis-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p87",
+      "name": "Donat Daging",
+      "price": 5000,
+      "cat": "roti-donat",
+      "img": "images/produk/p87-donat-daging.jpg",
+      "active": true
+    },
+    {
+      "id": "p88",
+      "name": "Martabak Mini (Full Meses)",
+      "price": 1500,
+      "cat": "cake-premium",
+      "img": "images/produk/p88-martabak-mini-full-meses.jpg",
+      "active": true
+    },
+    {
+      "id": "p89",
+      "name": "Bola Biskuit",
+      "price": 1500,
+      "cat": "cake-premium",
+      "img": "images/produk/p89-bola-biskuit.jpg",
+      "active": true
+    },
+    {
+      "id": "p90",
+      "name": "Harum Manis",
+      "price": 2000,
+      "cat": "cake-premium",
+      "img": "images/produk/p90-harum-manis.jpg",
+      "active": true
+    },
+    {
+      "id": "p91",
+      "name": "Cookies",
+      "price": 2000,
+      "cat": "cake-premium",
+      "img": "images/produk/p91-cookies.jpg",
+      "active": true
+    },
+    {
+      "id": "p92",
+      "name": "Brownis",
+      "price": 2000,
+      "cat": "cake-premium",
+      "img": "images/produk/p92-brownis.jpg",
+      "active": true
+    },
+    {
+      "id": "p93",
+      "name": "Brownis Pandan",
+      "price": 2000,
+      "cat": "cake-premium",
+      "img": "images/produk/p93-brownis-pandan.jpg",
+      "active": true
+    },
+    {
+      "id": "p94",
+      "name": "Pie Brownis",
+      "price": 2000,
+      "cat": "cake-premium",
+      "img": "images/produk/p94-pie-brownis.jpg",
+      "active": true
+    },
+    {
+      "id": "p95",
+      "name": "Cake Ketagih",
+      "price": 3500,
+      "cat": "cake-premium",
+      "img": "images/produk/p95-cake-ketagih.jpg",
+      "active": true
+    },
+    {
+      "id": "p96",
+      "name": "Brownis Toping",
+      "price": 3500,
+      "cat": "cake-premium",
+      "img": "images/produk/p96-brownis-toping.jpg",
+      "active": true
+    },
+    {
+      "id": "p97",
+      "name": "Sosis Abon",
+      "price": 1500,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p97-sosis-abon.jpg",
+      "active": true
+    },
+    {
+      "id": "p98",
+      "name": "Sosis Sayur",
+      "price": 1500,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p98-sosis-sayur.jpg",
+      "active": true
+    },
+    {
+      "id": "p99",
+      "name": "Pastel",
+      "price": 1500,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p99-pastel.jpg",
+      "active": true
+    },
+    {
+      "id": "p100",
+      "name": "Sosis Ayam Kecil",
+      "price": 1500,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p100-sosis-ayam-kecil.jpg",
+      "active": true
+    },
+    {
+      "id": "p101",
+      "name": "Risoles Timlo",
+      "price": 1500,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p101-risoles-timlo.jpg",
+      "active": true
+    },
+    {
+      "id": "p102",
+      "name": "Sosis Basah Baso",
+      "price": 2000,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p102-sosis-basah-baso.jpg",
+      "active": true
+    },
+    {
+      "id": "p103",
+      "name": "Sosis Ayam Besar",
+      "price": 2000,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p103-sosis-ayam-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p104",
+      "name": "Sosis Basah Besar",
+      "price": 2000,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p104-sosis-basah-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p105",
+      "name": "Sosis Telur",
+      "price": 2000,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p105-sosis-telur.jpg",
+      "active": true
+    },
+    {
+      "id": "p106",
+      "name": "Risol Mayo",
+      "price": 2500,
+      "cat": "pastel-sosis",
+      "img": "images/produk/p106-risol-mayo.jpg",
+      "active": true
+    },
+    {
+      "id": "p107",
+      "name": "Martabak Goreng",
+      "price": 2000,
+      "cat": "gorengan",
+      "img": "images/produk/p107-martabak-goreng.jpg",
+      "active": true
+    },
+    {
+      "id": "p108",
+      "name": "Kroket",
+      "price": 2000,
+      "cat": "gorengan",
+      "img": "images/produk/p108-kroket.jpg",
+      "active": true
+    },
+    {
+      "id": "p109",
+      "name": "Pisang Panir Besar",
+      "price": 2000,
+      "cat": "gorengan",
+      "img": "images/produk/p109-pisang-panir-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p110",
+      "name": "Gabin Ubi Ungu",
+      "price": 2000,
+      "cat": "gorengan",
+      "img": "images/produk/p110-gabin-ubi-ungu.jpg",
+      "active": true
+    },
+    {
+      "id": "p111",
+      "name": "Semar Mendem",
+      "price": 2500,
+      "cat": "gorengan",
+      "img": "images/produk/p111-semar-mendem.jpg",
+      "active": true
+    },
+    {
+      "id": "p112",
+      "name": "Macaron",
+      "price": 2500,
+      "cat": "gorengan",
+      "img": "images/produk/p112-macaron.jpg",
+      "active": true
+    },
+    {
+      "id": "p113",
+      "name": "Burger Umar",
+      "price": 4500,
+      "cat": "gorengan",
+      "img": "images/produk/p113-burger-umar.jpg",
+      "active": true
+    },
+    {
+      "id": "p114",
+      "name": "Sosis Bakar",
+      "price": 5000,
+      "cat": "gorengan",
+      "img": "images/produk/p114-sosis-bakar.jpg",
+      "active": true
+    },
+    {
+      "id": "p115",
+      "name": "Burger Guritno",
+      "price": 6000,
+      "cat": "gorengan",
+      "img": "images/produk/p115-burger-guritno.jpg",
+      "active": true
+    },
+    {
+      "id": "p116",
+      "name": "Arem Kecil WHYN",
+      "price": 1500,
+      "cat": "arem-berat",
+      "img": "images/produk/p116-arem-kecil-whyn.jpg",
+      "active": true
+    },
+    {
+      "id": "p117",
+      "name": "Arem Sayur SRYNT",
+      "price": 2000,
+      "cat": "arem-berat",
+      "img": "images/produk/p117-arem-sayur-srynt.jpg",
+      "active": true
+    },
+    {
+      "id": "p118",
+      "name": "Arem Ayam SRYNT",
+      "price": 2000,
+      "cat": "arem-berat",
+      "img": "images/produk/p118-arem-ayam-srynt.jpg",
+      "active": true
+    },
+    {
+      "id": "p119",
+      "name": "Arem Besar WHYN",
+      "price": 2000,
+      "cat": "arem-berat",
+      "img": "images/produk/p119-arem-besar-whyn.jpg",
+      "active": true
+    },
+    {
+      "id": "p120",
+      "name": "Arem Sayur WHYN",
+      "price": 2000,
+      "cat": "arem-berat",
+      "img": "images/produk/p120-arem-sayur-whyn.jpg",
+      "active": true
+    },
+    {
+      "id": "p121",
+      "name": "Bakso Mercon",
+      "price": 2000,
+      "cat": "arem-berat",
+      "img": "images/produk/p121-bakso-mercon.jpg",
+      "active": true
+    },
+    {
+      "id": "p122",
+      "name": "Bihun",
+      "price": 2000,
+      "cat": "arem-berat",
+      "img": "images/produk/p122-bihun.jpg",
+      "active": true
+    },
+    {
+      "id": "p123",
+      "name": "Arem Ati",
+      "price": 2500,
+      "cat": "arem-berat",
+      "img": "images/produk/p123-arem-ati.jpg",
+      "active": true
+    },
+    {
+      "id": "p124",
+      "name": "Bakmi/Capcay",
+      "price": 2500,
+      "cat": "arem-berat",
+      "img": "images/produk/p124-bakmi-capcay.jpg",
+      "active": true
+    },
+    {
+      "id": "p125",
+      "name": "Nasi Goreng",
+      "price": 2500,
+      "cat": "arem-berat",
+      "img": "images/produk/p125-nasi-goreng.jpg",
+      "active": true
+    },
+    {
+      "id": "p126",
+      "name": "Nasi Kuning",
+      "price": 2500,
+      "cat": "arem-berat",
+      "img": "images/produk/p126-nasi-kuning.jpg",
+      "active": true
+    },
+    {
+      "id": "p127",
+      "name": "Sushi",
+      "price": 2500,
+      "cat": "arem-berat",
+      "img": "images/produk/p127-sushi.jpg",
+      "active": true
+    },
+    {
+      "id": "p128",
+      "name": "Nasi Bandeng",
+      "price": 3000,
+      "cat": "arem-berat",
+      "img": "images/produk/p128-nasi-bandeng.jpg",
+      "active": true
+    },
+    {
+      "id": "p129",
+      "name": "Nasi Ayam Geprek Kremes",
+      "price": 3000,
+      "cat": "arem-berat",
+      "img": "images/produk/p129-nasi-ayam-geprek-kremes.jpg",
+      "active": true
+    },
+    {
+      "id": "p130",
+      "name": "Sate Ayam",
+      "price": 3000,
+      "cat": "arem-berat",
+      "img": "images/produk/p130-sate-ayam.jpg",
+      "active": true
+    },
+    {
+      "id": "p131",
+      "name": "Rice Bowl",
+      "price": 7000,
+      "cat": "arem-berat",
+      "img": "images/produk/p131-rice-bowl.jpg",
+      "active": true
+    },
+    {
+      "id": "p132",
+      "name": "Stick Salatiga",
+      "price": 1000,
+      "cat": "snack-kering",
+      "img": "images/produk/p132-stick-salatiga.jpg",
+      "active": true
+    },
+    {
+      "id": "p133",
+      "name": "Makaroni Goreng",
+      "price": 1000,
+      "cat": "snack-kering",
+      "img": "images/produk/p133-makaroni-goreng.jpg",
+      "active": true
+    },
+    {
+      "id": "p134",
+      "name": "Makaroni Spiral",
+      "price": 1000,
+      "cat": "snack-kering",
+      "img": "images/produk/p134-makaroni-spiral.jpg",
+      "active": true
+    },
+    {
+      "id": "p135",
+      "name": "Emping Jagung",
+      "price": 1000,
+      "cat": "snack-kering",
+      "img": "images/produk/p135-emping-jagung.jpg",
+      "active": true
+    },
+    {
+      "id": "p136",
+      "name": "Kacang Ijo",
+      "price": 1500,
+      "cat": "snack-kering",
+      "img": "images/produk/p136-kacang-ijo.jpg",
+      "active": true
+    },
+    {
+      "id": "p137",
+      "name": "Enting-Enting",
+      "price": 1500,
+      "cat": "snack-kering",
+      "img": "images/produk/p137-enting-enting.jpg",
+      "active": true
+    },
+    {
+      "id": "p138",
+      "name": "Emping Mlinjo",
+      "price": 1500,
+      "cat": "snack-kering",
+      "img": "images/produk/p138-emping-mlinjo.jpg",
+      "active": true
+    },
+    {
+      "id": "p139",
+      "name": "Kripik Pisang",
+      "price": 1500,
+      "cat": "snack-kering",
+      "img": "images/produk/p139-kripik-pisang.jpg",
+      "active": true
+    },
+    {
+      "id": "p140",
+      "name": "Kacang Bawang",
+      "price": 1500,
+      "cat": "snack-kering",
+      "img": "images/produk/p140-kacang-bawang.jpg",
+      "active": true
+    },
+    {
+      "id": "p141",
+      "name": "Pop Corn",
+      "price": 2000,
+      "cat": "snack-kering",
+      "img": "images/produk/p141-pop-corn.jpg",
+      "active": true
+    },
+    {
+      "id": "p142",
+      "name": "Intip Goreng",
+      "price": 2500,
+      "cat": "snack-kering",
+      "img": "images/produk/p142-intip-goreng.jpg",
+      "active": true
+    },
+    {
+      "id": "p143",
+      "name": "Basreng Asin",
+      "price": 3000,
+      "cat": "snack-kering",
+      "img": "images/produk/p143-basreng-asin.jpg",
+      "active": true
+    },
+    {
+      "id": "p144",
+      "name": "Basreng Pedas",
+      "price": 3000,
+      "cat": "snack-kering",
+      "img": "images/produk/p144-basreng-pedas.jpg",
+      "active": true
+    },
+    {
+      "id": "p145",
+      "name": "Mi Lidi",
+      "price": 4000,
+      "cat": "snack-kering",
+      "img": "images/produk/p145-mi-lidi.jpg",
+      "active": true
+    },
+    {
+      "id": "p146",
+      "name": "Kripik Pisang Coklat",
+      "price": 6000,
+      "cat": "snack-kering",
+      "img": "images/produk/p146-kripik-pisang-coklat.jpg",
+      "active": true
+    },
+    {
+      "id": "p147",
+      "name": "Kremes",
+      "price": 6000,
+      "cat": "snack-kering",
+      "img": "images/produk/p147-kremes.jpg",
+      "active": true
+    },
+    {
+      "id": "p148",
+      "name": "Sari Kacang Ijo",
+      "price": 1500,
+      "cat": "minuman",
+      "img": "images/produk/p148-sari-kacang-ijo.jpg",
+      "active": true
+    },
+    {
+      "id": "p149",
+      "name": "Susu Kedele Besar",
+      "price": 1500,
+      "cat": "minuman",
+      "img": "images/produk/p149-susu-kedele-besar.jpg",
+      "active": true
+    },
+    {
+      "id": "p150",
+      "name": "Jus Jambu",
+      "price": 2500,
+      "cat": "minuman",
+      "img": "images/produk/p150-jus-jambu.jpg",
+      "active": true
+    },
+    {
+      "id": "p151",
+      "name": "Susu Jelly",
+      "price": 4500,
+      "cat": "minuman",
+      "img": "images/produk/p151-susu-jelly.jpg",
+      "active": true
+    }
+  ],
+  "paket": {
+    "enabled": true,
+    "label": "Pembelian Paket",
+    "quickQty": [
+      1,
+      5,
+      10,
+      20,
+      50,
+      100
+    ],
+    "addons": [
+      {
+        "id": "mineral",
+        "name": "Air Mineral",
+        "price": 1000
+      },
+      {
+        "id": "box",
+        "name": "Box Kemasan",
+        "price": 1000
+      }
+    ]
+  }
+}

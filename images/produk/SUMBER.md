@@ -1,0 +1,149 @@
+# Sumber foto produk
+
+Foto dicari otomatis dari web (Bing Images) untuk penggunaan internal. Setiap baris: produk, file, dan alamat sumber.
+
+- p7 Lapis — `images/produk/p7-lapis.jpg` — https://silamparitv.disway.id/upload/3fdfbc2179b6f672d2ac2b7d9c1b2b6c.jpg
+- p8 Lapis Singkong — `images/produk/p8-lapis-singkong.jpg` — https://palpos.bacakoran.co/upload/9d57a783c944777476c7bd60d1dc8c69.jpg
+- p9 Cantik Manis — `images/produk/p9-cantik-manis.jpg` — https://resepmamiku.com/wp-content/uploads/2023/04/kue-cantik-manis-moona-jingga.jpg
+- p10 Nogosari — `images/produk/p10-nogosari.jpg` — https://cdn1-production-images-kly.akamaized.net/M307V2t427gY5gMXUWveUTKAjnw=/1280x720/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4931140/original/085829900_1724906277-Sebungkus_kue_nagasari_pisang.__Liputan6.comWikimedia_Commonsbolakeluarga_.jpg
+- p11 Lepet Jagung — `images/produk/p11-lepet-jagung.jpg` — https://www.boladeli.id/images/resep_detail_image/961/lepet-jagung-775x513-px.jpg
+- p12 Timus — `images/produk/p12-timus.jpg` — https://cdns.diadona.id/diadona.id/resources/real/2023/10/02/525287/resep-olahan-singkong-kue-timus-singkong-gula-merah-kukus.jpg
+- p13 Mochi Kecil — `images/produk/p13-mochi-kecil.jpg` — https://i.pinimg.com/originals/7e/a7/07/7ea70700c5fa44eadbee98df97676d63.jpg
+- p14 Mochi Besar — `images/produk/p14-mochi-besar.jpg` — https://static01.nyt.com/images/2024/01/24/multimedia/ND-Mochi-hkpl/ND-Mochi-hkpl-mediumSquareAt3X.jpg
+- p15 Klepon — `images/produk/p15-klepon.jpg` — https://2.bp.blogspot.com/-y9TYecEfBew/WNXqqoN482I/AAAAAAAAAkM/5dxgWeftHOE54yXxKimTRpD5KbMsj9bpACLcB/s1600/Klepon%2BKue%2BJajajan%2BPasar%2BTradisional.png
+- p16 Wingko Babat — `images/produk/p16-wingko-babat.jpg` — https://gaekon.com/wp-content/uploads/2024/01/wingko-babat.jpg
+- p17 Meniran — `images/produk/p17-meniran.jpg` — https://img.mbizmarket.co.id/products/thumbs/800x800/2022/10/25/aa50547b75a2692871ac56de3e4747ff.jpg
+- p18 Tahu Bakso Kecil — `images/produk/p18-tahu-bakso-kecil.jpg` — https://img-global.cpcdn.com/recipes/521fb05ff5ab7f13/680x964cq70/mini-tahu-putih-goreng-isi-bakso-ayam-foto-resep-utama.jpg
+- p19 Rolade — `images/produk/p19-rolade.jpg` — https://img.herstory.co.id/articles/archive_20230403/resep-masakan-20230403-224333.jpg
+- p20 Tahu Bakso Goreng Besar — `images/produk/p20-tahu-bakso-goreng-besar.jpg` — https://akcdn.detik.net.id/visual/2020/03/12/ee4fceb3-34c8-4cc9-8ecc-43fdcbb00bcc_169.jpeg?w=700&q=90
+- p21 Tahu Bakso Besar — `images/produk/p21-tahu-bakso-besar.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7rbk5-m65855y7si3cd9
+- p22 Tahu Bulat — `images/produk/p22-tahu-bulat.jpg` — https://assets.pikiran-rakyat.com/crop/0x0:0x0/720x0/webp/photo/2025/01/20/2005410930.jpg
+- p23 Tahu Segar — `images/produk/p23-tahu-segar.jpg` — https://static.republika.co.id/uploads/images/inpicture_slide/tahu-segar-sebelum-dimasak-_180524091241-424.jpg
+- p24 Tahu Aci — `images/produk/p24-tahu-aci.jpg` — https://cdn.idntimes.com/content-images/community/2022/01/tahu-aci-n-66934c0cbeade5e56b2fec27e2f98983-1217980577408614889f129713889198.jpg
+- p25 Sarang Burung — `images/produk/p25-sarang-burung.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7r98r-lroefcf0yyyhbb
+- p26 Tahu Ayam — `images/produk/p26-tahu-ayam.jpg` — https://img-global.cpcdn.com/recipes/b2bbccc3dac78a8b/680x964cq70/tahu-isi-ayam-cincang-sayuran-foto-resep-utama.jpg
+- p27 Tahu Bakso 2000 — `images/produk/p27-tahu-bakso-2000.jpg` — https://img.okezone.com/content/2023/02/20/298/2767832/resep-tahu-bakso-khas-semarang-lezat-istimewa-bikin-ketagihan-tQQhJ6SoRK.jpg
+- p28 Tahu Bacem — `images/produk/p28-tahu-bacem.jpg` — https://cdn0-production-images-kly.akamaized.net/dTMSS44NaW0d834gMOMofr2MldI=/1280x720/smart/filters:quality(75):strip_icc()/kly-media-production/medias/5495853/original/042797300_1770439497-Gemini_Generated_Image_n6gtesn6gtesn6gt.png
+- p29 Apem — `images/produk/p29-apem.jpg` — https://pbs.twimg.com/media/DwXHKJTU0AA83Gb.jpg
+- p30 Pukis — `images/produk/p30-pukis.jpg` — https://i.pinimg.com/originals/21/19/2c/21192c139eebb6e15b0847abbc51028e.jpg
+- p31 Gandos Rangin — `images/produk/p31-gandos-rangin.jpg` — https://i.ytimg.com/vi/k_YZlOplDrk/maxresdefault.jpg
+- p32 Serabi Kecil — `images/produk/p32-serabi-kecil.jpg` — https://i.pinimg.com/736x/c8/0c/77/c80c778a158cf979577771513197b79a.jpg
+- p33 Corobikan — `images/produk/p33-corobikan.jpg` — https://statik.tempo.co/data/2023/10/04/id_1242572/1242572_720.jpg
+- p34 Onde-Onde — `images/produk/p34-onde-onde.jpg` — https://assets.pikiran-rakyat.com/crop/0x0:0x0/720x0/webp/photo/2023/09/09/2401117180.png
+- p35 Jadah — `images/produk/p35-jadah.jpg` — https://cdn0-production-images-kly.akamaized.net/YXZoOBBUSHUoAwaPf9Ge89EfET8=/1280x720/smart/filters:quality(75):strip_icc()/kly-media-production/medias/5414476/original/071739800_1763285574-ketan_kukus__3_.jpg
+- p36 Wajik — `images/produk/p36-wajik.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7qukx-lhil30avsl1b05
+- p37 Serabi Besar — `images/produk/p37-serabi-besar.jpg` — https://awsimages.detik.net.id/community/media/visual/2023/03/03/suasana-tradisi-cetingan-dan-festival-seribu-serabi-klasik-di-ambarawa-kabupaten-semarang-jumat-332023-1.jpeg?w=800
+- p38 Lemper — `images/produk/p38-lemper.jpg` — https://down-id.img.susercontent.com/file/id-11134201-7qukx-leodu7ui259p90
+- p39 Lemper Kodok — `images/produk/p39-lemper-kodok.jpg` — https://asset-2.tribunnews.com/solo/foto/bank/originals/Foto-lemper-kuliner-populer-di-Solo.jpg
+- p40 Sagon Basah — `images/produk/p40-sagon-basah.jpg` — http://4.bp.blogspot.com/-WRP32TYF1sY/UqU_aCf0j_I/AAAAAAAAIDU/AqD1dF-Ubj8/s1600/Kue+sagon+close+up.jpg
+- p41 Karanggesing — `images/produk/p41-karanggesing.jpg` — https://cdn.shopify.com/s/files/1/0428/0965/5452/files/carang-gesing-solo.webp?v=1661962926
+- p42 Wajik Isi — `images/produk/p42-wajik-isi.jpg` — https://radarutara.disway.id/upload/135ac8c93c1869607cec429c50100026.jpeg
+- p43 Ketan — `images/produk/p43-ketan.jpg` — https://down-id.img.susercontent.com/file/sg-11134201-22110-a97feh8dy5jv5e
+- p44 Bolu Kukus Karamel — `images/produk/p44-bolu-kukus-karamel.jpg` — https://i.pinimg.com/736x/9f/f9/14/9ff914ac98eb22846a7f4a3931ccec79.jpg
+- p45 Bolu Kukus Warna — `images/produk/p45-bolu-kukus-warna.jpg` — https://img.okezone.com/content/2024/05/18/298/3009953/resep-kue-bolu-kukus-warna-warni-camilan-akhir-pekan-yang-enak-1VP1mwHlBg.jpg
+- p46 Bolu Legit — `images/produk/p46-bolu-legit.jpg` — https://image.idntimes.com/post/20251117/1000164314_9afc5878-58a6-4a04-9000-9dc6e2472467.jpg
+- p47 Rainbow Cake — `images/produk/p47-rainbow-cake.jpg` — https://i1.wp.com/resepkoki.id/wp-content/uploads/2020/01/Resep-Rainbow-Cake.jpg?fit=1536%2C1920&ssl=1
+- p48 Bolu Mawar — `images/produk/p48-bolu-mawar.jpg` — https://img-global.cpcdn.com/recipes/b08fd4f8fc50a2a8/751x532cq70/bolu-mawar-foto-resep-utama.jpg
+- p49 Kue Lumpur — `images/produk/p49-kue-lumpur.jpg` — https://okuliner.com/wp-content/uploads/2026/02/1a86b0c6-829f-42e4-85e8-849dc257aaea-1024x683.png
+- p50 Dadar Kelapa — `images/produk/p50-dadar-kelapa.jpg` — https://cdn1-production-images-kly.akamaized.net/hOuDX8vqiXUjI6JN_kA0pIGqkeQ=/1200x675/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/5057511/original/003874200_1734592500-Screenshot_2024-12-19_140609.jpg
+- p51 Mangkring — `images/produk/p51-mangkring.jpg` — https://i.ytimg.com/vi/9tnOxPhIq1A/maxresdefault.jpg
+- p52 Putri Mandi — `images/produk/p52-putri-mandi.jpg` — https://palpos.disway.id/upload/afb4375ca0998e6df0643d46494dece0.jpg
+- p53 Kue Kentang — `images/produk/p53-kue-kentang.jpg` — https://cdn1-production-images-kly.akamaized.net/o4VRAw_05kzk3_TikLVnNoFDhOo=/640x360/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2221305/original/074584300_1526885463-makresep.jpg
+- p54 Dadar Coklat — `images/produk/p54-dadar-coklat.jpg` — http://bisnisusahaonline.com/wp-content/uploads/2019/05/kue-dadar-gulung-coklat-3.jpg
+- p55 Sarang Semut — `images/produk/p55-sarang-semut.jpg` — https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2022/11/03/3292505620.jpeg
+- p56 Bolu Pisang — `images/produk/p56-bolu-pisang.jpg` — https://ik.imagekit.io/tvlk/blog/2022/07/Resep-Bolu-Pisang-Kukus-Traveloka-Mart-1024x768.jpg?tr=dpr-2,w-675
+- p57 Prol Tape — `images/produk/p57-prol-tape.jpg` — https://resepmamiku.com/wp-content/uploads/2023/02/prol-tape-aguswatis.jpg
+- p58 Lapis Sakura — `images/produk/p58-lapis-sakura.jpg` — https://assets.pikiran-rakyat.com/crop/0x0:0x0/720x0/webp/photo/2021/12/05/1379721820.jpeg
+- p59 Puding — `images/produk/p59-puding.jpg` — https://image.idntimes.com/post/20220409/puding-cokelatt-resep-puding-cokelat-buka-puasa-resep-puding-coklat-takjil-buka-puasa-puding-coklat-dingin-puding-coklat-enak-9cde86371d7fc78c91ae80a6ffab250e-5acab90db48ceb0cd139579fea053e86.jpg?tr=w-1200
+- p60 Puding Telur — `images/produk/p60-puding-telur.jpg` — https://thumb.viva.id/vivabanyuwangi/665x374/2025/06/09/6846fb161333d-resep-dan-cara-membuat-pudding-telur-di-rumah_banyuwangi.jpg
+- p61 Puding Ikan — `images/produk/p61-puding-ikan.jpg` — https://i.ytimg.com/vi/fLaMYuymMRI/maxresdefault.jpg
+- p62 Jelly Sate — `images/produk/p62-jelly-sate.jpg` — https://i.ytimg.com/vi/r5dX4DDXy7M/maxresdefault.jpg
+- p63 Puding Lumut — `images/produk/p63-puding-lumut.jpg` — https://i.pinimg.com/originals/5b/2b/06/5b2b06c5a01d972227e417bd1a85150e.jpg
+- p64 Puding Waloh — `images/produk/p64-puding-waloh.jpg` — https://www.cookmeindonesian.com/wp-content/uploads/2022/03/pudingwaluh-cover-scaled.jpg
+- p65 Puding Besar — `images/produk/p65-puding-besar.jpg` — https://down-id.img.susercontent.com/file/id-11134207-23020-v2h1mhr8bgnvb4
+- p66 Puding Gula Jawa — `images/produk/p66-puding-gula-jawa.jpg` — https://ayampresident.com/wp-content/uploads/2025/08/Pudding-Gula-Jawa-1024x1024.webp
+- p67 Coklat Colek — `images/produk/p67-coklat-colek.jpg` — https://assets.pikiran-rakyat.com/crop/0x0:0x0/1200x675/photo/2024/01/16/252471023.jpg
+- p68 Roti Semir 1000 — `images/produk/p68-roti-semir-1000.jpg` — https://img-global.cpcdn.com/recipes/b74c4b3caec4ab4c/680x482cq70/roti-semir-foto-resep-utama.jpg
+- p69 Roti Kacang Ijo — `images/produk/p69-roti-kacang-ijo.jpg` — http://4.bp.blogspot.com/-Gnv06aBAwko/Tyk1Om31TbI/AAAAAAAAASg/FQ2N9_-Wcf8/s1600/Roti+goreng+kacang+hijau+jadul.jpg
+- p70 Roti Pisang Goreng — `images/produk/p70-roti-pisang-goreng.jpg` — https://lh3.googleusercontent.com/-OmQVFM4jEv4/UvdZ7E_ptSI/AAAAAAAAB60/nQQ8qMPNfnI/w800-h533-no/003+Roti+Goreng.JPG
+- p71 Bakpao — `images/produk/p71-bakpao.jpg` — https://asset.kompas.com/crops/mY74qunmmYnXxgpsLUNVPxnDjAA=/0x0:1000x667/750x500/data/photo/2020/09/02/5f4fb36738919.jpg
+- p72 Muffin Kukus — `images/produk/p72-muffin-kukus.jpg` — https://blog.tokowahab.com/wp-content/uploads/2018/10/resep-kue-muffin-kukus.jpg
+- p73 Pastry — `images/produk/p73-pastry.jpg` — https://nibble-images.b-cdn.net/nibble/original_images/bakery_di_jakarta_paling_enak_00_2bea09be33_l7Q71Jcva.jpg
+- p74 Roti Goreng Panir Bulat — `images/produk/p74-roti-goreng-panir-bulat.jpg` — https://www.prjctreoco.com/wp-content/uploads/2021/09/roti-goreng-tepung-panir.jpg
+- p75 Roti Pizza — `images/produk/p75-roti-pizza.jpg` — https://media.indozone.id/crop/0x0:0x0/images/2025/08/21/WJw0LE3Sqay09qFqeQrOFt2NiAu5xxMmQdkWQHFG.jpg
+- p76 Roti Pisang Oven — `images/produk/p76-roti-pisang-oven.jpg` — https://cdn.idntimes.com/content-images/community/2019/08/28155639-1593353410741958-5440699626648764416-n-1-b3e4d91bc93c715d3092aab959349e73.jpg
+- p77 Roti Pisang — `images/produk/p77-roti-pisang.jpg` — https://www.dapurkintamani.com/wp-content/uploads/2022/11/resep-cara-buat-roti-pisang.webp
+- p78 Roti Selai — `images/produk/p78-roti-selai.jpg` — https://img-global.cpcdn.com/recipes/961018decb59994b/680x482cq70/roti-isi-selai-nanas-foto-resep-utama.jpg
+- p79 Donat Meses — `images/produk/p79-donat-meses.jpg` — https://ontycake.com/wp-content/uploads/2025/12/13.png
+- p80 Kue Muffin Kecil — `images/produk/p80-kue-muffin-kecil.jpg` — https://okuliner.com/wp-content/uploads/2026/05/yehor-milohrodskyi-kZ1OGMNcVrk-unsplash.jpg
+- p81 Roti Sosis Kecil — `images/produk/p81-roti-sosis-kecil.jpg` — https://i.pinimg.com/originals/3f/f8/7e/3ff87ef7adc43691b904204a2b3db2b9.jpg
+- p82 Roti Gulung Abon — `images/produk/p82-roti-gulung-abon.jpg` — https://www.finnafood.com/blog/wp-content/uploads/2026/01/roti-gulung-abon-rawit-tabur-e1768799836229-1536x1413.png
+- p83 Donat Kentang — `images/produk/p83-donat-kentang.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7r98p-lwqwgcbowh0u25
+- p84 Kue Muffin — `images/produk/p84-kue-muffin.jpg` — https://www.tokomesin.com/wp-content/uploads/2017/10/6-Cara-Membuat-Roti-Muffin-Yang-Lembut-Dan-Nikmat.jpg
+- p85 Bolen 2500 — `images/produk/p85-bolen-2500.jpg` — http://www.tokomesin.com/wp-content/uploads/2017/10/3-Rahasia-Cara-Membuat-Roti-Bolen-Paling-Mudah2.png
+- p86 Roti Sosis Besar — `images/produk/p86-roti-sosis-besar.jpg` — https://i2.wp.com/www.tiktak.id/wp-content/uploads/2022/11/Resep-Roti-Sosis-ala-Bakery.jpg?resize=660%2C400&ssl=1
+- p87 Donat Daging — `images/produk/p87-donat-daging.jpg` — https://image.idn.media/post/20240726/img-20240726-170212-d435ce93525b3ca5080eb74123d2d291-942b70eca4153e639bb4d444a8075689.jpg
+- p88 Martabak Mini (Full Meses) — `images/produk/p88-martabak-mini-full-meses.jpg` — https://cdn1.katadata.co.id/media/images/thumb/2022/08/30/Martabak_Mini-2022_08_30-12_03_37_499de4ba50697d484d8e4de59a32c3bb_960x640_thumb.jpg
+- p89 Bola Biskuit — `images/produk/p89-bola-biskuit.jpg` — https://i.ytimg.com/vi/-5i4EAQQ7IM/maxresdefault.jpg
+- p90 Harum Manis — `images/produk/p90-harum-manis.jpg` — https://i.pinimg.com/originals/a9/5d/f9/a95df9cb878f7541a9512f876bb6a4eb.jpg
+- p91 Cookies — `images/produk/p91-cookies.jpg` — https://image.idntimes.com/post/20200316/325-3-large-b81af62b9e377ad9a84e26a623238e20.jpg
+- p92 Brownis — `images/produk/p92-brownis.jpg` — https://i.pinimg.com/736x/aa/2e/17/aa2e17f12bdeed8b739de860a64eab71.jpg
+- p93 Brownis Pandan — `images/produk/p93-brownis-pandan.jpg` — https://cdn0-production-images-kly.akamaized.net/FdD6DTjS2aaf9E5cUWdXA5xBe0w=/640x360/smart/filters:quality(75):strip_icc()/kly-media-production/medias/5428318/original/087071000_1764493524-Brownies_Pandan.jpg
+- p94 Pie Brownis — `images/produk/p94-pie-brownis.jpg` — https://down-id.img.susercontent.com/file/sg-11134201-22110-ykacm6tybhjv71
+- p95 Cake Ketagih — `images/produk/p95-cake-ketagih.jpg` — https://i.pinimg.com/originals/bd/67/ab/bd67abf42f5245545f9d39b6c0abbbd2.jpg
+- p96 Brownis Toping — `images/produk/p96-brownis-toping.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7ra0g-mcpub4ptt73j6e
+- p97 Sosis Abon — `images/produk/p97-sosis-abon.jpg` — https://i.ytimg.com/vi/InOWho5TGHY/maxresdefault.jpg
+- p98 Sosis Sayur — `images/produk/p98-sosis-sayur.jpg` — https://image.popmama.com/post/20230923/img-20230923-223610-37d61e2d000e60ebe11cb71bde87b65e.jpg
+- p99 Pastel — `images/produk/p99-pastel.jpg` — https://4.bp.blogspot.com/-Vxw23ON4xPM/VGxO5Ba7SxI/AAAAAAAAx4s/i35HhLhAqVQ/s1600/pastel%2Bgoreng.jpg
+- p100 Sosis Ayam Kecil — `images/produk/p100-sosis-ayam-kecil.jpg` — https://img-global.cpcdn.com/recipes/3e1eb39a646c3ba2/680x482cq70/sosis-ayam-goreng-crispy-foto-resep-utama.jpg
+- p101 Risoles Timlo — `images/produk/p101-risoles-timlo.jpg` — https://i.pinimg.com/originals/bd/8a/ce/bd8ace94ccac07c6c1e86e2b8ce528c1.jpg
+- p102 Sosis Basah Baso — `images/produk/p102-sosis-basah-baso.jpg` — http://3.bp.blogspot.com/-kXMe7HZkA6k/VWNBTMyDaqI/AAAAAAAAA_A/DUZtb0OrLC0/s1600/sosis%2Bsolo%2B1.jpg
+- p103 Sosis Ayam Besar — `images/produk/p103-sosis-ayam-besar.jpg` — https://static.chickin.id/blog/wp-content/uploads/2026/03/Potensi-Besar-Bisnis-Sosis-Ayam-di-Industri-Kuliner-1160x773.png
+- p104 Sosis Basah Besar — `images/produk/p104-sosis-basah-besar.jpg` — https://img.okezone.com/content/2020/08/25/298/2267266/resep-sosis-solo-basah-wajib-banget-coba-di-rumah-xHcFT7mlZb.jpg
+- p105 Sosis Telur — `images/produk/p105-sosis-telur.jpg` — https://i.pinimg.com/736x/2e/d3/ba/2ed3ba6d9b4f2946625791a7ba0aa13f.jpg
+- p106 Risol Mayo — `images/produk/p106-risol-mayo.jpg` — https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgDzL4Ku96ILM84gHwBlQ9COkmzSKoTrS3ETsUL3wEwaipNEJidpDEHuRi7qlo1nTEuY0itrO6UrQFtmEfB4fJovbocnXgEA3FAfvR6n4P2fmgev4Po1OgtwSAejjB_VLj4J6rps3Y_omZ_jXz38dI3M_FxKJhQ-KdQ5iU6hjfOlA5tMIosWTDQXmRaXg/s1200/1744205510457094-risol-mayo-margo.jpg
+- p107 Martabak Goreng — `images/produk/p107-martabak-goreng.jpg` — https://i.pinimg.com/originals/b2/04/4b/b2044bfbd4d08aa9d8b02d87459cc3fb.jpg
+- p108 Kroket — `images/produk/p108-kroket.jpg` — https://image.idntimes.com/post/20240329/img-20240330-004120-f654b09baa3908ec7c4fd14e87d67bdd.jpg
+- p109 Pisang Panir Besar — `images/produk/p109-pisang-panir-besar.jpg` — https://img-global.cpcdn.com/recipes/a91f94be32e11e06/680x482cq70/pisang-panir-foto-resep-utama.jpg
+- p110 Gabin Ubi Ungu — `images/produk/p110-gabin-ubi-ungu.jpg` — https://awsimages.detik.net.id/community/media/visual/2024/04/02/gabin-fla-ubi-ungu.png?w=700&q=90
+- p111 Semar Mendem — `images/produk/p111-semar-mendem.jpg` — https://i.pinimg.com/originals/6d/10/3a/6d103a32b9178aa280b09c29b50e5046.jpg
+- p112 Macaron — `images/produk/p112-macaron.jpg` — https://sugargeekshow.com/wp-content/uploads/2022/12/italian_macaron_Featured.jpg
+- p113 Burger Umar — `images/produk/p113-burger-umar.jpg` — https://cdn-brilio-net.akamaized.net/news/2021/09/29/214336/1570194-resep-kreasi-burger-ayam.jpg
+- p114 Sosis Bakar — `images/produk/p114-sosis-bakar.jpg` — https://img-global.cpcdn.com/recipes/f8ed17f8cee0cad2/1502x1064cq70/sosis-bakar-foto-resep-utama.jpg
+- p115 Burger Guritno — `images/produk/p115-burger-guritno.jpg` — https://down-id.img.susercontent.com/file/0d72cae159a6d0f6fa03e68445de6832
+- p116 Arem Kecil WHYN — `images/produk/p116-arem-kecil-whyn.jpg` — https://i0.wp.com/www.topwisata.info/wp-content/uploads/2021/06/AREM2B25E2258025932BAREM2B252812529.jpg?resize=930%2C620&ssl=1
+- p117 Arem Sayur SRYNT — `images/produk/p117-arem-sayur-srynt.jpg` — https://cdn-jpr.jawapos.com/images/14/2025/06/30/Screenshot-2025-06-30-210356-738715379.jpg
+- p118 Arem Ayam SRYNT — `images/produk/p118-arem-ayam-srynt.jpg` — https://i.pinimg.com/originals/99/cf/6b/99cf6b09d54f548ac5c559c67e3fc244.png
+- p119 Arem Besar WHYN — `images/produk/p119-arem-besar-whyn.jpg` — https://www.aboutjatim.com/wp-content/uploads/2025/01/gambarfeatured_image_1737778285.webp
+- p120 Arem Sayur WHYN — `images/produk/p120-arem-sayur-whyn.jpg` — https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHtmBInDxzf9CB23qjO_H4WmRYfAEvNRkE5AktGjGsN-qhrE-ENP8IbdNC4bkRC0SDNclhmjgCrY4egJUZUKvIjg5kN-HyVPg87CTb_iQTQa1M_kB2xc20FoxMyJZIULUVcIqOPsNeXG4iffgnzVziKFRmKmPf68WYXe_H-N1oJSSmEWj4G3tLE4S8/w1200-h630-p-k-no-nu/308.jpg
+- p121 Bakso Mercon — `images/produk/p121-bakso-mercon.jpg` — https://1.bp.blogspot.com/-kykuPfDoVmk/XoSLarW6VsI/AAAAAAAAGZk/Qxd_QaTWjPgb7vWjcbfLYxhpmveidWhEQCLcBGAsYHQ/s1600/resep-bakso-mercon-kuah-super-pedas-simple-sederhana.jpg
+- p122 Bihun — `images/produk/p122-bihun.jpg` — https://cinnamonsnail.com/wp-content/uploads/2023/08/Bihun-Goreng-feature.jpg
+- p123 Arem Ati — `images/produk/p123-arem-ati.jpg` — https://gratisongkir-storage.com/products/900x900/QLyGYZ9cei2r.jpg
+- p124 Bakmi/Capcay — `images/produk/p124-bakmi-capcay.jpg` — http://4.bp.blogspot.com/-UwMA0-DRpDc/U1NJeeX62WI/AAAAAAAAAs4/LyzEwH9Yq-o/s1600/resep-capcay-kuah.jpg
+- p125 Nasi Goreng — `images/produk/p125-nasi-goreng.jpg` — https://delishglobe.com/wp-content/uploads/2024/12/Nasi-Goreng-Fried-Rice.png
+- p126 Nasi Kuning — `images/produk/p126-nasi-kuning.jpg` — https://i.pinimg.com/originals/3d/f7/81/3df78151b37f3a4f958a14a46f0aa357.png
+- p127 Sushi — `images/produk/p127-sushi.jpg` — https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2d/1d/5b/8d/caption.jpg?w=1200&h=1200&s=1
+- p128 Nasi Bandeng — `images/produk/p128-nasi-bandeng.jpg` — https://img.mbizmarket.co.id/products/thumbs/800x800/2022/07/05/ff4f8c23482d10b929c8cb610ffaa81b.jpg
+- p129 Nasi Ayam Geprek Kremes — `images/produk/p129-nasi-ayam-geprek-kremes.jpg` — https://www.jagel.id/api/listimage/v/Ayam-Geprek-Kremes--Nasi-0-4235e673c49f2a7d.jpg
+- p130 Sate Ayam — `images/produk/p130-sate-ayam.jpg` — https://www.rumahmesin.com/wp-content/uploads/2017/03/resep-sate-ayam-madura-mencicipi-makanan-asli-indonesia-yang-mendunia.jpg
+- p131 Rice Bowl — `images/produk/p131-rice-bowl.jpg` — https://cheffrecipes.com/wp-content/uploads/2024/08/Teriyaki-Chicken-Rice-Bowl.jpg
+- p132 Stick Salatiga — `images/produk/p132-stick-salatiga.jpg` — https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2022/12/23/4159697473.jpeg
+- p133 Makaroni Goreng — `images/produk/p133-makaroni-goreng.jpg` — https://asset-2.tstatic.net/priangan/foto/bank/images/Makaroni-Goreng-Kriuk-Pedas-Sukabumi.jpg
+- p134 Makaroni Spiral — `images/produk/p134-makaroni-spiral.jpg` — https://cf.shopee.co.id/file/8f751192d7ee06dbb88b0ec7e0b909e1
+- p135 Emping Jagung — `images/produk/p135-emping-jagung.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7rbk8-ma1eg5l8pmodeb
+- p136 Kacang Ijo — `images/produk/p136-kacang-ijo.jpg` — https://down-id.img.susercontent.com/file/sg-11134201-7qvev-lihlsn3q7fqk6d
+- p137 Enting-Enting — `images/produk/p137-enting-enting.jpg` — https://img.herstory.co.id/articles/archive_20221021/enting-enting-kacang-20221021-080629.jpg
+- p138 Emping Mlinjo — `images/produk/p138-emping-mlinjo.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7rbk3-m95f023v7px775
+- p139 Kripik Pisang — `images/produk/p139-kripik-pisang.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7ra0t-mboubdcnaa7n4b
+- p140 Kacang Bawang — `images/produk/p140-kacang-bawang.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7r98v-lr88dtjz6oy573
+- p141 Pop Corn — `images/produk/p141-pop-corn.jpg` — https://i.pinimg.com/originals/c8/7f/ab/c87fab2ac5daf1e44d0e9e485754e7ca.jpg
+- p142 Intip Goreng — `images/produk/p142-intip-goreng.jpg` — https://down-id.img.susercontent.com/file/befda7b97dd12ff7ad6b8d45eae31517
+- p143 Basreng Asin — `images/produk/p143-basreng-asin.jpg` — https://assets.pikiran-rakyat.com/crop/0x0:0x0/750x500/photo/2023/03/22/2034001182.jpg
+- p144 Basreng Pedas — `images/produk/p144-basreng-pedas.jpg` — https://cf.shopee.co.id/file/5761aa8c5b9b4ff9384b7d5cd72d2087
+- p145 Mi Lidi — `images/produk/p145-mi-lidi.jpg` — https://down-id.img.susercontent.com/file/a1cbcba27b673e3b3ce99296c20b9872
+- p146 Kripik Pisang Coklat — `images/produk/p146-kripik-pisang-coklat.jpg` — https://down-id.img.susercontent.com/file/id-11134207-7r991-locs443m5lyxe6
+- p147 Kremes — `images/produk/p147-kremes.jpg` — https://dailycookingquest.com/img/2020/11/ayam-goreng-kremes-5_hude5919cba21617c0f1cde9b7c8ad7219_225479_1200x1800_resize_q75_lanczos.jpg
+- p148 Sari Kacang Ijo — `images/produk/p148-sari-kacang-ijo.jpg` — https://fibercreme.com/wp-content/uploads/2021/04/Sari-Kacang-Ijo-Tanpa-Santan-1.jpg
+- p149 Susu Kedele Besar — `images/produk/p149-susu-kedele-besar.jpg` — https://down-id.img.susercontent.com/file/e4392cecabc7e866c1432f796fcdcda7
+- p150 Jus Jambu — `images/produk/p150-jus-jambu.jpg` — https://www.indoresep.web.id/wp-content/uploads/2014/01/jus-jambu-merah_zps8e7rtnar.jpg
+- p151 Susu Jelly — `images/produk/p151-susu-jelly.jpg` — https://i.pinimg.com/originals/c1/ba/0d/c1ba0d99044cb8e86d068023574ecd1e.jpg

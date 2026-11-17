@@ -1,0 +1,18 @@
+{
+  "name": "Admin Katalog Tenongan",
+  "short_name": "Admin",
+  "description": "Kelola produk, foto, dan harga katalog Tenongan.",
+  "lang": "id",
+  "id": "/__ADMIN__/",
+  "start_url": "/__ADMIN__/",
+  "scope": "/__ADMIN__/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf5ec",
+  "theme_color": "#92400e",
+  "icons": [
+    { "src": "/icons/admin-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/admin-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/admin-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

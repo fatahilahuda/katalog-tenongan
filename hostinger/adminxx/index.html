@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Katalog</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#92400e">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/admin-192.png">
+<link rel="apple-touch-icon" href="/icons/admin-apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf5ec; --ink: #1f2937; --muted: #6b7280; --brand: #c8772a; --brand-dark: #92400e;
+    --price: #b45309; --line: #e5e7eb; --danger: #dc2626; --pink: #fee2e2; --ok: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--bg); color: var(--ink); padding-bottom: 90px; }
+  button, input, select { font-family: inherit; font-size: 14px; }
+  button { cursor: pointer; border: 0; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 12px; }
+
+  .top { background: var(--brand-dark); color: #fff; }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 46px; }
+  .top h1 { font-size: 16px; }
+  .top a { color: #fff; font-size: 13px; }
+  .install { height: 30px; padding: 0 12px; border-radius: 15px; background: #fff; color: var(--brand-dark); font-weight: 700; font-size: 12.5px; border: 0; cursor: pointer; white-space: nowrap; }
+  .install[hidden] { display: none; }
+
+  .tabs { background: #fff; position: sticky; top: 0; z-index: 5; box-shadow: 0 1px 0 var(--line); }
+  .tabs .wrap { display: flex; gap: 4px; overflow-x: auto; }
+  .tab { flex: 1 0 auto; padding: 12px 14px; background: none; color: var(--muted); font-weight: 600; border-bottom: 3px solid transparent; }
+  .tab.on { color: var(--brand-dark); border-color: var(--brand-dark); }
+
+  .panel { padding: 14px 0; }
+  .panel > h2 { font-size: 16px; margin-bottom: 4px; }
+  .hint { color: var(--muted); font-size: 12.5px; margin-bottom: 12px; line-height: 1.45; }
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); padding: 12px; margin-bottom: 10px; }
+
+  .tool { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .tool input, .tool select { flex: 1 1 130px; min-width: 0; }
+  input[type=text], input[type=number], input[type=url], select {
+    height: 36px; border: 1px solid #d1d5db; border-radius: 8px; padding: 0 10px; background: #fff; color: var(--ink); width: 100%;
+  }
+  input:focus, select:focus { outline: none; border-color: #f0b429; box-shadow: 0 0 0 2px #f6d27a66; }
+  .btn { height: 36px; padding: 0 14px; border-radius: 8px; background: var(--brand); color: #fff; font-weight: 700; white-space: nowrap; }
+  .btn.ghost { background: #e5e7eb; color: var(--ink); }
+  .btn.danger { background: var(--pink); color: var(--danger); }
+  .icon { width: 32px; height: 32px; border-radius: 8px; background: #f3f4f6; color: var(--ink); }
+  .icon:disabled { opacity: .35; cursor: default; }
+  .icon.del { background: var(--pink); color: var(--danger); }
+
+  /* baris produk / kategori / tambahan */
+  .row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; background: #fff; border-radius: 10px; padding: 8px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
+  .row.off { opacity: .55; }
+  .th { width: 46px; height: 46px; border-radius: 8px; object-fit: cover; background: #eee; flex: 0 0 auto; }
+  .mid { flex: 1 1 120px; min-width: 0; }
+  .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sub { font-size: 12px; color: var(--muted); }
+  .rp { display: flex; align-items: center; gap: 4px; color: var(--muted); font-size: 12px; }
+  .rp input { width: 92px; text-align: right; font-weight: 600; color: var(--price); }
+  .acts { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+  .sw { position: relative; width: 40px; height: 22px; display: inline-block; margin: 0 4px; }
+  .sw input { opacity: 0; width: 100%; height: 100%; position: absolute; margin: 0; cursor: pointer; z-index: 1; }
+  .sw span { position: absolute; inset: 0; background: #d1d5db; border-radius: 11px; transition: .2s; }
+  .sw span::after { content: ""; position: absolute; width: 18px; height: 18px; left: 2px; top: 2px; background: #fff; border-radius: 50%; transition: .2s; }
+  .sw input:checked + span { background: var(--ok); }
+  .sw input:checked + span::after { transform: translateX(18px); }
+  .empty { text-align: center; color: var(--muted); padding: 24px 0; }
+
+  .field { margin-bottom: 12px; }
+  .field > label { display: block; font-weight: 600; margin-bottom: 4px; }
+  .check { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .check input { width: 18px; height: 18px; accent-color: var(--brand-dark); }
+  .imgbox { display: flex; gap: 10px; align-items: center; }
+  .imgbox img { width: 72px; height: 72px; border-radius: 10px; object-fit: cover; background: #eee; flex: 0 0 auto; }
+  .imgbox .col { flex: 1; min-width: 0; display: grid; gap: 6px; }
+  .imgbox.wide img { width: 120px; height: 72px; }
+
+  /* kartu produk: semua kolom bisa diedit langsung */
+  .prod { align-items: flex-start; flex-wrap: nowrap; }
+  .thumb { position: relative; width: 60px; height: 60px; flex: 0 0 auto; cursor: pointer; display: block; }
+  .thumb .th { width: 60px; height: 60px; display: block; }
+  .thumb .cam { position: absolute; right: -4px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand); color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+  .thumb.busy { opacity: .5; pointer-events: none; }
+  button.thumb { padding: 0; background: none; }
+
+  /* pemilih foto: galeri/kamera atau album Google Photos */
+  .sheet { margin: auto; border: 0; border-radius: 14px; padding: 0; width: min(720px, 96vw); max-height: 90vh; box-shadow: 0 10px 40px rgba(0,0,0,.3); color: var(--ink); }
+  .sheet::backdrop { background: rgba(0,0,0,.45); }
+  .sheet .in { padding: 12px; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; }
+  .sh-head { display: flex; align-items: center; justify-content: space-between; font-size: 15px; }
+  .sh-sec { font-weight: 700; margin-top: 4px; }
+  .sheet .tool { margin: 0; }
+  .sheet .hint { margin: 0; }
+  .gpwrap { overflow-y: auto; min-height: 0; flex: 1; }
+  .gpgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 4px; }
+  .gpgrid button { position: relative; padding: 0; aspect-ratio: 1; background: #eee; border-radius: 6px; overflow: hidden; }
+  .gpgrid .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 4px 3px; font-size: 10.5px; line-height: 1.2; color: #fff; text-align: left;
+    background: linear-gradient(transparent, rgba(0,0,0,.7)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gpgrid .cap.match { font-weight: 700; }
+  .gpgrid .cap.man::before { content: "✔ "; color: #86efac; }
+  .gpgrid .ed { position: absolute; top: 3px; right: 3px; width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff;
+    font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .gpgrid .ed.mu { right: auto; left: 3px; }
+  .mu-top { display: flex; gap: 10px; align-items: center; }
+  .mu-top img { width: 72px; height: 72px; border-radius: 8px; object-fit: cover; background: #eee; flex: 0 0 auto; }
+  .mulist { overflow-y: auto; min-height: 0; flex: 1; border: 1px solid var(--line); border-radius: 8px; }
+  .murow { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid #f1f1f1; cursor: pointer; }
+  .murow input { width: 18px; height: 18px; flex: 0 0 auto; accent-color: var(--brand-dark); }
+  .murow img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; background: #eee; flex: 0 0 auto; }
+  .murow span { min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .murow small { display: block; font-weight: 400; color: var(--muted); font-size: 11.5px; }
+  .murow.on { background: #fdf0e1; }
+  #mu-count { align-self: center; font-size: 13px; color: var(--muted); }
+  #rl-img { width: 100%; max-height: 42vh; object-fit: contain; border-radius: 8px; background: #eee; }
+  .sheet .crow { display: flex; gap: 8px; flex-wrap: wrap; } .sheet .crow .btn:last-child { margin-left: auto; }
+  .gp-sec { grid-column: 1 / -1; font-size: 13px; color: var(--brand-dark); padding: 8px 2px 2px; border-bottom: 1px solid var(--line); }
+  .gp-sec:first-child { padding-top: 0; }
+  .gp-sec small { color: var(--muted); font-weight: 500; }
+  .gp-sec.hl { color: var(--ok); }
+  .gp-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .gp-tools input[type=search] { flex: 1 1 160px; min-width: 0; height: 36px; border: 1px solid #d1d5db; border-radius: 8px; padding: 0 10px; }
+  .gp-tools .check { font-weight: 500; font-size: 13px; }
+  .gp-ai { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+  .gp-ai .btn { height: 30px; font-size: 12.5px; padding: 0 10px; }
+
+  /* tab Foto: saran foto dari album untuk tiap produk */
+  .sugg { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+  .sugg button { flex: 0 0 auto; width: 46px; height: 46px; padding: 0; border-radius: 6px; overflow: hidden; background: #eee; }
+  .sugg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sugg button.busy { opacity: .4; pointer-events: none; }
+  .sugg .more { font-size: 12px; font-weight: 700; color: var(--brand-dark); background: #fdf0e1; }
+  .frow .sub b { color: var(--danger); font-weight: 600; }
+  .bulk { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; font-size: 13px; color: var(--muted); }
+  .gpgrid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gpgrid button.busy { opacity: .4; pointer-events: none; }
+  .gpgrid button:focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+  .fields { flex: 1; min-width: 0; display: grid; gap: 6px; }
+  .fields .name { font-weight: 600; height: 32px; border-color: transparent; border-bottom: 1px dashed #cbd5e1; border-radius: 6px; padding: 0 6px; background: transparent; }
+  .fields .name:focus { border-color: #f0b429; background: #fff; }
+  .line2 { display: flex; gap: 6px; align-items: center; }
+  .line2 select { flex: 1; min-width: 0; height: 32px; font-size: 13px; }
+  .line2 .rp input { width: 84px; height: 32px; }
+  .side { display: grid; grid-template-columns: repeat(2, 32px); gap: 6px 4px; align-items: center; justify-items: center; flex: 0 0 auto; }
+  .side .sw { margin: 0; }
+
+  /* Asisten AI */
+  .chatlog { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .bub { max-width: 92%; padding: 9px 12px; border-radius: 14px; white-space: pre-wrap; line-height: 1.45; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .bub.me { align-self: flex-end; background: var(--brand); color: #fff; border-bottom-right-radius: 4px; }
+  .bub.ai { align-self: flex-start; background: #fff; border-bottom-left-radius: 4px; }
+  .bub.err { align-self: stretch; max-width: 100%; background: var(--pink); color: #991b1b; white-space: normal; }
+  .bub.typing { color: var(--muted); font-style: italic; }
+  .setup ol { margin: 6px 0 0 18px; padding: 0; } .setup li { margin-bottom: 4px; } .setup code { background: rgba(0,0,0,.08); padding: 1px 5px; border-radius: 4px; }
+  .chips2 { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip2 { padding: 7px 12px; border-radius: 16px; background: #fff; border: 1px solid #d1d5db; color: var(--ink); font-size: 13px; text-align: left; }
+  .props { background: #fff; border: 2px solid var(--brand); border-radius: 12px; padding: 10px; }
+  .props.done { border-color: var(--ok); background: #f0fdf4; } .props.dim { opacity: .6; border-color: #d1d5db; }
+  .props h4 { font-size: 14px; margin-bottom: 4px; } .props h4 small { font-weight: 400; color: var(--muted); }
+  .opl { display: flex; gap: 8px; align-items: flex-start; padding: 7px 2px; border-bottom: 1px solid #f1f1f1; font-size: 13px; line-height: 1.4; cursor: pointer; }
+  .opl input { margin-top: 2px; width: 17px; height: 17px; flex: 0 0 auto; accent-color: var(--brand-dark); }
+  .opl.bad { color: #991b1b; } .opl.noop { color: var(--muted); } .opl.danger span { color: #b91c1c; }
+  .acts2 { display: flex; gap: 8px; margin-top: 10px; } .acts2 .btn:first-child { flex: 1; }
+  .okline { margin-top: 8px; font-size: 13px; color: #166534; } .okline.muted { color: var(--muted); }
+  .btn.sm { height: 28px; padding: 0 10px; font-size: 12px; margin-left: 6px; }
+  .btn.sm.retry { margin: 8px 0 0; background: #fff; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .composer { background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .composer textarea { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; font: 14px 'DM Sans', sans-serif; resize: vertical; min-height: 70px; max-height: 40vh; }
+  .composer textarea:focus { outline: none; border-color: #f0b429; box-shadow: 0 0 0 2px #f6d27a66; }
+  .crow { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; } .crow #chat-send { margin-left: auto; min-width: 90px; }
+  .filebtn { display: inline-flex; align-items: center; cursor: pointer; }
+  .savebar { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; box-shadow: 0 -2px 10px rgba(0,0,0,.15); z-index: 20; transform: translateY(110%); transition: .2s; }
+  .savebar.show { transform: none; }
+  .savebar .wrap { display: flex; align-items: center; gap: 8px; padding-top: 10px; padding-bottom: 10px; }
+  .savebar span { flex: 1; font-weight: 600; color: var(--brand-dark); font-size: 13px; }
+  .toast { position: fixed; left: 50%; bottom: 76px; transform: translate(-50%, 10px); opacity: 0; pointer-events: none; transition: .25s; background: #111827; color: #fff; font-weight: 600; padding: 10px 16px; border-radius: 20px; z-index: 40; max-width: 92vw; text-align: center; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.err { background: var(--danger); }
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap"><h1>Admin Katalog</h1><span style="display:flex;gap:14px;align-items:center"><button class="install" id="install" hidden>Pasang</button><a href="/kasir/" target="_blank" rel="noopener">Kasir ↗</a><a href="/" target="_blank" rel="noopener">Lihat website ↗</a></span></div></div>
+<div class="tabs"><div class="wrap" id="tabs">
+  <button class="tab on" data-tab="produk">Produk</button>
+  <button class="tab" data-tab="foto">Foto</button>
+  <button class="tab" data-tab="kategori">Kategori</button>
+  <button class="tab" data-tab="paket">Paket</button>
+  <button class="tab" data-tab="setelan">Pengaturan</button>
+  <button class="tab" data-tab="ai">✨ AI</button>
+</div></div>
+
+<div class="wrap"><div class="panel" id="view">Memuat…</div></div>
+
+<div class="savebar" id="savebar"><div class="wrap">
+  <span>Ada perubahan yang belum disimpan</span>
+  <button class="btn ghost" id="discard">Batalkan</button>
+  <button class="btn" id="save">Simpan</button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<dialog class="sheet" id="pick"><div class="in">
+  <div class="sh-head"><b>Ganti foto</b><button class="icon" data-a="pick-close" title="Tutup">✕</button></div>
+  <div class="crow"><button class="btn ghost" data-a="pick-file">📁 Dari galeri / kamera</button><button class="btn danger" data-a="pick-clear" id="pick-clear">🗑 Lepas foto</button></div>
+  <div class="sh-sec">Dari album Google Photos</div>
+  <div class="tool"><input type="url" id="gp-link" placeholder="Tempel link album (photos.app.goo.gl/…)"><button class="btn" data-a="gp-load">Buka album</button></div>
+  <p class="hint" id="gp-info" data-hint='Album harus dibagikan ke "siapa saja yang memiliki link". Ketuk foto untuk memakainya.'>Album harus dibagikan ke "siapa saja yang memiliki link". Ketuk foto untuk memakainya.</p>
+  <div class="gp-tools" id="gp-tools" hidden>
+    <input type="search" id="gp-q" placeholder="Cari foto, mis. lumpur, bolu, risol…" autocomplete="off">
+    <label class="check"><input type="checkbox" id="gp-group"> Kelompokkan</label>
+  </div>
+  <div class="gp-ai" id="gp-ai" hidden><button class="btn ghost" data-a="gp-ai">✨ Kenali foto dengan AI</button><button class="btn ghost" data-a="gp-ai-all" hidden>↻ Kenali ulang semua</button><span class="gp-ai-info"></span></div>
+  <div class="gpwrap"><div class="gpgrid" id="gp-grid"></div></div>
+</div></dialog>
+
+<dialog class="sheet" id="multi"><div class="in">
+  <div class="sh-head"><b>Pakai foto untuk beberapa produk</b><button class="icon" data-a="mu-close" title="Tutup">✕</button></div>
+  <div class="mu-top"><img id="mu-img" alt="" referrerpolicy="no-referrer"><p class="hint">Centang semua produk yang memakai foto ini. Foto lama produk yang dicentang akan diganti. Setelah itu tekan Simpan.</p></div>
+  <input type="search" id="mu-q" placeholder="Cari produk…" autocomplete="off">
+  <div class="mulist" id="mu-list"></div>
+  <div class="crow"><span id="mu-count"></span><button class="btn" data-a="mu-apply">Pasang</button></div>
+</div></dialog>
+
+<dialog class="sheet" id="relabel"><div class="in">
+  <div class="sh-head"><b>Koreksi label foto</b><button class="icon" data-a="rl-close" title="Tutup">✕</button></div>
+  <img id="rl-img" alt="" referrerpolicy="no-referrer">
+  <p class="hint" id="rl-now"></p>
+  <input type="text" id="rl-in" list="rl-list" maxlength="60" placeholder="Ketik nama produk atau nama makanan" autocomplete="off">
+  <datalist id="rl-list"></datalist>
+  <p class="hint">Pilih nama produk dari daftar supaya foto ini disarankan untuk produk itu. Label koreksi langsung tersimpan dan tidak akan diubah AI lagi.</p>
+  <div class="crow"><button class="btn ghost" data-a="rl-not">Bukan makanan</button><button class="btn" data-a="rl-save">Simpan label</button></div>
+</div></dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const rp = n => "Rp" + Number(n).toLocaleString("id-ID");
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+// Foto tersimpan sebagai "images/..." (relatif ke root website), sedangkan halaman ini ada di /<link-admin>/
+const src = u => !u ? "" : /^https?:\/\//i.test(u) ? u : "/" + String(u).replace(/^\/+/, "");
+
+let data = null, saved = "", tab = "produk", q = "", fcat = "", toastTimer;
+
+/* ---------- muat / simpan ---------- */
+async function api(path, opt) {
+  const r = await fetch(path.replace(/^api\//, "https://nyvwnpkhzkdtmbwigfoy.supabase.co/functions/v1/catalog/a/adminxx/"), opt);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(j.error || "Gagal (" + r.status + ")"), { code: j.code });
+  return j;
+}
+async function load() {
+  try { data = await api("api/data", { cache: "no-store" }); }
+  catch (e) { $("view").innerHTML = `<p class="empty">Gagal memuat data: ${esc(e.message)}</p>`; return; }
+  saved = JSON.stringify(data); render();
+}
+async function save() {
+  // Server membuang isian tanpa nama, jadi cegah dulu supaya tidak hilang diam-diam.
+  const empty = [["produk", data.products, "[data-pid=\"ID\"] [data-f=\"name\"]", "produk"],
+                 ["kategori", data.categories, "[data-cid=\"ID\"] [data-f=\"cname\"]", "kategori"],
+                 ["paket", data.paket.addons, "[data-aid=\"ID\"] [data-f=\"aname\"]", "tambahan paket"]]
+    .map(([t, list, sel, label]) => ({ t, label, sel, item: list.find(x => !String(x.name).trim()) })).find(x => x.item);
+  if (empty) {
+    tab = empty.t; q = ""; fcat = ""; render();
+    const inp = document.querySelector(empty.sel.replace("ID", empty.item.id));
+    if (inp) { inp.scrollIntoView({ block: "center" }); inp.focus(); }
+    msg(`Nama ${empty.label} belum diisi`, true); return;
+  }
+  const btn = $("save"); btn.disabled = true; btn.textContent = "Menyimpan…";
+  try {
+    data = await api("api/data", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    saved = JSON.stringify(data); msg("Tersimpan ✓"); render();
+  } catch (e) { msg(e.message, true); }
+  btn.disabled = false; btn.textContent = "Simpan";
+}
+const dirty = () => JSON.stringify(data) !== saved;
+function markDirty() { $("savebar").classList.toggle("show", dirty()); }
+function msg(t, err) {
+  const el = $("toast"); el.textContent = t; el.classList.toggle("err", !!err); el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), err ? 3500 : 1800);
+}
+window.addEventListener("beforeunload", e => { if (data && dirty()) { e.preventDefault(); e.returnValue = ""; } });
+$("save").onclick = save;
+$("discard").onclick = () => { if (confirm("Buang semua perubahan yang belum disimpan?")) load(); };
+
+/* ---------- foto ---------- */
+// Perkecil foto dari kamera HP (maks 1000px) sebelum diunggah supaya halaman katalog tetap ringan.
+async function shrink(file) {
+  try {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1000 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(bmp, 0, 0, c.width, c.height);
+    const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.85));
+    return blob && blob.size < file.size ? blob : file;
+  } catch { return file; }
+}
+async function upload(file) {
+  const blob = await shrink(file);
+  const r = await api("api/upload", { method: "POST", headers: { "Content-Type": blob.type || "image/jpeg" }, body: blob });
+  return r.path;
+}
+
+/* ---------- pemilih foto (galeri/kamera atau Google Photos) ---------- */
+// target: { pid } untuk foto produk, { hero: true } untuk foto header
+// Daftar foto album + label AI disimpan di HP ini (localStorage "gpCache") supaya grid langsung tampil tanpa memuat ulang dari Google.
+// Label AI (id foto -> { l: nama makanan, p: nama produk katalog yang cocok }) juga tersimpan di server, jadi cukup dikenali sekali.
+const GP_KEY = "gpCache";
+const gp = { target: null, link: "", title: "", photos: null, labels: {}, at: 0, loading: false, q: "", group: localStorage.getItem("gpGroup") === "1", ai: null };
+try {
+  const c = JSON.parse(localStorage.getItem(GP_KEY) || "null");
+  if (c && Array.isArray(c.photos)) Object.assign(gp, { link: c.link, title: c.title || "", photos: c.photos.map(([id, src]) => ({ id, src })), labels: c.labels || {}, at: c.at || 0 });
+  else if (c && c.link) gp.link = c.link; // simpanan versi lama (tanpa id foto): muat ulang album
+  else gp.link = localStorage.getItem("gpAlbum") || "";
+} catch {}
+function saveAlbum() {
+  try {
+    localStorage.setItem(GP_KEY, JSON.stringify({ link: gp.link, title: gp.title, at: gp.at, photos: gp.photos.map(p => [p.id, p.src]), labels: gp.labels }));
+    localStorage.removeItem("gpAlbum");
+  } catch { /* penyimpanan HP penuh: album tetap bisa dipakai, hanya tidak tersimpan */ }
+}
+const gpThumb = (u, n) => `${u}=w${n}-h${n}-c`;
+const ago = t => {
+  const m = Math.round((Date.now() - t) / 60000);
+  return m < 1 ? "baru saja" : m < 60 ? m + " menit lalu" : m < 1440 ? Math.round(m / 60) + " jam lalu" : Math.round(m / 1440) + " hari lalu";
+};
+
+const targetImg = t => t.hero ? data.settings.heroImage : (data.products.find(x => x.id === t.pid) || {}).img;
+function openPicker(target) {
+  gp.target = target;
+  $("gp-link").value = gp.link;
+  $("gp-q").value = gp.q; $("gp-group").checked = gp.group;
+  $("pick-clear").hidden = !targetImg(target);
+  renderAlbum();
+  $("pick").showModal();
+  if (gp.link && !gp.photos) loadAlbum($("gp-link"));
+}
+// Tombol jadi "Perbarui" bila link di kotak sebelahnya sama dengan album yang sudah tersimpan.
+// Ada di jendela pilih foto dan di tab Foto, jadi semua tombol diperbarui.
+function syncAlbumBtn() {
+  document.querySelectorAll('[data-a="gp-load"]').forEach(btn => {
+    const same = gp.photos && btn.closest(".tool").querySelector("input").value.trim() === gp.link;
+    btn.textContent = gp.loading ? "Memuat…" : same ? "↻ Perbarui" : "Buka album";
+    btn.disabled = gp.loading;
+  });
+}
+// Dipanggil setiap data album/label berubah: perbarui tampilan yang sedang terbuka.
+function gpRefresh() {
+  if ($("pick").open) renderAlbum();
+  if (tab === "foto" && data) { renderFotoAlbum(); renderFotoList(); }
+}
+const albumInfo = () => gp.loading ? (gp.photos ? "Memperbarui album… (foto lama tetap bisa dipilih)" : "Memuat album…")
+  : gp.photos ? `${gp.title ? gp.title + " · " : ""}${gp.photos.length} foto · diperbarui ${ago(gp.at)}`
+  : gp.failed ? "Album belum bisa dimuat. Periksa link-nya lalu coba lagi." : "";
+
+/* --- cari & kelompokkan --- */
+const LAST_GROUPS = ["Aneka jajanan", "Tidak dikenali", "Bukan makanan", "Belum dikenali"]; // selalu di akhir, urutan ini
+const gpGroupOf = p => { const l = gp.labels[p.id]; return l ? (l.p || l.l) : "Belum dikenali"; };
+// semua produk yang memakai/cocok dengan foto ini: produk utama + produk lain tempat foto ini dipasang
+const labNames = l => l ? [l.p, ...(l.a || [])].filter(Boolean) : [];
+const gpText = p => {
+  const l = gp.labels[p.id]; if (!l) return "";
+  const prod = l.p && data.products.find(x => x.name === l.p);
+  return norm([l.l, ...labNames(l), prod && catName(prod.cat)].join(" "));
+};
+function gpVisible() {
+  const words = norm(gp.q).split(" ").filter(Boolean);
+  return gp.photos.map((p, i) => ({ p, i })).filter(({ p }) => !words.length || words.every(w => gpText(p).includes(w)));
+}
+function gpGroups(list) {
+  const map = new Map();
+  for (const it of list) { const g = gpGroupOf(it.p); if (!map.has(g)) map.set(g, []); map.get(g).push(it); }
+  const prodRank = new Map(data.products.map((x, i) => [x.name, i]));
+  const rank = g => prodRank.has(g) ? [0, prodRank.get(g)] : LAST_GROUPS.includes(g) ? [2, LAST_GROUPS.indexOf(g)] : [1, 0];
+  return [...map].sort(([a], [b]) => { const x = rank(a), y = rank(b); return x[0] - y[0] || x[1] - y[1] || a.localeCompare(b, "id"); });
+}
+const gpCell = ({ p, i }, prodName) => {
+  const l = gp.labels[p.id], cap = l ? (l.p || l.l) + (l.a && l.a.length ? ` +${l.a.length}` : "") : "";
+  return `<button data-a="gp-pick" data-i="${i}" title="${esc(cap || "Pakai foto ini")}"><img src="${esc(gpThumb(p.src, 200))}" loading="lazy" referrerpolicy="no-referrer" alt="">` +
+    (cap ? `<span class="cap${prodName && labNames(l).includes(prodName) ? " match" : ""}${l.m ? " man" : ""}">${esc(cap)}</span>` : "") +
+    `<span class="ed mu" data-a="gp-multi" data-i="${i}" title="Pakai untuk beberapa produk">⧉</span>` +
+    `<span class="ed" data-a="gp-edit" data-i="${i}" title="Koreksi label">✎</span></button>`;
+};
+const gpSec = (name, n, hl) => `<div class="gp-sec${hl ? " hl" : ""}">${esc(name)} <small>${n}</small></div>`;
+
+function renderAlbum() {
+  syncAlbumBtn();
+  const grid = $("gp-grid");
+  $("gp-tools").hidden = $("gp-ai").hidden = !gp.photos;
+  if (!gp.photos) { grid.innerHTML = ""; $("gp-info").textContent = albumInfo() || $("gp-info").dataset.hint; return; }
+  const list = gpVisible(), labeled = gp.photos.filter(p => gp.labels[p.id]).length;
+  $("gp-info").textContent = albumInfo() + (gp.q ? ` · ${list.length} cocok dengan "${gp.q}"` : "") + ". Ketuk foto untuk memakainya.";
+  renderAiInfo();
+  // Foto yang dikenali AI sebagai produk yang sedang diganti fotonya ditampilkan paling atas.
+  const prod = gp.target && gp.target.pid ? data.products.find(x => x.id === gp.target.pid) : null;
+  const pname = prod && prod.name.trim();
+  const match = pname ? list.filter(({ p }) => labNames(gp.labels[p.id]).includes(pname)) : [];
+  let html = "";
+  if (!list.length) html = `<p class="hint" style="grid-column:1/-1">Tidak ada foto yang cocok.${labeled < gp.photos.length ? " Foto yang belum dikenali AI tidak ikut dicari." : ""}</p>`;
+  else if (gp.group) { // foto produk ini (termasuk yang juga dipasang ke produk lain) di paling atas, lalu grup lainnya
+    const inMatch = new Set(match.map(it => it.i));
+    html = (match.length ? gpSec("Cocok untuk " + pname, match.length, true) + match.map(it => gpCell(it, pname)).join("") : "") +
+      gpGroups(list.filter(it => !inMatch.has(it.i))).map(([g, items]) => gpSec(g, items.length) + items.map(it => gpCell(it, pname)).join("")).join("");
+  } else html = (match.length ? gpSec("Cocok untuk " + pname, match.length, true) + match.map(it => gpCell(it, pname)).join("") + gpSec("Semua foto", list.length) : "") +
+    list.map(it => gpCell(it, pname)).join("");
+  grid.innerHTML = html;
+}
+// input = kotak link yang dipakai (jendela pilih foto atau tab Foto)
+async function loadAlbum(input) {
+  const link = input.value.trim();
+  if (!link) { msg("Tempel link album dulu", true); input.focus(); return; }
+  if (gp.loading) return;
+  if (link !== gp.link) gp.photos = null;
+  gp.loading = true; gp.failed = false; syncAlbumBtn(); gpRefresh();
+  try {
+    const r = await api("api/gphotos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ link }) });
+    // label dari server digabung dengan label yang sudah ada di HP ini
+    const labels = link === gp.link ? { ...gp.labels, ...(r.labels || {}) } : (r.labels || {});
+    Object.assign(gp, { link, title: r.title || "", photos: r.photos, labels, at: Date.now() });
+    saveAlbum();
+  } catch (e) { msg(e.message, true); gp.failed = !gp.photos; }
+  gp.loading = false;
+  syncAlbumBtn(); gpRefresh();
+}
+
+/* --- kenali foto dengan AI: dikirim per 16 foto, foto yang sudah berlabel dilewati --- */
+function renderAiInfo() {
+  if (!gp.photos) return;
+  const labeled = gp.photos.filter(p => gp.labels[p.id]).length, left = gp.photos.length - labeled, ai = gp.ai;
+  document.querySelectorAll('[data-a="gp-ai"]').forEach(btn => {
+    btn.textContent = ai ? "■ Berhenti" : left ? `✨ Kenali ${left} foto dengan AI` : "✨ Semua foto sudah dikenali";
+    btn.disabled = !ai && !left;
+  });
+  document.querySelectorAll('[data-a="gp-ai-all"]').forEach(btn => btn.hidden = !!ai || !labeled);
+  const manual = gp.photos.filter(p => gp.labels[p.id]?.m).length;
+  document.querySelectorAll(".gp-ai-info").forEach(el => el.textContent = ai ? ai.status
+    : left === gp.photos.length ? "Supaya foto bisa dicari, dikelompokkan, dan disarankan untuk tiap produk."
+    : `${labeled} foto sudah dikenali${manual ? `, ${manual} dikoreksi manual` : ""}. Ketuk ✎ di foto untuk mengoreksi label.`);
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+// Lembar contoh untuk AI: foto produk katalog disusun jadi kolase 6x6 bernomor C1, C2, ... (urut sesuai daftar nama).
+// Dikirim sekali di awal setiap proses "Kenali"; server menyimpannya dan mengirimnya ke AI bersama tiap kelompok foto.
+const REF = { cols: 6, cell: 192, max: 8 };
+const loadImg = u => new Promise(res => {
+  const img = new Image(); img.crossOrigin = "anonymous"; img.referrerPolicy = "no-referrer";
+  img.onload = () => res(img); img.onerror = () => res(null); img.src = u;
+});
+async function buildRefs() {
+  const seen = new Set(), prods = data.products.filter(p => p.img && !seen.has(norm(p.name)) && seen.add(norm(p.name)));
+  const imgs = await Promise.all(prods.slice(0, REF.cols * REF.cols * REF.max).map(p => loadImg(src(p.img))));
+  const items = prods.map((p, i) => ({ name: p.name.trim(), img: imgs[i] })).filter(x => x.img);
+  const per = REF.cols * REF.cols, sheets = [];
+  for (let a = 0; a < items.length; a += per) {
+    const part = items.slice(a, a + per), rows = Math.ceil(part.length / REF.cols);
+    const c = document.createElement("canvas"); c.width = REF.cols * REF.cell; c.height = rows * REF.cell;
+    const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height);
+    part.forEach((it, k) => {
+      const x = (k % REF.cols) * REF.cell, y = Math.floor(k / REF.cols) * REF.cell, im = it.img;
+      const sc = Math.max((REF.cell - 4) / im.naturalWidth, (REF.cell - 4) / im.naturalHeight), sw = (REF.cell - 4) / sc, sh = (REF.cell - 4) / sc;
+      g.drawImage(im, (im.naturalWidth - sw) / 2, (im.naturalHeight - sh) / 2, sw, sh, x + 2, y + 2, REF.cell - 4, REF.cell - 4);
+      const code = "C" + (a + k + 1);
+      g.font = "bold 26px sans-serif"; const w = g.measureText(code).width + 14;
+      g.fillStyle = "rgba(0,0,0,.75)"; g.fillRect(x + 2, y + 2, w, 34);
+      g.fillStyle = "#fff"; g.fillText(code, x + 9, y + 29);
+    });
+    sheets.push(c.toDataURL("image/jpeg", 0.82).split(",")[1]);
+  }
+  return { sheets, names: items.map(x => x.name) };
+}
+
+// all = kenali ulang semua foto (kecuali yang dikoreksi manual), misalnya setelah foto produk katalog bertambah.
+async function runAi(all = false) {
+  if (gp.ai) { gp.ai.stop = true; gp.ai.status = "Menghentikan…"; renderAiInfo(); return; }
+  const ai = gp.ai = { stop: false, status: "Menyiapkan foto contoh dari katalog…" }, link = gp.link;
+  renderAiInfo();
+  try {
+    const refs = await buildRefs();
+    if (refs.sheets.length) await api("api/gphotos-refs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(refs) });
+    ai.refs = refs.names.length;
+  } catch (e) { msg("Foto contoh tidak bisa disiapkan, AI jalan tanpa contoh: " + e.message, true); }
+  const todo = gp.photos.filter(p => !gp.labels[p.id] || (all && !gp.labels[p.id].m)), total = todo.length;
+  let done = 0, failStreak = 0;
+  while (todo.length && !ai.stop && gp.link === link) {
+    const batch = todo.slice(0, 16);
+    ai.status = `Mengenali foto ${done + 1}–${done + batch.length} dari ${total}${ai.refs ? ` (acuan: ${ai.refs} foto produk)` : ""}…`; renderAiInfo();
+    try {
+      const r = await api("api/gphotos-label", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: batch.map(p => ({ id: p.id, src: p.src })) }) });
+      Object.assign(gp.labels, r.labels); saveAlbum(); gpRefresh();
+      todo.splice(0, batch.length); done += batch.length; failStreak = 0;
+    } catch (e) {
+      if (e.code === "ai_rate" || e.code === "ai_busy") { // kuota per menit habis / penyedia sibuk: tunggu lalu lanjut
+        for (let s = 30; s > 0 && !ai.stop; s--) { ai.status = `Kuota AI per menit habis, lanjut dalam ${s} detik…`; renderAiInfo(); await sleep(1000); }
+        continue;
+      }
+      if (e.code === "ai_not_configured") { msg("Fitur AI belum diaktifkan. Isi AI_API_KEY dulu (lihat tab ✨ AI).", true); break; }
+      if (++failStreak >= 3) { msg("Pengenalan foto berhenti: " + e.message, true); break; }
+      await sleep(3000);
+    }
+  }
+  gp.ai = null; gpRefresh();
+  if (!todo.length && total) msg(`✓ ${total} foto selesai dikenali`);
+}
+function useImage(path, t = gp.target) {
+  if (t.hero) { data.settings.heroImage = path; render(); return; }
+  const p = data.products.find(x => x.id === t.pid); if (!p) return;
+  p.img = path;
+  const th = document.querySelector(`[data-pid="${CSS.escape(t.pid)}"] .th`); if (th) th.src = src(path) || BLANK;
+  markDirty();
+  if (tab === "foto") renderFotoList();
+}
+// Koreksi label satu foto (langsung tersimpan di server; AI tidak menimpanya lagi).
+let rlIndex = -1;
+function openRelabel(i) {
+  rlIndex = i;
+  const p = gp.photos[i], l = gp.labels[p.id];
+  $("rl-img").src = gpThumb(p.src, 600).replace(/-c$/, "");
+  $("rl-now").textContent = l ? `Label sekarang: ${l.p || l.l}${l.m ? " (dikunci admin)" : " (dari AI)"}` +
+    (l.a && l.a.length ? `. Juga dipakai di: ${l.a.join(", ")}` : "") : "Belum dikenali AI.";
+  $("rl-in").value = l ? (l.p || l.l) : "";
+  $("rl-list").innerHTML = data.products.map(x => `<option value="${esc(x.name)}"></option>`).join("");
+  $("relabel").showModal(); $("rl-in").focus(); $("rl-in").select();
+}
+async function saveRelabel(label) {
+  label = label.trim();
+  if (!label) { msg("Isi nama produk atau makanan dulu", true); $("rl-in").focus(); return; }
+  const p = gp.photos[rlIndex];
+  try {
+    const r = await api("api/gphotos-relabel", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id, label }) });
+    gp.labels[p.id] = r.label; saveAlbum(); $("relabel").close(); gpRefresh();
+    msg(r.label.p ? `✓ Ditandai sebagai ${r.label.p}` : `✓ Label disimpan: ${r.label.l}`);
+  } catch (e) { msg(e.message, true); }
+}
+
+// Salin foto album ke penyimpanan katalog lalu pasang ke target.
+// Foto album yang sudah pernah disalin diingat (alamat album -> alamat salinan) supaya tidak disalin ulang
+// saat dipasang ke produk lain; beberapa produk boleh memakai file foto yang sama.
+const IMPORTED_KEY = "gpImported";
+const imported = (() => { try { return JSON.parse(localStorage.getItem(IMPORTED_KEY) || "{}"); } catch { return {}; } })();
+async function copyPhoto(photo) {
+  if (imported[photo.src]) return imported[photo.src];
+  const r = await api("api/gphotos-import", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ src: photo.src }) });
+  imported[photo.src] = r.path;
+  try { localStorage.setItem(IMPORTED_KEY, JSON.stringify(imported)); } catch {}
+  return r.path;
+}
+async function importPhoto(photo, target) {
+  useImage(await copyPhoto(photo), target);
+  if (target.pid) await attachLabel(photo, [data.products.find(x => x.id === target.pid)?.name]);
+}
+// Foto yang dipasang ke produk diberi label nama produk itu (dikunci, tidak ditimpa AI) supaya jadi saran di produk tersebut.
+// Gagal menyimpan label tidak membatalkan pemasangan foto.
+async function attachLabel(photo, names) {
+  names = names.filter(Boolean).map(n => n.trim());
+  if (!names.length) return;
+  try {
+    const r = await api("api/gphotos-attach", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: photo.id, products: names }) });
+    gp.labels[photo.id] = r.label; saveAlbum(); gpRefresh();
+  } catch (e) { console.warn("label foto:", e.message); }
+}
+
+// --- satu foto untuk beberapa produk ---
+const mu = { i: -1, sel: new Set() };
+function openMulti(i) {
+  const photo = gp.photos[i], l = gp.labels[photo.id];
+  mu.i = i; mu.sel = new Set();
+  if (gp.target && gp.target.pid) mu.sel.add(gp.target.pid); // produk yang sedang diganti fotonya langsung tercentang
+  if (l && l.p) data.products.filter(x => x.name.trim() === l.p).forEach(x => mu.sel.add(x.id));
+  $("mu-img").src = gpThumb(photo.src, 200);
+  $("mu-q").value = "";
+  renderMulti();
+  $("multi").showModal();
+}
+function renderMulti() {
+  const words = norm($("mu-q").value).split(" ").filter(Boolean);
+  // produk yang sudah dicentang tampil paling atas
+  const ps = data.products.filter(x => words.every(w => norm(x.name + " " + catName(x.cat)).includes(w)))
+    .sort((a, b) => mu.sel.has(b.id) - mu.sel.has(a.id));
+  $("mu-list").innerHTML = ps.map(x => `
+    <label class="murow${mu.sel.has(x.id) ? " on" : ""}"><input type="checkbox" data-mu="${esc(x.id)}"${mu.sel.has(x.id) ? " checked" : ""}>
+      <img src="${esc(src(x.img) || BLANK)}" alt="" loading="lazy"><span>${esc(x.name)}<small>${esc(catName(x.cat))} · ${x.img ? "ada foto" : "belum ada foto"}</small></span></label>`).join("")
+    || `<p class="empty">Tidak ada produk yang cocok.</p>`;
+  syncMulti();
+}
+function syncMulti() {
+  $("mu-count").textContent = mu.sel.size ? `${mu.sel.size} produk dipilih` : "Belum ada produk dipilih";
+  document.querySelector('[data-a="mu-apply"]').textContent = mu.sel.size ? `Pasang ke ${mu.sel.size} produk` : "Pasang";
+  document.querySelector('[data-a="mu-apply"]').disabled = !mu.sel.size;
+}
+async function applyMulti(b) {
+  const ids = [...mu.sel];
+  b.disabled = true; b.textContent = "Memasang…";
+  try {
+    const photo = gp.photos[mu.i], path = await copyPhoto(photo);
+    ids.forEach(pid => useImage(path, { pid }));
+    await attachLabel(photo, ids.map(pid => data.products.find(x => x.id === pid)?.name));
+    $("multi").close(); $("pick").close();
+    msg(`✓ Foto dipasang ke ${ids.length} produk. Tekan Simpan untuk menyimpan.`);
+  } catch (e) { msg(e.message, true); syncMulti(); }
+}
+async function pickClick(a, b) {
+  if (a === "pick-img") openPicker({ pid: b.closest("[data-pid]").dataset.pid });
+  else if (a === "pick-hero") openPicker({ hero: true });
+  else if (a === "pick-close") $("pick").close();
+  else if (a === "pick-clear") {
+    const what = gp.target.hero ? "foto header" : `foto "${(data.products.find(x => x.id === gp.target.pid) || {}).name}"`;
+    if (!confirm(`Lepas ${what}? File fotonya tidak dihapus, hanya tidak dipakai lagi.`)) return;
+    useImage("", gp.target); $("pick").close(); msg("Foto dilepas. Tekan Simpan untuk menyimpan.");
+  }
+  else if (a === "pick-file") {
+    $("pick").close();
+    const t = gp.target;
+    (t.hero ? $("hero-file") : document.querySelector(`[data-pid="${CSS.escape(t.pid)}"] [data-f="img"]`))?.click();
+  }
+  else if (a === "gp-load") loadAlbum(b.closest(".tool").querySelector("input"));
+  else if (a === "gp-ai") runAi();
+  else if (a === "gp-ai-all") {
+    if (confirm("Kenali ulang semua foto album dengan AI? Label yang sudah kamu koreksi manual tidak diubah.")) runAi(true);
+  }
+  else if (a === "gp-edit") openRelabel(+b.dataset.i);
+  else if (a === "gp-multi") openMulti(+b.dataset.i);
+  else if (a === "mu-close") $("multi").close();
+  else if (a === "mu-apply") applyMulti(b);
+  else if (a === "rl-close") $("relabel").close();
+  else if (a === "rl-not") saveRelabel("Bukan makanan");
+  else if (a === "rl-save") saveRelabel($("rl-in").value);
+  else if (a === "gp-pick") {
+    const photo = gp.photos[+b.dataset.i];
+    b.classList.add("busy"); msg("Mengambil foto dari Google Photos…");
+    try { await importPhoto(photo, gp.target); $("pick").close(); msg("Foto terpasang ✓"); }
+    catch (e) { msg(e.message + (e.message.includes("Google Photos") ? " Coba tekan ↻ Perbarui." : ""), true); }
+    b.classList.remove("busy");
+  }
+}
+$("pick").addEventListener("click", e => { if (e.target === $("pick")) $("pick").close(); }); // ketuk area gelap = tutup
+$("relabel").addEventListener("click", e => { if (e.target === $("relabel")) $("relabel").close(); });
+$("multi").addEventListener("click", e => { if (e.target === $("multi")) $("multi").close(); });
+$("mu-q").addEventListener("input", renderMulti);
+$("mu-list").addEventListener("change", e => {
+  const id = e.target.dataset.mu; if (!id) return;
+  e.target.checked ? mu.sel.add(id) : mu.sel.delete(id);
+  e.target.closest(".murow").classList.toggle("on", e.target.checked); syncMulti();
+});
+$("rl-in").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); saveRelabel(e.target.value); } });
+$("gp-link").addEventListener("input", syncAlbumBtn);
+let gpQTimer;
+$("gp-q").addEventListener("input", e => { clearTimeout(gpQTimer); gpQTimer = setTimeout(() => { gp.q = e.target.value.trim(); renderAlbum(); $("gp-grid").parentElement.scrollTop = 0; }, 150); });
+$("gp-group").addEventListener("change", e => { gp.group = e.target.checked; localStorage.setItem("gpGroup", gp.group ? "1" : "0"); renderAlbum(); });
+$("gp-link").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); loadAlbum(e.target); } });
+
+/* ---------- helpers data ---------- */
+const catName = id => (data.categories.find(c => c.id === id) || {}).name || "Tanpa kategori";
+const catOptions = sel => `<option value="">Tanpa kategori</option>` +
+  data.categories.map(c => `<option value="${esc(c.id)}"${c.id === sel ? " selected" : ""}>${esc(c.name)}</option>`).join("");
+function move(list, i, d) { const j = i + d; if (j < 0 || j >= list.length) return; [list[i], list[j]] = [list[j], list[i]]; }
+
+/* ---------- render ---------- */
+function render() {
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  $("view").innerHTML = ({ produk: viewProduk, foto: viewFoto, kategori: viewKategori, paket: viewPaket, setelan: viewSetelan, ai: viewAI })[tab]();
+  if (tab === "ai") renderChat();
+  if (tab === "foto") {
+    renderFotoAlbum(); renderFotoList();
+    if (gp.link && !gp.photos && !gp.loading && !gp.failed) loadAlbum($("fa-link"));
+  }
+  markDirty();
+}
+
+const BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+function viewProduk() {
+  const ps = data.products.filter(p => (!fcat || p.cat === fcat) && p.name.toLowerCase().includes(q.toLowerCase()));
+  return `
+    <h2>Produk (${data.products.length})</h2>
+    <p class="hint">Ketuk foto untuk ganti (kamera, galeri, atau album Google Photos). Nama, kategori, dan harga bisa langsung diubah. Saklar hijau = tampil di website; mati = disembunyikan.</p>
+    <div class="tool">
+      <input type="text" id="q" placeholder="Cari produk…" value="${esc(q)}">
+      <select id="fcat"><option value="">Semua kategori</option>${data.categories.map(c => `<option value="${esc(c.id)}"${c.id === fcat ? " selected" : ""}>${esc(c.name)}</option>`).join("")}</select>
+      <button class="btn" data-a="add-prod">+ Produk</button>
+    </div>
+    ${ps.length ? ps.map(p => `
+      <div class="row prod${p.active ? "" : " off"}" data-pid="${esc(p.id)}">
+        <button class="thumb" data-a="pick-img" title="Ganti foto">
+          <img class="th" src="${esc(src(p.img) || BLANK)}" alt="">
+          <span class="cam">📷</span>
+        </button>
+        <input type="file" accept="image/*" data-f="img" hidden>
+        <div class="fields">
+          <input type="text" class="name" data-f="name" value="${esc(p.name)}" placeholder="Nama produk" maxlength="100">
+          <div class="line2">
+            <select data-f="cat">${catOptions(p.cat)}</select>
+            <label class="rp">Rp <input type="number" min="0" step="100" inputmode="numeric" value="${p.price}" data-f="price"></label>
+          </div>
+        </div>
+        <div class="side">
+          <button class="icon" data-a="up" title="Naik">▲</button><button class="icon" data-a="down" title="Turun">▼</button>
+          <label class="sw" title="Tampilkan di website"><input type="checkbox" data-f="active"${p.active ? " checked" : ""}><span></span></label>
+          <button class="icon del" data-a="del-prod" title="Hapus">🗑</button>
+        </div>
+      </div>`).join("") : `<p class="empty">${data.products.length ? "Tidak ada produk yang cocok." : "Belum ada produk."}</p>`}`;
+}
+
+/* ---------- tab Foto: kelola foto semua produk + album Google Photos ---------- */
+let fotoQ = "", fotoFilter = "all";
+function viewFoto() {
+  return `
+    <h2>Foto Produk</h2>
+    <p class="hint">Kelola foto semua produk di satu tempat. Ketuk foto untuk mengganti (galeri, kamera, atau album Google Photos).
+      Setelah foto album dikenali AI, foto yang cocok muncul sebagai saran di bawah nama produk. Ketuk saran untuk memakainya.</p>
+    <div class="card">
+      <div class="field" style="margin-bottom:6px"><label>Album Google Photos</label>
+        <div class="tool" style="margin:0"><input type="url" id="fa-link" value="${esc(gp.link)}" placeholder="Tempel link album (photos.app.goo.gl/…)"><button class="btn" data-a="gp-load">Buka album</button></div></div>
+      <p class="hint" id="fa-info" style="margin-bottom:8px"></p>
+      <div class="gp-ai" id="fa-ai" hidden><button class="btn ghost" data-a="gp-ai"></button><button class="btn ghost" data-a="gp-ai-all" hidden>↻ Kenali ulang semua</button><span class="gp-ai-info"></span></div>
+    </div>
+    <div class="tool">
+      <input type="text" id="fq" placeholder="Cari produk…" value="${esc(fotoQ)}">
+      <select id="ffilter">${[["all", "Semua produk"], ["none", "Belum ada foto"], ["sugg", "Ada saran dari album"]]
+        .map(([v, t]) => `<option value="${v}"${v === fotoFilter ? " selected" : ""}>${t}</option>`).join("")}</select>
+    </div>
+    <div class="bulk" id="foto-bulk"></div>
+    <div id="foto-list"></div>`;
+}
+function renderFotoAlbum() {
+  if (!$("fa-info")) return;
+  $("fa-info").textContent = albumInfo() || 'Album harus dibagikan ke "siapa saja yang memiliki link".';
+  $("fa-ai").hidden = !gp.photos;
+  syncAlbumBtn(); renderAiInfo();
+}
+// nama produk -> foto album yang dikenali AI sebagai produk itu
+function suggestions() {
+  const m = new Map();
+  (gp.photos || []).forEach((p, i) => labNames(gp.labels[p.id]).forEach(n => { if (!m.has(n)) m.set(n, []); m.get(n).push({ p, i }); }));
+  return m;
+}
+function renderFotoList() {
+  const el = $("foto-list"); if (!el) return;
+  const sugg = suggestions(), sOf = p => sugg.get(p.name.trim()) || [];
+  const words = norm(fotoQ).split(" ").filter(Boolean);
+  const ps = data.products.filter(p => words.every(w => norm(p.name + " " + catName(p.cat)).includes(w)) &&
+    (fotoFilter === "all" || (fotoFilter === "none" ? !p.img : sOf(p).length > 0)));
+  const noImg = data.products.filter(p => !p.img), auto = noImg.filter(p => sOf(p).length);
+  $("foto-bulk").innerHTML = `<span>${data.products.length} produk · ${noImg.length} belum ada foto</span>` +
+    (auto.length ? `<button class="btn" data-a="foto-auto">✨ Pasang foto saran untuk ${auto.length} produk tanpa foto</button>` : "");
+  el.innerHTML = ps.length ? ps.map(p => {
+    const s = sOf(p);
+    return `
+      <div class="row prod frow${p.active ? "" : " off"}" data-pid="${esc(p.id)}">
+        <button class="thumb" data-a="pick-img" title="Ganti foto"><img class="th" src="${esc(src(p.img) || BLANK)}" alt=""><span class="cam">📷</span></button>
+        <input type="file" accept="image/*" data-f="img" hidden>
+        <div class="fields">
+          <div class="nm">${esc(p.name)}</div>
+          <div class="sub">${esc(catName(p.cat))} · ${p.img ? "ada foto" : "<b>belum ada foto</b>"}${s.length ? ` · ${s.length} saran` : ""}</div>
+          ${s.length ? `<div class="sugg">${s.slice(0, 8).map(({ p: ph, i }) =>
+            `<button data-a="foto-use" data-i="${i}" title="Pakai foto ini"><img src="${esc(gpThumb(ph.src, 120))}" loading="lazy" referrerpolicy="no-referrer" alt=""></button>`).join("")}${
+            s.length > 8 ? `<button class="more" data-a="pick-img" title="Lihat semua saran">+${s.length - 8}</button>` : ""}</div>` : ""}
+        </div>
+        ${p.img ? `<button class="icon del" data-a="foto-del" title="Hapus foto">✕</button>` : ""}
+      </div>`;
+  }).join("") : `<p class="empty">${fotoFilter === "sugg" && !gp.photos ? "Buka album lalu kenali fotonya dengan AI untuk mendapat saran." : "Tidak ada produk yang cocok."}</p>`;
+}
+let fotoBusy = false;
+async function fotoClick(a, b) {
+  const pid = b.closest("[data-pid]")?.dataset.pid, p = pid && data.products.find(x => x.id === pid);
+  if (a === "foto-use") {
+    b.classList.add("busy"); msg("Mengambil foto dari Google Photos…");
+    try { await importPhoto(gp.photos[+b.dataset.i], { pid }); msg("Foto terpasang ✓ (jangan lupa Simpan)"); }
+    catch (e) { msg(e.message, true); b.classList.remove("busy"); }
+  } else if (a === "foto-del") {
+    if (!confirm(`Hapus foto "${p.name}"?`)) return;
+    p.img = ""; markDirty(); renderFotoList();
+  } else if (a === "foto-auto") {
+    if (fotoBusy) return;
+    const sugg = suggestions(), todo = data.products.filter(x => !x.img && sugg.has(x.name.trim()));
+    if (!confirm(`Pasang foto saran pertama untuk ${todo.length} produk yang belum punya foto?\nSetelah itu periksa hasilnya lalu tekan Simpan.`)) return;
+    fotoBusy = true; b.disabled = true;
+    let ok = 0, fail = 0;
+    for (const x of todo) {
+      b.textContent = `Memasang ${ok + fail + 1}/${todo.length}…`;
+      try { await importPhoto(sugg.get(x.name.trim())[0].p, { pid: x.id }); ok++; } catch { fail++; }
+    }
+    fotoBusy = false; renderFotoList();
+    msg(`✓ ${ok} foto terpasang` + (fail ? `, ${fail} gagal` : "") + ". Periksa lalu tekan Simpan.", fail > 0);
+  }
+}
+
+function viewKategori() {
+  const cnt = id => data.products.filter(p => p.cat === id).length;
+  return `
+    <h2>Kategori</h2>
+    <p class="hint">Tab "Semua" selalu ada di website. Menghapus kategori tidak menghapus produknya; produk itu jadi "Tanpa kategori".</p>
+    <div class="tool"><input type="text" id="newcat" placeholder="Nama kategori baru…"><button class="btn" data-a="add-cat">+ Tambah</button></div>
+    ${data.categories.length ? data.categories.map(c => `
+      <div class="row" data-cid="${esc(c.id)}">
+        <div class="mid"><input type="text" value="${esc(c.name)}" data-f="cname" maxlength="60"></div>
+        <span class="sub">${cnt(c.id)} produk</span>
+        <div class="acts"><button class="icon" data-a="up" title="Naik">▲</button><button class="icon" data-a="down" title="Turun">▼</button><button class="icon del" data-a="del-cat" title="Hapus">🗑</button></div>
+      </div>`).join("") : `<p class="empty">Belum ada kategori.</p>`}`;
+}
+
+function viewPaket() {
+  const k = data.paket;
+  return `
+    <h2>Pembelian Paket</h2>
+    <p class="hint">Saat pembeli mencentang paket, total = (subtotal keranjang + tambahan yang dipilih) × jumlah paket.</p>
+    <div class="card">
+      <div class="field"><label class="check"><input type="checkbox" data-p="enabled"${k.enabled ? " checked" : ""}> Aktifkan pembelian paket</label></div>
+      <div class="field"><label>Nama pilihan</label><input type="text" data-p="label" value="${esc(k.label)}" maxlength="60"></div>
+      <div class="field"><label>Tombol jumlah cepat</label><input type="text" data-p="quickQty" value="${esc(k.quickQty.join(", "))}" placeholder="1, 5, 10, 20, 50, 100">
+        <div class="hint" style="margin:4px 0 0">Pisahkan dengan koma.</div></div>
+    </div>
+    <h2 style="margin-top:14px">Tambahan paket</h2>
+    <p class="hint">Contoh: Air Mineral, Box Kemasan. Harga dihitung per paket.</p>
+    ${k.addons.map(a => `
+      <div class="row" data-aid="${esc(a.id)}">
+        <div class="mid"><input type="text" value="${esc(a.name)}" data-f="aname" maxlength="60" placeholder="Nama tambahan"></div>
+        <label class="rp">Rp <input type="number" min="0" step="100" inputmode="numeric" value="${a.price}" data-f="aprice"></label>
+        <div class="acts"><button class="icon del" data-a="del-addon" title="Hapus">🗑</button></div>
+      </div>`).join("") || `<p class="empty">Belum ada tambahan.</p>`}
+    <button class="btn" data-a="add-addon">+ Tambahan</button>`;
+}
+
+function viewSetelan() {
+  const s = data.settings;
+  return `
+    <h2>Pengaturan</h2>
+    <div class="card">
+      <div class="field"><label>Judul katalog</label><input type="text" data-s="title" value="${esc(s.title)}" maxlength="120"></div>
+      <div class="field"><label>Sub judul</label><input type="text" data-s="subtitle" value="${esc(s.subtitle)}" maxlength="200"></div>
+      <div class="field"><label>Nomor WhatsApp penjual</label><input type="text" inputmode="numeric" data-s="waNumber" value="${esc(s.waNumber)}" placeholder="6281234567890">
+        <div class="hint" style="margin:4px 0 0">Boleh diawali 08… atau 62… (otomatis diubah ke format 62…). Pesanan pembeli dikirim ke nomor ini.</div></div>
+      <div class="field"><label>Foto header</label>
+        <div class="imgbox wide"><img id="hero-prev" src="${esc(src(s.heroImage))}" alt="">
+          <div class="col"><button class="btn ghost" data-a="pick-hero">Ganti foto…</button><input type="file" accept="image/*" id="hero-file" hidden><input type="url" data-s="heroImage" value="${esc(s.heroImage)}" placeholder="atau tempel alamat foto"></div></div></div>
+    </div>
+    <p class="hint">Untuk mengganti link admin: ubah <b>adminPath</b> di <b>config.json</b>, lalu jalankan ulang server.</p>`;
+}
+
+/* ---------- event ---------- */
+document.addEventListener("click", e => {
+  const t = e.target.closest(".tab"); if (t) { tab = t.dataset.tab; render(); return; }
+  const b = e.target.closest("[data-a]"); if (!b) return;
+  if (b.dataset.a.startsWith("ai-")) { aiClick(b.dataset.a, b); return; }
+  if (/^(pick|gp|rl|mu)-/.test(b.dataset.a)) { pickClick(b.dataset.a, b); return; }
+  if (b.dataset.a.startsWith("foto-")) { fotoClick(b.dataset.a, b); return; }
+  const a = b.dataset.a, row = b.closest("[data-pid],[data-cid],[data-aid]");
+  const pid = row && row.dataset.pid, cid = row && row.dataset.cid, aid = row && row.dataset.aid;
+  const pi = pid ? data.products.findIndex(p => p.id === pid) : -1;
+  const ci = cid ? data.categories.findIndex(c => c.id === cid) : -1;
+
+  if (a === "add-prod") {
+    const p = { id: uid(), name: "", price: 0, cat: fcat, img: "", active: true };
+    data.products.push(p); q = ""; render();
+    const inp = document.querySelector(`[data-pid="${p.id}"] [data-f="name"]`);
+    inp.scrollIntoView({ block: "center" }); inp.focus();
+  }
+  else if (a === "del-prod") { if (confirm(`Hapus produk "${data.products[pi].name}"?`)) { data.products.splice(pi, 1); render(); } }
+  else if (a === "up" || a === "down") {
+    const d = a === "up" ? -1 : 1;
+    if (pid) { // geser terhadap produk terdekat yang sedang terlihat di daftar (filter)
+      let j = pi + d; const vis = p => (!fcat || p.cat === fcat) && p.name.toLowerCase().includes(q.toLowerCase());
+      while (j >= 0 && j < data.products.length && !vis(data.products[j])) j += d;
+      if (j >= 0 && j < data.products.length) [data.products[pi], data.products[j]] = [data.products[j], data.products[pi]];
+    } else move(data.categories, ci, d);
+    render();
+  }
+  else if (a === "add-cat") {
+    const name = $("newcat").value.trim(); if (!name) { msg("Isi nama kategori dulu", true); return; }
+    data.categories.push({ id: uid(), name }); render();
+  }
+  else if (a === "del-cat") {
+    const n = data.products.filter(p => p.cat === cid).length;
+    if (confirm(`Hapus kategori "${data.categories[ci].name}"?` + (n ? `\n${n} produk akan menjadi "Tanpa kategori".` : ""))) {
+      data.products.forEach(p => { if (p.cat === cid) p.cat = ""; });
+      data.categories.splice(ci, 1); if (fcat === cid) fcat = ""; render();
+    }
+  }
+  else if (a === "add-addon") { data.paket.addons.push({ id: uid(), name: "", price: 1000 }); render(); }
+  else if (a === "del-addon") { data.paket.addons = data.paket.addons.filter(x => x.id !== aid); render(); }
+});
+
+// input inline: perbarui data tanpa render ulang supaya keyboard tidak tertutup
+document.addEventListener("input", e => {
+  const el = e.target, f = el.dataset.f;
+  const pid = el.closest("[data-pid]")?.dataset.pid, cid = el.closest("[data-cid]")?.dataset.cid, aid = el.closest("[data-aid]")?.dataset.aid;
+  if (el.id === "q") { q = el.value; const pos = el.selectionStart; render(); const n = $("q"); n.focus(); n.setSelectionRange(pos, pos); return; }
+  if (el.id === "fcat") { fcat = el.value; render(); return; }
+  if (el.id === "fq") { fotoQ = el.value; renderFotoList(); return; }
+  if (el.id === "ffilter") { fotoFilter = el.value; renderFotoList(); return; }
+  if (el.id === "fa-link") { syncAlbumBtn(); return; }
+  if (f === "name" && pid) data.products.find(p => p.id === pid).name = el.value;
+  else if (f === "price" && pid) data.products.find(p => p.id === pid).price = Math.max(0, Math.round(+el.value || 0));
+  else if (f === "cname" && cid) data.categories.find(c => c.id === cid).name = el.value;
+  else if (f === "aname" && aid) data.paket.addons.find(x => x.id === aid).name = el.value;
+  else if (f === "aprice" && aid) data.paket.addons.find(x => x.id === aid).price = Math.max(0, Math.round(+el.value || 0));
+  else if (el.dataset.s) data.settings[el.dataset.s] = el.value;
+  else if (el.dataset.p === "label") data.paket.label = el.value;
+  else if (el.dataset.p === "quickQty") data.paket.quickQty = el.value.split(/[,\s]+/).map(n => parseInt(n, 10)).filter(n => n >= 1);
+  else return;
+  if (el.dataset.s === "heroImage") $("hero-prev").src = src(el.value);
+  markDirty();
+});
+document.addEventListener("change", async e => {
+  const el = e.target;
+  if (el.dataset.f === "cat") {
+    data.products.find(p => p.id === el.closest("[data-pid]").dataset.pid).cat = el.value; markDirty();
+  } else if (el.dataset.f === "img" && el.files[0]) {
+    const row = el.closest("[data-pid]"), p = data.products.find(x => x.id === row.dataset.pid), thumb = row.querySelector(".thumb");
+    thumb.classList.add("busy"); msg("Mengunggah foto…");
+    try { p.img = await upload(el.files[0]); row.querySelector(".th").src = src(p.img); markDirty(); msg("Foto terunggah ✓"); if (tab === "foto") renderFotoList(); }
+    catch (err) { msg(err.message, true); }
+    thumb.classList.remove("busy"); el.value = "";
+  } else if (el.dataset.f === "active") {
+    const row = el.closest("[data-pid]");
+    data.products.find(p => p.id === row.dataset.pid).active = el.checked;
+    render();
+  } else if (el.dataset.p === "enabled") { data.paket.enabled = el.checked; markDirty(); }
+  else if (el.id === "hero-file" && el.files[0]) {
+    msg("Mengunggah foto…");
+    try { data.settings.heroImage = await upload(el.files[0]); msg("Foto terunggah ✓"); render(); }
+    catch (err) { msg(err.message, true); }
+  }
+});
+
+/* =====================================================================
+   Asisten AI: admin menulis permintaan biasa -> AI memberi USULAN operasi -> admin centang & terapkan.
+   Perubahan hanya masuk ke data di halaman ini (belum tersimpan) sampai admin menekan Simpan.
+   ===================================================================== */
+const chat = { msgs: [], busy: false, draft: "", undo: null }; // undo: { mi, snapshot }
+const norm = s => String(s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const byRef = (list, ref) => {
+  ref = String(ref ?? "").trim(); if (!ref) return null;
+  let x = list.find(i => i.id === ref); if (x) return x;
+  const n = norm(ref), m = list.filter(i => norm(i.name) === n);
+  return n && m.length === 1 ? m[0] : null;
+};
+// "" = tanpa kategori, undefined = tidak ditemukan
+const resolveCat = (d, ref) => {
+  if (ref === "" || /^(-|none|tanpa kategori)$/i.test(String(ref).trim())) return "";
+  const c = byRef(d.categories, ref); return c ? c.id : undefined;
+};
+const catLabel = (d, id) => (d.categories.find(c => c.id === id) || {}).name || "Tanpa kategori";
+
+function runOp(o, d) {
+  const fail = m => { throw new Error(m); };
+  switch (o.op) {
+    case "update_product": {
+      const p = byRef(d.products, o.id) || fail(`Produk "${o.id}" tidak ditemukan`), parts = [], nm = p.name;
+      if (o.name && o.name !== p.name) { parts.push(`nama → "${o.name}"`); p.name = o.name; }
+      if (o.price !== undefined) { const np = Math.max(0, Math.round(o.price)); if (np !== p.price) { parts.push(`harga ${rp(p.price)} → ${rp(np)}`); p.price = np; } }
+      if (o.cat !== undefined) {
+        const c = resolveCat(d, o.cat); if (c === undefined) fail(`Kategori "${o.cat}" tidak ditemukan`);
+        if (c !== p.cat) { parts.push(`kategori → ${catLabel(d, c)}`); p.cat = c; }
+      }
+      if (o.active !== undefined && o.active !== p.active) { parts.push(o.active ? "ditampilkan" : "disembunyikan"); p.active = o.active; }
+      return parts.length ? { text: `${nm}: ${parts.join(", ")}` } : { text: `${nm}: tidak ada perubahan`, noop: true };
+    }
+    case "add_product": {
+      if (d.products.some(p => norm(p.name) === norm(o.name))) fail(`"${o.name}" sudah ada (pakai pembaruan, bukan tambah)`);
+      let c = o.cat === undefined ? "" : resolveCat(d, o.cat), note = "";
+      if (c === undefined) { note = ` — kategori "${o.cat}" tidak ditemukan`; c = ""; }
+      d.products.push({ id: uid(), name: o.name, price: Math.max(0, Math.round(o.price || 0)), cat: c, img: "", active: o.active !== false });
+      return { text: `+ Produk baru: ${o.name} (${rp(Math.max(0, Math.round(o.price || 0)))}, ${catLabel(d, c)})${note}` };
+    }
+    case "delete_product": {
+      const i = d.products.findIndex(p => p === byRef(d.products, o.id)); if (i < 0) fail(`Produk "${o.id}" tidak ditemukan`);
+      const [p] = d.products.splice(i, 1); return { text: `Hapus produk: ${p.name}`, danger: true };
+    }
+    case "bulk_price": {
+      const w = o.where || {}; let list = d.products, scope = "semua produk";
+      if (!w.all && !(w.ids && w.ids.length) && (w.cat === undefined || w.cat === "")) fail("Cakupan harga massal tidak jelas (sebutkan kategori atau produk)");
+      if (w.ids && w.ids.length) { const set = new Set(w.ids.map(r => (byRef(d.products, r) || {}).id).filter(Boolean)); list = list.filter(p => set.has(p.id)); scope = "produk terpilih"; }
+      if (w.cat !== undefined && w.cat !== "") {
+        const c = resolveCat(d, w.cat); if (!c) fail(`Kategori "${w.cat}" tidak ditemukan`);
+        list = list.filter(p => p.cat === c); scope = `kategori ${catLabel(d, c)}`;
+      }
+      const r = o.round > 0 ? o.round : o.mode === "set" ? 1 : 100;
+      const next = p => Math.max(0, Math.round((o.mode === "percent" ? p.price * (1 + o.value / 100) : o.mode === "add" ? p.price + o.value : o.value) / r) * r);
+      const changed = list.filter(p => next(p) !== p.price);
+      const desc = o.mode === "percent" ? `${o.value >= 0 ? "naik" : "turun"} ${Math.abs(o.value)}%` : o.mode === "add" ? `${o.value >= 0 ? "+" : "−"}${rp(Math.abs(o.value))}` : `disamakan ${rp(o.value)}`;
+      if (!changed.length) return { text: `Harga ${scope} ${desc}: tidak ada yang berubah`, noop: true };
+      const ex = changed.slice(0, 3).map(p => `${p.name} ${rp(p.price)}→${rp(next(p))}`).join("; ");
+      changed.forEach(p => { p.price = next(p); });
+      return { text: `Harga ${changed.length} produk (${scope}) ${desc}. Contoh: ${ex}` };
+    }
+    case "add_category":
+      if (d.categories.some(c => norm(c.name) === norm(o.name))) return { text: `Kategori "${o.name}" sudah ada`, noop: true };
+      d.categories.push({ id: uid(), name: o.name }); return { text: `+ Kategori baru: ${o.name}` };
+    case "rename_category": {
+      const c = byRef(d.categories, o.id) || fail(`Kategori "${o.id}" tidak ditemukan`), old = c.name; c.name = o.name;
+      return { text: `Kategori "${old}" → "${o.name}"` };
+    }
+    case "delete_category": {
+      const c = byRef(d.categories, o.id) || fail(`Kategori "${o.id}" tidak ditemukan`);
+      const n = d.products.filter(p => p.cat === c.id).length;
+      d.products.forEach(p => { if (p.cat === c.id) p.cat = ""; });
+      d.categories.splice(d.categories.indexOf(c), 1);
+      return { text: `Hapus kategori "${c.name}"${n ? ` (${n} produk jadi tanpa kategori)` : ""}`, danger: true };
+    }
+    case "set_settings": {
+      const s = d.settings, parts = [];
+      for (const [k, label] of [["title", "judul"], ["subtitle", "sub judul"], ["waNumber", "WhatsApp"]])
+        if (o[k] !== undefined && o[k] !== s[k]) { parts.push(`${label} → "${o[k]}"`); s[k] = o[k]; }
+      return parts.length ? { text: `Pengaturan: ${parts.join(", ")}` } : { text: "Pengaturan: tidak ada perubahan", noop: true };
+    }
+    case "set_paket": {
+      const k = d.paket, parts = [];
+      if (o.enabled !== undefined && o.enabled !== k.enabled) { parts.push(o.enabled ? "paket diaktifkan" : "paket dimatikan"); k.enabled = o.enabled; }
+      if (o.label !== undefined && o.label !== k.label) { parts.push(`nama → "${o.label}"`); k.label = o.label; }
+      if (o.quickQty && o.quickQty.length && o.quickQty.join() !== k.quickQty.join()) { parts.push(`jumlah cepat → ${o.quickQty.join(", ")}`); k.quickQty = o.quickQty; }
+      return parts.length ? { text: `Paket: ${parts.join(", ")}` } : { text: "Paket: tidak ada perubahan", noop: true };
+    }
+    case "add_addon":
+      if (d.paket.addons.some(a => norm(a.name) === norm(o.name))) fail(`Tambahan "${o.name}" sudah ada`);
+      d.paket.addons.push({ id: uid(), name: o.name, price: Math.max(0, Math.round(o.price || 0)) });
+      return { text: `+ Tambahan paket: ${o.name} (${rp(Math.max(0, Math.round(o.price || 0)))}/paket)` };
+    case "update_addon": {
+      const a = byRef(d.paket.addons, o.id) || fail(`Tambahan "${o.id}" tidak ditemukan`), parts = [], nm = a.name;
+      if (o.name && o.name !== a.name) { parts.push(`nama → "${o.name}"`); a.name = o.name; }
+      if (o.price !== undefined && Math.round(o.price) !== a.price) { parts.push(`harga ${rp(a.price)} → ${rp(Math.round(o.price))}`); a.price = Math.max(0, Math.round(o.price)); }
+      return parts.length ? { text: `Tambahan ${nm}: ${parts.join(", ")}` } : { text: `Tambahan ${nm}: tidak ada perubahan`, noop: true };
+    }
+    case "delete_addon": {
+      const a = byRef(d.paket.addons, o.id) || fail(`Tambahan "${o.id}" tidak ditemukan`);
+      d.paket.addons.splice(d.paket.addons.indexOf(a), 1); return { text: `Hapus tambahan paket: ${a.name}`, danger: true };
+    }
+  }
+  fail(`Operasi "${o.op}" tidak dikenal`);
+}
+// Satu hasil per operasi (urutan sama). d dimutasi; untuk pratinjau berikan salinan.
+const runOps = (ops, d) => ops.map(o => { try { return runOp(o, d); } catch (e) { return { error: true, text: e.message }; } });
+
+const catalogForAi = () => ({
+  settings: { title: data.settings.title, subtitle: data.settings.subtitle, waNumber: data.settings.waNumber },
+  categories: data.categories.map(c => ({ id: c.id, name: c.name })),
+  products: data.products.map(p => ({ id: p.id, name: p.name, price: p.price, cat: p.cat, active: p.active })),
+  paket: { enabled: data.paket.enabled, label: data.paket.label, quickQty: data.paket.quickQty, addons: data.paket.addons.map(a => ({ id: a.id, name: a.name, price: a.price })) },
+});
+const historyForAi = () => chat.msgs.filter(m => !m.err).slice(-8).map(m => ({
+  role: m.role,
+  content: m.role === "user" ? m.text : m.text + (m.ops && m.ops.length ? `\n[usulan ${m.ops.length} perubahan: ${{ pending: "belum diputuskan", applied: "diterapkan", rejected: "ditolak", undone: "dibatalkan" }[m.status] || m.status}]` : ""),
+}));
+
+async function sendChat(text) {
+  text = String(text || "").trim();
+  if (!text || chat.busy) return;
+  chat.msgs.push({ role: "user", text }); chat.draft = ""; chat.busy = true; renderChat(true);
+  try {
+    const r = await api("api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: historyForAi(), catalog: catalogForAi() }) });
+    const ops = r.operations || [], lines = runOps(ops, JSON.parse(JSON.stringify(data)));
+    chat.msgs.push({ role: "assistant", text: r.reply || (ops.length ? "Berikut usulannya." : "Tidak ada perubahan yang diusulkan."), ops, lines,
+      sel: lines.map(l => !l.error && !l.noop), status: ops.length ? "pending" : "none", dropped: r.dropped || 0 });
+  } catch (e) { chat.msgs.push({ role: "assistant", text: e.message, err: true, setup: e.code === "ai_not_configured" }); }
+  chat.busy = false; renderChat(true);
+}
+
+const SETUP_HTML = `<div class="setup"><b>Fitur AI belum diaktifkan.</b> Langkah singkat:
+<ol><li>Buat API key <b>gratis</b>: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio (Gemini)</a> atau <a href="https://console.mistral.ai" target="_blank" rel="noopener">Mistral</a>.</li>
+<li><b>Server lokal:</b> salin <code>ai.config.example.json</code> menjadi <code>ai.config.json</code>, isi <code>apiKey</code>, lalu jalankan ulang server.</li>
+<li><b>Online (Supabase):</b> Edge Functions → Secrets → tambah <code>AI_API_KEY</code> (opsional: <code>AI_PROVIDER</code>, <code>AI_MODEL</code>).</li></ol></div>`;
+
+function msgHtml(m, mi) {
+  if (m.role === "user") return `<div class="bub me">${esc(m.text)}</div>`;
+  if (m.err) return `<div class="bub err">${m.setup ? SETUP_HTML : `${esc(m.text)}<div><button class="btn ghost sm retry" data-a="ai-retry" data-mi="${mi}">↻ Coba lagi</button></div>`}</div>`;
+  let h = `<div class="bub ai">${esc(m.text)}</div>`;
+  if (m.ops && m.ops.length) {
+    const nSel = m.sel.filter(Boolean).length, done = m.status === "applied", off = m.status !== "pending";
+    h += `<div class="props${done ? " done" : ""}${m.status === "rejected" || m.status === "undone" ? " dim" : ""}">
+      <h4>Usulan perubahan (${m.ops.length})${m.dropped ? ` <small>· ${m.dropped} usulan tidak valid diabaikan</small>` : ""}</h4>
+      ${m.ops.map((o, oi) => {
+        const l = m.lines[oi];
+        return `<label class="opl${l.error ? " bad" : ""}${l.noop ? " noop" : ""}${l.danger ? " danger" : ""}"><input type="checkbox" data-aisel="${mi}:${oi}"${m.sel[oi] ? " checked" : ""}${l.error || l.noop || off ? " disabled" : ""}><span>${l.error ? "⚠ " : l.danger ? "🗑 " : ""}${esc(l.text)}${l.error ? " (dilewati)" : ""}</span></label>`;
+      }).join("")}
+      ${m.status === "pending" ? `<div class="acts2"><button class="btn" data-a="ai-apply" data-mi="${mi}"${nSel ? "" : " disabled"}>Terapkan (${nSel})</button><button class="btn ghost" data-a="ai-reject" data-mi="${mi}">Tolak</button></div>` : ""}
+      ${done ? `<div class="okline">✓ ${m.applied} perubahan diterapkan${m.failed ? `, ${m.failed} dilewati` : ""}. <b>Belum tersimpan</b> — tekan Simpan di bawah untuk menayangkan ke website.${chat.undo && chat.undo.mi === mi ? ` <button class="btn ghost sm" data-a="ai-undo" data-mi="${mi}">Urungkan</button>` : ""}</div>` : ""}
+      ${m.status === "rejected" ? `<div class="okline muted">Ditolak.</div>` : ""}${m.status === "undone" ? `<div class="okline muted">Dibatalkan (data dikembalikan).</div>` : ""}
+    </div>`;
+  }
+  return h;
+}
+const AI_EXAMPLES = ["Ganti harga Klepon jadi 2500", "Nonaktifkan semua produk di kategori Minuman", "Naikkan harga semua Snack Kering 10%", "Tambah produk Kue Cubit Rp2000 kategori Kue Basah", "Hapus kategori Cake Premium"];
+function renderChat(scroll) {
+  const log = $("chat-log"); if (!log) return;
+  log.innerHTML = (chat.msgs.length ? chat.msgs.map(msgHtml).join("") :
+    `<div class="bub ai">Halo! Saya bisa membantu mengelola katalog: ganti harga, nonaktifkan/hapus produk, tambah produk, atur kategori & paket, atau memproses <b>daftar produk</b> yang Anda tempel. Setiap perubahan saya tampilkan dulu sebagai usulan untuk Anda setujui.</div>
+     <div class="chips2">${AI_EXAMPLES.map(t => `<button class="chip2" data-a="ai-ex" data-t="${esc(t)}">${esc(t)}</button>`).join("")}</div>`)
+    + (chat.busy ? `<div class="bub ai typing">AI sedang menyusun usulan…</div>` : "");
+  const btn = $("chat-send"); if (btn) { btn.disabled = chat.busy; btn.textContent = chat.busy ? "Menunggu…" : "Kirim"; }
+  if (scroll) { const last = log.lastElementChild; if (last) last.scrollIntoView({ block: "nearest" }); }
+}
+function viewAI() {
+  return `<h2>Asisten AI</h2>
+    <p class="hint">Tulis permintaan seperti chat biasa, atau tempel daftar produk (satu produk per baris, contoh: <i>Klepon 2000</i>). Untuk daftar panjang, kirim ±40 baris per pesan. Perubahan baru tersimpan setelah Anda menekan <b>Simpan</b>.</p>
+    <div id="chat-log" class="chatlog"></div>
+    <div class="composer">
+      <textarea id="chat-in" rows="3" placeholder="Contoh: naikkan harga semua Snack Kering 10%">${esc(chat.draft)}</textarea>
+      <div class="crow">
+        <label class="btn ghost filebtn">📎 Daftar (.txt/.csv)<input type="file" id="chat-file" accept=".txt,.csv,text/plain,text/csv" hidden></label>
+        <button class="btn ghost" data-a="ai-clear">Bersihkan</button>
+        <button class="btn" id="chat-send" data-a="ai-send">Kirim</button>
+      </div>
+    </div>`;
+}
+function aiClick(a, b) {
+  const mi = +b.dataset.mi, m = chat.msgs[mi];
+  if (a === "ai-send") { sendChat($("chat-in").value); }
+  else if (a === "ai-ex") { $("chat-in").value = chat.draft = b.dataset.t; $("chat-in").focus(); }
+  else if (a === "ai-clear") { if (!chat.msgs.length || confirm("Hapus percakapan? (Perubahan yang sudah diterapkan tidak ikut dibatalkan)")) { chat.msgs = []; chat.undo = null; renderChat(); } }
+  else if (a === "ai-retry" && m && m.err) {
+    const prev = chat.msgs[mi - 1];
+    if (prev && prev.role === "user" && !chat.busy) { chat.msgs.splice(mi - 1, 2); sendChat(prev.text); } // kirim ulang tanpa menggandakan gelembung pesan
+  }
+  else if (a === "ai-reject" && m) { m.status = "rejected"; renderChat(); }
+  else if (a === "ai-apply" && m && m.status === "pending") {
+    const chosen = m.ops.filter((o, i) => m.sel[i] && !m.lines[i].error && !m.lines[i].noop);
+    if (!chosen.length) return;
+    const snapshot = JSON.stringify(data), res = runOps(chosen, data);
+    m.status = "applied"; m.applied = res.filter(r => !r.error).length; m.failed = res.length - m.applied;
+    chat.undo = { mi, snapshot };
+    render();
+  }
+  else if (a === "ai-undo" && chat.undo && chat.undo.mi === mi) {
+    data = JSON.parse(chat.undo.snapshot); m.status = "undone"; chat.undo = null; render();
+  }
+}
+document.addEventListener("change", async e => {
+  const el = e.target;
+  if (el.dataset && el.dataset.aisel !== undefined) {
+    const [mi, oi] = el.dataset.aisel.split(":").map(Number); chat.msgs[mi].sel[oi] = el.checked; renderChat();
+  } else if (el.id === "chat-file" && el.files[0]) {
+    let t = await el.files[0].text(); el.value = "";
+    if (t.length > 12000) { t = t.slice(0, 12000); msg("Daftar dipotong 12.000 karakter pertama; kirim sisanya di pesan berikutnya.", true); }
+    $("chat-in").value = chat.draft = "Perbarui/tambahkan produk dari daftar berikut:\n" + t.trim();
+  }
+});
+document.addEventListener("input", e => { if (e.target.id === "chat-in") chat.draft = e.target.value; });
+document.addEventListener("keydown", e => { if (e.target.id === "fa-link" && e.key === "Enter") { e.preventDefault(); loadAlbum(e.target); } });
+document.addEventListener("keydown", e => { if (e.target.id === "chat-in" && e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); sendChat(e.target.value); } });
+
+load();
+
+/* ---------- pasang sebagai aplikasi di HP (PWA) ---------- */
+// Service worker yang sama dengan katalog (/sw.js); manifest halaman ini membuatnya terpasang sebagai aplikasi terpisah.
+if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+(function installButton() {
+  const btn = document.getElementById("install");
+  if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) return; // sudah dibuka sebagai aplikasi
+  let prompt = null;
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); prompt = e; btn.hidden = false; });
+  window.addEventListener("appinstalled", () => { btn.hidden = true; prompt = null; });
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (ios) btn.hidden = false;
+  btn.onclick = async () => {
+    if (prompt) { prompt.prompt(); await prompt.userChoice; prompt = null; btn.hidden = true; }
+    else if (ios) alert("Cara memasang di iPhone:\n1. Ketuk tombol Bagikan (kotak dengan panah ke atas) di Safari.\n2. Pilih \"Tambah ke Layar Utama\".");
+  };
+})();
+</script>
+</body>
+</html>

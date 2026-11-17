@@ -1,0 +1,9 @@
+<IfModule mod_headers.c>
+  <FilesMatch "^(sw\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <If "%{REQUEST_URI} =~ m#^/(adminxx|kasir)/#">
+    Header set X-Robots-Tag "noindex, nofollow"
+  </If>
+</IfModule>
+AddType application/manifest+json .webmanifest

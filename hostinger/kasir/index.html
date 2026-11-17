@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kasir · Tenongan</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#92400e">
+<link rel="manifest" href="/kasir/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/kasir-apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kasir">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/kasir-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf5ec; --ink: #1f2937; --muted: #4b5563; --line: #e5e7eb;
+    --brand: #c8772a; --brand-dark: #92400e; --price: #b45309;
+    --ok: #16a34a; --ok-bg: #ecfdf5; --danger: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--bg); color: var(--ink); padding-bottom: 24px; }
+  button { font-family: inherit; cursor: pointer; border: 0; }
+  button:disabled { opacity: .5; cursor: default; }
+  input { font-family: inherit; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 10px; }
+
+  /* ---------- bar atas ---------- */
+  .top { position: sticky; top: 0; z-index: 10; background: var(--brand-dark); color: #fff; }
+  .top .wrap { display: flex; align-items: center; gap: 8px; height: 48px; }
+  .top h1 { font-size: 16px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .install { height: 30px; padding: 0 12px; border-radius: 15px; background: #fff; color: var(--brand-dark); font-weight: 700; font-size: 12.5px; border: 0; cursor: pointer; white-space: nowrap; }
+  .install[hidden] { display: none; }
+  .tabs { display: flex; background: rgba(255,255,255,.15); border-radius: 8px; padding: 2px; }
+  .tabs button { height: 30px; padding: 0 12px; border-radius: 6px; background: transparent; color: #fff; font-size: 13px; font-weight: 700; }
+  .tabs button.on { background: #fff; color: var(--brand-dark); }
+
+  /* ---------- kamera ---------- */
+  .cam { position: relative; margin-top: 10px; border-radius: 12px; overflow: hidden; background: #111; aspect-ratio: 4 / 3; }
+  .cam video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .guide { position: absolute; left: 50%; top: 50%; width: 62%; aspect-ratio: 1; transform: translate(-50%, -50%);
+    border: 3px solid rgba(255,255,255,.85); border-radius: 14px; box-shadow: 0 0 0 999px rgba(0,0,0,.28); pointer-events: none; transition: border-color .15s; }
+  .guide.hit { border-color: #4ade80; }
+  .cam-msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    padding: 16px; text-align: center; color: #fff; background: #1f2937; }
+  .cam-msg[hidden] { display: none; }
+  .cam-msg p { max-width: 320px; line-height: 1.45; }
+  .status { position: absolute; left: 8px; top: 8px; padding: 3px 9px; border-radius: 10px; background: rgba(0,0,0,.6); color: #fff; font-size: 12px; font-weight: 600; }
+  .cam-tools { position: absolute; right: 8px; top: 8px; display: flex; gap: 6px; }
+  .ic { width: 36px; height: 36px; border-radius: 18px; background: rgba(0,0,0,.6); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+  .ic svg { width: 20px; height: 20px; }
+  .btn { height: 40px; padding: 0 16px; border-radius: 9px; background: var(--brand); color: #fff; font-size: 14px; font-weight: 700; }
+  .btn.ghost { background: #fff; color: var(--brand-dark); border: 1px solid #e7cfb4; }
+  .btn.dark { background: var(--brand-dark); }
+  .btn.ok { background: var(--ok); }
+  .btn.danger { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
+
+  /* ---------- hasil deteksi ---------- */
+  .det { margin-top: 8px; background: #fff; border-radius: 12px; padding: 10px; display: flex; gap: 10px; align-items: center; min-height: 92px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .det img { width: 72px; height: 72px; border-radius: 8px; object-fit: cover; flex: 0 0 auto; background: #f3f4f6; }
+  .det .info { flex: 1; min-width: 0; }
+  .det .nm { font-size: 17px; font-weight: 700; line-height: 1.25; }
+  .det .pr { font-size: 24px; font-weight: 700; color: var(--price); font-variant-numeric: tabular-nums; }
+  .det .conf { font-size: 12px; color: var(--muted); }
+  .det .idle { color: var(--muted); line-height: 1.4; }
+  .det.big { flex-direction: column; text-align: center; padding: 16px; }
+  .det.big img { width: 140px; height: 140px; }
+  .det.big .nm { font-size: 22px; }
+  .det.big .pr { font-size: 40px; }
+  .alts { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 2px; scrollbar-width: none; }
+  .alts:empty { display: none; }
+  .alts button { flex: 0 0 auto; height: 32px; padding: 0 12px; border-radius: 16px; background: #fff; border: 1px solid #e7cfb4; color: var(--ink); font-size: 13px; white-space: nowrap; }
+  .alts button b { color: var(--price); margin-left: 4px; }
+
+  .row { display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+  .switch { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; }
+  .switch input { width: 18px; height: 18px; accent-color: var(--brand); }
+
+  /* ---------- cari manual ---------- */
+  .search-box { position: relative; margin-top: 10px; }
+  .search { width: 100%; height: 42px; border: 1px solid #d1d5db; border-radius: 10px; padding: 0 12px; font-size: 15px; outline: none; background: #fff; }
+  .search:focus { border-color: #f0b429; box-shadow: 0 0 0 2px #f6d27a; }
+  .results { position: absolute; left: 0; right: 0; top: 46px; max-height: 50vh; overflow: auto; background: #fff; border-radius: 10px; box-shadow: 0 8px 22px rgba(0,0,0,.2); z-index: 8; }
+  .results:empty { display: none; }
+  .res { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-bottom: 1px solid #f1f1f1; width: 100%; background: #fff; text-align: left; font-size: 15px; }
+  .res img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex: 0 0 auto; }
+  .res span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .res b { color: var(--price); }
+
+  /* ---------- keranjang kasir ---------- */
+  .card { margin-top: 12px; background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .card h2 { font-size: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .empty { color: var(--muted); padding: 10px 0; text-align: center; }
+  .line { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f3f4f6; }
+  .line .nm { flex: 1; min-width: 0; }
+  .line .nm div { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .line .nm small { color: var(--muted); }
+  .qty { display: flex; align-items: center; gap: 4px; }
+  .qty button { width: 32px; height: 32px; border-radius: 8px; background: #fef3e2; color: var(--brand-dark); font-size: 18px; font-weight: 700; }
+  .qty span { min-width: 26px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .line .sum { width: 76px; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; font-size: 16px; font-weight: 700; }
+  .total .v { font-size: 26px; color: var(--price); font-variant-numeric: tabular-nums; }
+  .pay label { display: block; font-weight: 600; margin: 12px 0 4px; }
+  .pay input { width: 100%; height: 44px; border: 1px solid #d1d5db; border-radius: 10px; padding: 0 12px; font-size: 18px; font-weight: 700; outline: none; font-variant-numeric: tabular-nums; }
+  .quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .quick button { height: 34px; padding: 0 12px; border-radius: 8px; background: #fef3e2; color: var(--brand-dark); font-weight: 700; font-size: 13px; }
+  .change { display: flex; justify-content: space-between; margin-top: 10px; font-size: 16px; font-weight: 700; }
+  .change .v { font-variant-numeric: tabular-nums; }
+  .change.short .v { color: var(--danger); }
+  .change.ok .v { color: var(--ok); }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .actions .wide { grid-column: 1 / -1; height: 48px; font-size: 16px; }
+
+  .hist summary { font-weight: 700; cursor: pointer; }
+  .hist .sumrow { display: flex; justify-content: space-between; margin: 8px 0; }
+  .tx { padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; display: flex; justify-content: space-between; gap: 8px; }
+  .tx small { color: var(--muted); display: block; }
+
+  /* ---------- dialog ajari ---------- */
+  /* panel bawah: kamera di atas tetap terlihat saat mengambil contoh */
+  dialog { border: 0; border-radius: 14px 14px 0 0; padding: 0; width: min(560px, 100%); max-width: 100%; max-height: 54vh; margin: auto auto 0; overflow: auto; box-shadow: 0 -8px 24px rgba(0,0,0,.25); }
+  dialog::backdrop { background: rgba(0,0,0,.12); }
+  .dlg { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .dlg h3 { font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .dlg p { color: var(--muted); line-height: 1.45; font-size: 13px; }
+  .x { width: 32px; height: 32px; border-radius: 16px; background: #f3f4f6; font-size: 16px; }
+  .teach-list { max-height: 22vh; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
+  .teach-list .res.sel { background: #fef3e2; box-shadow: inset 4px 0 0 var(--brand); }
+  .teach-list .cnt { font-size: 12px; color: var(--muted); }
+  .teach-list .cnt.has { color: var(--ok); font-weight: 700; }
+  .slider { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .slider input { flex: 1; accent-color: var(--brand); }
+
+  .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(20px); opacity: 0; background: #111827; color: #fff;
+    padding: 9px 16px; border-radius: 10px; font-weight: 600; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 50; max-width: 90%; text-align: center; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  body.mode-cek .only-kasir { display: none !important; }
+  [hidden] { display: none !important; }
+
+  /* ---------- struk (cetak) ---------- */
+  #receipt { display: none; }
+  @media print {
+    @page { size: 58mm auto; margin: 3mm; }
+    body { background: #fff; padding: 0; font-size: 11px; }
+    body > *:not(#receipt) { display: none !important; }
+    #receipt { display: block; font-family: monospace; width: 100%; }
+    #receipt .c { text-align: center; }
+    #receipt .r { display: flex; justify-content: space-between; gap: 6px; }
+    #receipt hr { border: 0; border-top: 1px dashed #000; margin: 4px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .toast, .guide { transition: none; } }
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <h1 id="title">Kasir</h1>
+  <button class="install" id="install" hidden>Pasang</button>
+  <div class="tabs" role="tablist">
+    <button id="tab-kasir" class="on" role="tab">Kasir</button>
+    <button id="tab-cek" role="tab">Cek Harga</button>
+  </div>
+</div></div>
+
+<main class="wrap">
+  <div class="cam">
+    <video id="video" playsinline muted></video>
+    <div class="guide" id="guide"></div>
+    <span class="status" id="status">Memuat…</span>
+    <div class="cam-tools">
+      <button class="ic" id="btn-flip" title="Ganti kamera" aria-label="Ganti kamera" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><path d="M9 13a3 3 0 0 1 5-2.2M15 13a3 3 0 0 1-5 2.2M14 9v2h-2M10 17v-2h2"/></svg>
+      </button>
+      <button class="ic" id="btn-stop" title="Matikan kamera" aria-label="Matikan kamera" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="cam-msg" id="cam-msg">
+      <p id="cam-text">Arahkan kamera ke jajanan. Produk dikenali otomatis dan harganya langsung tampil.</p>
+      <button class="btn" id="btn-start">Nyalakan Kamera</button>
+    </div>
+  </div>
+
+  <div class="det" id="det"><div class="idle">Belum ada produk terdeteksi. Letakkan satu jajanan di dalam kotak.</div></div>
+  <div class="alts" id="alts"></div>
+
+  <div class="row">
+    <label class="switch only-kasir"><input type="checkbox" id="auto"> Tambah otomatis</label>
+    <span style="flex:1"></span>
+    <button class="btn ghost" id="btn-teach">Ajari Kamera</button>
+  </div>
+
+  <div class="search-box">
+    <input class="search" id="search" type="search" placeholder="Cari produk manual…" autocomplete="off" aria-label="Cari produk">
+    <div class="results" id="results"></div>
+  </div>
+
+  <section class="card only-kasir">
+    <h2><span>Pesanan</span><button class="btn danger" id="btn-clear" style="height:30px;padding:0 10px;font-size:12px">Kosongkan</button></h2>
+    <div id="lines"><p class="empty">Belum ada barang.</p></div>
+    <div class="total"><span>Total</span><span class="v" id="total">Rp0</span></div>
+    <div class="pay">
+      <label for="paid">Uang diterima</label>
+      <input id="paid" type="text" inputmode="numeric" placeholder="0" autocomplete="off">
+      <div class="quick" id="quick"></div>
+      <div class="change" id="change"><span>Kembalian</span><span class="v">Rp0</span></div>
+    </div>
+    <div class="actions">
+      <button class="btn ok wide" id="btn-done">Selesai &amp; Simpan</button>
+      <button class="btn ghost" id="btn-print">Cetak Struk</button>
+      <button class="btn ghost" id="btn-share">Bagikan Struk</button>
+    </div>
+  </section>
+
+  <details class="card hist only-kasir" id="hist">
+    <summary>Riwayat Penjualan Hari Ini</summary>
+    <div id="hist-body"></div>
+  </details>
+</main>
+
+<dialog id="dlg-teach">
+  <div class="dlg">
+    <h3><span>Ajari Kamera</span><button class="x" id="teach-close" aria-label="Tutup">✕</button></h3>
+    <p>Pilih produk, arahkan kamera ke jajanan aslinya di dalam kotak, lalu tekan <b>Ambil Contoh</b>. Ambil dari beberapa sudut. Semakin banyak contoh, semakin akurat. Contoh disimpan di HP ini saja.</p>
+    <input class="search" id="teach-search" type="search" placeholder="Cari produk…" autocomplete="off" aria-label="Cari produk untuk diajarkan">
+    <div class="teach-list" id="teach-list"></div>
+    <div class="row" style="margin:0">
+      <button class="btn" id="teach-capture" disabled>Ambil Contoh</button>
+      <button class="btn danger" id="teach-del" disabled>Hapus Contoh</button>
+    </div>
+    <div class="slider"><span>Kepekaan</span><input type="range" id="thr" min="0.45" max="0.9" step="0.01"><b id="thr-v"></b></div>
+    <p>Geser ke kanan jika sering salah tebak. Geser ke kiri jika produk sulit terdeteksi.</p>
+    <div class="row" style="margin:0">
+      <button class="btn ghost" id="teach-export">Ekspor</button>
+      <label class="btn ghost" style="display:inline-flex;align-items:center">Impor<input type="file" id="teach-import" accept="application/json,.json" hidden></label>
+      <button class="btn danger" id="teach-reset">Hapus Semua</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+<div id="receipt"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+<script>
+/* Kasir + cek harga dengan kamera.
+   Cara kerja pengenal: model MobileNet (berjalan di HP, tanpa server/API key) mengubah gambar menjadi "sidik jari" angka.
+   Sidik jari tiap foto produk dan tiap contoh yang diajarkan disimpan; gambar kamera dicocokkan ke yang paling mirip.
+   Semua data kasir (contoh, riwayat) hanya tersimpan di perangkat ini. */
+const $ = id => document.getElementById(id);
+const rp = n => "Rp" + Math.round(n).toLocaleString("id-ID");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const imgUrl = p => !p.img ? "" : /^https?:\/\//i.test(p.img) ? p.img : "/" + p.img.replace(/^\/+/, "");
+const BG = "__bg__"; // label "latar kosong" (tidak ada produk)
+const MODEL_TAG = "mnv2-100";
+const SCAN_MS = 220;
+
+let DATA = { settings: {}, products: [] };
+let model = null, stream = null, facing = "environment", scanning = false;
+let loopId = 0; // putaran pemindaian lama berhenti sendiri bila kamera dinyalakan ulang
+const refs = [];      // { pid, v: Float32Array, src: "photo" | "teach" }
+const cart = new Map(); // pid -> qty
+let mode = localStorage.getItem("kasir-mode") || "kasir";
+let thr = +localStorage.getItem("kasir-thr") || 0.62;
+let current = null;   // { pid, score } hasil stabil
+const recent = [];    // riwayat tebakan teratas untuk penstabil
+let autoLock = null;  // pid terakhir yang ditambahkan otomatis (menunggu produk diganti)
+let teachPid = null;
+
+const byId = id => DATA.products.find(p => p.id === id);
+
+/* ---------- penyimpanan lokal (IndexedDB) ---------- */
+const idb = (() => {
+  let dbp;
+  const open = () => dbp || (dbp = new Promise((res, rej) => {
+    const r = indexedDB.open("kasir-tenongan", 1);
+    r.onupgradeneeded = () => {
+      r.result.createObjectStore("photo");                              // key: MODEL_TAG|url -> Float32Array[]
+      r.result.createObjectStore("teach", { keyPath: "id", autoIncrement: true }); // { pid, v, t }
+    };
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  }));
+  const tx = async (store, mode, fn) => {
+    const db = await open();
+    return new Promise((res, rej) => {
+      const t = db.transaction(store, mode); const s = t.objectStore(store);
+      const out = fn(s); t.oncomplete = () => res(out && "result" in out ? out.result : out); t.onerror = () => rej(t.error);
+    });
+  };
+  return {
+    get: (st, k) => tx(st, "readonly", s => s.get(k)),
+    put: (st, v, k) => tx(st, "readwrite", s => k === undefined ? s.put(v) : s.put(v, k)),
+    all: st => tx(st, "readonly", s => s.getAll()),
+    del: (st, k) => tx(st, "readwrite", s => s.delete(k)),
+    clear: st => tx(st, "readwrite", s => s.clear()),
+  };
+})();
+
+/* ---------- utilitas ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1600);
+}
+function beep() {
+  try {
+    const ctx = beep.ctx || (beep.ctx = new AudioContext());
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.value = 1320; g.gain.value = 0.08; o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + 0.09);
+  } catch {}
+  navigator.vibrate?.(40);
+}
+const setStatus = s => { $("status").textContent = s; };
+const loadImage = src => new Promise((res, rej) => {
+  const im = new Image(); im.crossOrigin = "anonymous";
+  im.onload = () => res(im); im.onerror = rej; im.src = src;
+});
+
+/* ---------- sidik jari gambar ---------- */
+const work = document.createElement("canvas"); work.width = work.height = 224;
+const wctx = work.getContext("2d", { willReadFrequently: true });
+
+// Gambar sumber (foto/video) dipotong persegi di tengah (zoom = porsi sisi terpendek), lalu dibuat sidik jarinya.
+function embed(src, sw, sh, { zoom = 1, flip = false } = {}) {
+  const side = Math.min(sw, sh) * zoom;
+  wctx.save();
+  if (flip) { wctx.translate(224, 0); wctx.scale(-1, 1); }
+  wctx.drawImage(src, (sw - side) / 2, (sh - side) / 2, side, side, 0, 0, 224, 224);
+  wctx.restore();
+  const data = tf.tidy(() => {
+    const e = model.infer(tf.browser.fromPixels(work), true).squeeze();
+    return e.div(e.norm().add(1e-6)).dataSync();
+  });
+  return new Float32Array(data);
+}
+function cos(a, b) { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }
+
+// Lebar kotak panduan terhadap sisi terpendek video (lihat .guide: 62% lebar dari tampilan 4:3 = ~83% tinggi).
+function guideZoom() {
+  const v = $("video"), box = $("guide").getBoundingClientRect(), cam = v.getBoundingClientRect();
+  const scale = Math.max(cam.width / v.videoWidth, cam.height / v.videoHeight); // object-fit: cover
+  return Math.min(1, box.width / scale / Math.min(v.videoWidth, v.videoHeight));
+}
+const embedFrame = () => { const v = $("video"); return embed(v, v.videoWidth, v.videoHeight, { zoom: guideZoom() }); };
+
+async function buildPhotoRefs() {
+  const list = DATA.products.filter(p => p.img);
+  let done = 0;
+  for (const p of list) {
+    const url = imgUrl(p), key = MODEL_TAG + "|" + url;
+    let vecs = await idb.get("photo", key).catch(() => null);
+    if (!vecs) {
+      try {
+        const im = await loadImage(url);
+        const w = im.naturalWidth, h = im.naturalHeight;
+        vecs = [embed(im, w, h), embed(im, w, h, { flip: true }), embed(im, w, h, { zoom: 0.7 })];
+        idb.put("photo", vecs, key).catch(() => {});
+        await tf.nextFrame();
+      } catch { vecs = []; }
+    }
+    for (const v of vecs) refs.push({ pid: p.id, v, src: "photo" });
+    setStatus(`Menyiapkan pengenal ${++done}/${list.length}`);
+  }
+}
+async function loadTeachRefs() {
+  const rows = await idb.all("teach").catch(() => []);
+  for (const r of rows) if (r.pid === BG || byId(r.pid)) refs.push({ pid: r.pid, v: r.v, src: "teach", id: r.id });
+}
+const teachCount = pid => refs.filter(r => r.src === "teach" && r.pid === pid).length;
+
+/* ---------- pencocokan ---------- */
+// Skor tiap produk = kemiripan tertinggi dari semua sidik jarinya. Contoh hasil "ajari" diberi sedikit bonus
+// karena diambil dengan kamera & cahaya yang sama.
+function rank(vec) {
+  const best = new Map();
+  for (const r of refs) {
+    const s = cos(vec, r.v) + (r.src === "teach" ? 0.03 : 0);
+    if (s > (best.get(r.pid) ?? -1)) best.set(r.pid, s);
+  }
+  return [...best].map(([pid, score]) => ({ pid, score })).sort((a, b) => b.score - a.score);
+}
+
+function startScan() { scanning = true; scanLoop(++loopId); }
+async function scanLoop(id) {
+  if (!scanning || id !== loopId) return;
+  const v = $("video"), t0 = performance.now();
+  if (v.readyState >= 2 && v.videoWidth && !$("dlg-teach").open) {
+    const ranked = rank(embedFrame());
+    onRanked(ranked);
+  }
+  const wait = Math.max(30, SCAN_MS - (performance.now() - t0));
+  setTimeout(() => requestAnimationFrame(() => scanLoop(id)), wait);
+}
+
+function onRanked(ranked) {
+  const prods = ranked.filter(r => r.pid !== BG);
+  const top = ranked[0];
+  const guess = top && top.pid !== BG && top.score >= thr ? top.pid : null;
+  recent.push(guess); if (recent.length > 3) recent.shift();
+  const stable = recent.length === 3 && recent.every(g => g === guess);
+  if (stable) current = guess ? { pid: guess, score: top.score } : null;
+  else if (recent.slice(-2).every(g => g === null)) current = null;
+  if (current && guess === current.pid) current.score = top.score;
+  $("guide").classList.toggle("hit", !!current);
+  renderDet(prods.slice(0, 4));
+
+  // Tambah otomatis: sekali per kemunculan; produk harus keluar dari kotak (atau berganti) sebelum ditambah lagi.
+  if (mode === "kasir" && $("auto").checked) {
+    if (current && autoLock !== current.pid) { autoLock = current.pid; addToCart(current.pid); }
+    else if (!current && recent.every(g => g === null)) autoLock = null;
+  }
+}
+
+function renderDet(top4) {
+  const det = $("det");
+  det.classList.toggle("big", mode === "cek");
+  if (!current) {
+    det.innerHTML = `<div class="idle">${refs.length ? "Belum ada produk terdeteksi. Letakkan satu jajanan di dalam kotak." : "Pengenal belum siap."}</div>`;
+  } else {
+    const p = byId(current.pid);
+    const pct = Math.max(0, Math.min(100, Math.round((current.score - 0.3) / 0.6 * 100)));
+    det.innerHTML = `${p.img ? `<img src="${esc(imgUrl(p))}" alt="">` : ""}
+      <div class="info"><div class="nm">${esc(p.name)}</div><div class="pr">${rp(p.price)}</div>
+      <div class="conf">Keyakinan ${pct}%</div></div>
+      ${mode === "kasir" ? `<button class="btn" data-add="${esc(p.id)}">+ Tambah</button>` : ""}`;
+  }
+  // kandidat lain: bisa diketuk bila tebakan salah
+  const alts = top4.filter(r => !current || r.pid !== current.pid).slice(0, 3).filter(r => r.score >= thr - 0.15);
+  $("alts").innerHTML = alts.map(r => { const p = byId(r.pid); return p ? `<button data-pick="${esc(p.id)}">${esc(p.name)}<b>${rp(p.price)}</b></button>` : ""; }).join("");
+}
+
+/* ---------- kamera ---------- */
+async function startCamera() {
+  if (!navigator.mediaDevices?.getUserMedia) {
+    $("cam-text").textContent = "Browser ini tidak bisa memakai kamera. Buka lewat Chrome dan alamat https://.";
+    return;
+  }
+  stopCamera();
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false });
+  } catch (e) {
+    $("cam-text").textContent = e.name === "NotAllowedError"
+      ? "Izin kamera ditolak. Ketuk ikon gembok di samping alamat situs, izinkan Kamera, lalu coba lagi."
+      : "Kamera tidak bisa dibuka. Pastikan tidak sedang dipakai aplikasi lain, lalu coba lagi.";
+    $("cam-msg").hidden = false; return;
+  }
+  const v = $("video"); v.srcObject = stream; await v.play().catch(() => {});
+  $("cam-msg").hidden = true; $("btn-stop").hidden = false;
+  navigator.mediaDevices.enumerateDevices().then(ds => { $("btn-flip").hidden = ds.filter(d => d.kind === "videoinput").length < 2; });
+  if (model && !scanning) startScan();
+}
+function stopCamera() {
+  scanning = false;
+  stream?.getTracks().forEach(t => t.stop()); stream = null;
+  $("video").srcObject = null; current = null; recent.length = 0;
+  $("btn-stop").hidden = true; $("guide").classList.remove("hit");
+}
+$("btn-start").onclick = startCamera;
+$("btn-stop").onclick = () => { stopCamera(); $("cam-text").textContent = "Kamera mati."; $("cam-msg").hidden = false; renderDet([]); $("alts").innerHTML = ""; };
+$("btn-flip").onclick = () => { facing = facing === "environment" ? "user" : "environment"; startCamera(); };
+document.addEventListener("visibilitychange", () => { if (document.hidden && stream) $("btn-stop").click(); });
+
+/* ---------- keranjang kasir ---------- */
+function addToCart(pid, n = 1) {
+  const p = byId(pid); if (!p) return;
+  const q = (cart.get(pid) || 0) + n;
+  if (q <= 0) cart.delete(pid); else cart.set(pid, q);
+  if (n > 0) { beep(); toast(`+1 ${p.name}`); }
+  renderCart();
+}
+const total = () => [...cart].reduce((s, [pid, q]) => s + (byId(pid)?.price || 0) * q, 0);
+const paid = () => parseInt($("paid").value.replace(/\D/g, ""), 10) || 0;
+
+function renderCart() {
+  const rows = [...cart].filter(([pid]) => byId(pid));
+  $("lines").innerHTML = rows.length ? rows.map(([pid, q]) => { const p = byId(pid); return `
+    <div class="line"><div class="nm"><div>${esc(p.name)}</div><small>${rp(p.price)}</small></div>
+      <div class="qty"><button data-dec="${esc(pid)}" aria-label="Kurangi">−</button><span>${q}</span><button data-inc="${esc(pid)}" aria-label="Tambah">+</button></div>
+      <div class="sum">${rp(p.price * q)}</div></div>`; }).join("") : `<p class="empty">Belum ada barang.</p>`;
+  const t = total();
+  $("total").textContent = rp(t);
+  const notes = [...new Set([t, Math.ceil(t / 5000) * 5000, Math.ceil(t / 10000) * 10000, 20000, 50000, 100000].filter(n => n >= t && n > 0))].sort((a, b) => a - b).slice(0, 5);
+  $("quick").innerHTML = notes.map(n => `<button data-cash="${n}">${n === t ? "Uang pas" : rp(n)}</button>`).join("");
+  renderChange();
+}
+function renderChange() {
+  const t = total(), pd = paid(), el = $("change");
+  const diff = pd - t;
+  el.className = "change" + (pd && t ? (diff < 0 ? " short" : " ok") : "");
+  el.innerHTML = `<span>${diff < 0 && pd ? "Kurang" : "Kembalian"}</span><span class="v">${rp(pd ? Math.abs(diff) : 0)}</span>`;
+}
+$("paid").addEventListener("input", e => {
+  const n = parseInt(e.target.value.replace(/\D/g, ""), 10);
+  e.target.value = n ? n.toLocaleString("id-ID") : "";
+  renderChange();
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-add],[data-pick],[data-inc],[data-dec],[data-cash],[data-res]");
+  if (!b) return;
+  if (b.dataset.add) addToCart(b.dataset.add);
+  else if (b.dataset.pick) {
+    // pilih kandidat lain: di mode kasir langsung ditambahkan, di cek harga ditampilkan
+    current = { pid: b.dataset.pick, score: thr }; recent.length = 0;
+    if (mode === "kasir") addToCart(b.dataset.pick); else renderDet([]);
+  }
+  else if (b.dataset.inc) addToCart(b.dataset.inc, 1);
+  else if (b.dataset.dec) addToCart(b.dataset.dec, -1);
+  else if (b.dataset.cash) { $("paid").value = (+b.dataset.cash).toLocaleString("id-ID"); renderChange(); }
+  else if (b.dataset.res) {
+    const pid = b.dataset.res; $("search").value = ""; $("results").innerHTML = "";
+    if (mode === "kasir") addToCart(pid); else { current = { pid, score: 1 }; recent.length = 0; renderDet([]); }
+  }
+});
+$("btn-clear").onclick = () => { if (cart.size && confirm("Kosongkan pesanan ini?")) { cart.clear(); $("paid").value = ""; renderCart(); } };
+
+/* ---------- transaksi & struk ---------- */
+const TX_KEY = "kasir-tx";
+const loadTx = () => { try { return JSON.parse(localStorage.getItem(TX_KEY)) || []; } catch { return []; } };
+function snapshot() {
+  return {
+    t: Date.now(),
+    items: [...cart].map(([pid, q]) => { const p = byId(pid); return p && { id: pid, name: p.name, price: p.price, q }; }).filter(Boolean),
+    total: total(), paid: paid(),
+  };
+}
+$("btn-done").onclick = () => {
+  if (!cart.size) return toast("Pesanan masih kosong");
+  const tx = snapshot();
+  if (tx.paid && tx.paid < tx.total) return toast("Uang diterima kurang dari total");
+  const list = loadTx(); list.push(tx);
+  localStorage.setItem(TX_KEY, JSON.stringify(list.slice(-1000)));
+  lastTx = tx; cart.clear(); $("paid").value = ""; autoLock = null;
+  renderCart(); renderHist(); toast(`Tersimpan · ${rp(tx.total)}`);
+};
+let lastTx = null;
+const txForReceipt = () => (cart.size ? snapshot() : lastTx);
+function receiptText(tx) {
+  const d = new Date(tx.t);
+  const L = [DATA.settings.title || "Tenongan", d.toLocaleString("id-ID"), "-".repeat(28)];
+  for (const it of tx.items) L.push(`${it.name}`, `  ${it.q} x ${rp(it.price)} = ${rp(it.q * it.price)}`);
+  L.push("-".repeat(28), `TOTAL   ${rp(tx.total)}`);
+  if (tx.paid) L.push(`Tunai   ${rp(tx.paid)}`, `Kembali ${rp(tx.paid - tx.total)}`);
+  L.push("", "Terima kasih!");
+  return L.join("\n");
+}
+$("btn-print").onclick = () => {
+  const tx = txForReceipt(); if (!tx) return toast("Belum ada transaksi");
+  const r = $("receipt"), d = new Date(tx.t);
+  r.innerHTML = `<div class="c"><b>${esc(DATA.settings.title || "Tenongan")}</b><br>${esc(d.toLocaleString("id-ID"))}</div><hr>
+    ${tx.items.map(it => `<div>${esc(it.name)}</div><div class="r"><span>${it.q} x ${rp(it.price)}</span><span>${rp(it.q * it.price)}</span></div>`).join("")}
+    <hr><div class="r"><b>TOTAL</b><b>${rp(tx.total)}</b></div>
+    ${tx.paid ? `<div class="r"><span>Tunai</span><span>${rp(tx.paid)}</span></div><div class="r"><span>Kembali</span><span>${rp(tx.paid - tx.total)}</span></div>` : ""}
+    <hr><div class="c">Terima kasih!</div>`;
+  window.print();
+};
+$("btn-share").onclick = async () => {
+  const tx = txForReceipt(); if (!tx) return toast("Belum ada transaksi");
+  const text = receiptText(tx);
+  if (navigator.share) { try { await navigator.share({ text }); } catch {} return; }
+  try { await navigator.clipboard.writeText(text); toast("Struk disalin"); } catch { toast("Tidak bisa membagikan struk"); }
+};
+function renderHist() {
+  const start = new Date(); start.setHours(0, 0, 0, 0);
+  const today = loadTx().filter(t => t.t >= start.getTime()).reverse();
+  const sum = today.reduce((s, t) => s + t.total, 0);
+  const items = today.reduce((s, t) => s + t.items.reduce((a, i) => a + i.q, 0), 0);
+  $("hist-body").innerHTML = `<div class="sumrow"><span>${today.length} transaksi · ${items} barang</span><b>${rp(sum)}</b></div>` +
+    (today.length ? today.slice(0, 50).map(t => `<div class="tx"><div>${esc(t.items.map(i => `${i.q}× ${i.name}`).join(", "))}<small>${new Date(t.t).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}</small></div><b>${rp(t.total)}</b></div>`).join("")
+      : `<p class="empty">Belum ada penjualan hari ini.</p>`);
+}
+
+/* ---------- cari manual ---------- */
+const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+function search(q, limit = 8) {
+  q = norm(q).trim(); if (!q) return [];
+  const words = q.split(/\s+/);
+  return DATA.products.filter(p => words.every(w => norm(p.name).includes(w))).slice(0, limit);
+}
+$("search").addEventListener("input", e => {
+  $("results").innerHTML = search(e.target.value).map(p => `<button class="res" data-res="${esc(p.id)}">${p.img ? `<img src="${esc(imgUrl(p))}" alt="" loading="lazy">` : ""}<span>${esc(p.name)}</span><b>${rp(p.price)}</b></button>`).join("")
+    || (e.target.value.trim() ? `<div class="res">Tidak ditemukan</div>` : "");
+});
+document.addEventListener("click", e => { if (!e.target.closest(".search-box")) $("results").innerHTML = ""; });
+
+/* ---------- mode ---------- */
+function setMode(m) {
+  mode = m; localStorage.setItem("kasir-mode", m);
+  document.body.classList.toggle("mode-cek", m === "cek");
+  $("tab-kasir").classList.toggle("on", m === "kasir"); $("tab-cek").classList.toggle("on", m === "cek");
+  $("tab-kasir").setAttribute("aria-selected", m === "kasir"); $("tab-cek").setAttribute("aria-selected", m === "cek");
+  renderDet([]);
+}
+$("tab-kasir").onclick = () => setMode("kasir");
+$("tab-cek").onclick = () => setMode("cek");
+$("auto").checked = localStorage.getItem("kasir-auto") === "1";
+$("auto").onchange = e => { localStorage.setItem("kasir-auto", e.target.checked ? "1" : ""); autoLock = current?.pid || null; };
+
+/* ---------- ajari kamera ---------- */
+function renderTeachList() {
+  const q = $("teach-search").value;
+  const list = q.trim() ? search(q, 60) : DATA.products;
+  const row = (id, name, img) => { const n = teachCount(id); return `<button class="res${teachPid === id ? " sel" : ""}" data-teach="${esc(id)}">
+    ${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ""}<span>${esc(name)}</span><span class="cnt${n ? " has" : ""}" style="flex:0 0 auto">${n} contoh</span></button>`; };
+  $("teach-list").innerHTML = row(BG, "Latar kosong (tanpa produk)", "") + list.map(p => row(p.id, p.name, imgUrl(p))).join("");
+  $("teach-capture").disabled = !teachPid || !stream || !model;
+  $("teach-del").disabled = !teachPid || !teachCount(teachPid);
+}
+$("teach-list").addEventListener("click", e => { const b = e.target.closest("[data-teach]"); if (b) { teachPid = b.dataset.teach; renderTeachList(); } });
+$("teach-search").addEventListener("input", renderTeachList);
+$("btn-teach").onclick = () => {
+  if (!model) return toast("Pengenal masih dimuat…");
+  $("thr").value = thr; $("thr-v").textContent = thr.toFixed(2);
+  renderTeachList(); window.scrollTo(0, 0); $("dlg-teach").showModal();
+  if (!stream) toast("Nyalakan kamera dulu untuk mengambil contoh");
+};
+$("teach-close").onclick = () => $("dlg-teach").close();
+// Ambil 6 contoh dalam ±1,5 detik; gerakkan sedikit jajanan/HP agar sudutnya beragam.
+$("teach-capture").onclick = async () => {
+  const b = $("teach-capture"), pid = teachPid; b.disabled = true;
+  for (let i = 0; i < 6; i++) {
+    b.textContent = `Mengambil ${i + 1}/6…`;
+    const v = embedFrame();
+    const id = await idb.put("teach", { pid, v, t: Date.now() });
+    refs.push({ pid, v, src: "teach", id });
+    await new Promise(r => setTimeout(r, 250));
+  }
+  b.textContent = "Ambil Contoh"; beep(); renderTeachList();
+};
+$("teach-del").onclick = async () => {
+  const name = teachPid === BG ? "Latar kosong" : byId(teachPid)?.name;
+  if (!confirm(`Hapus semua contoh untuk "${name}"?`)) return;
+  for (let i = refs.length - 1; i >= 0; i--) if (refs[i].src === "teach" && refs[i].pid === teachPid) { await idb.del("teach", refs[i].id); refs.splice(i, 1); }
+  renderTeachList();
+};
+$("thr").oninput = e => { thr = +e.target.value; $("thr-v").textContent = thr.toFixed(2); localStorage.setItem("kasir-thr", thr); };
+
+// Ekspor/impor contoh agar bisa dipindah ke HP kasir lain.
+const f32ToB64 = v => { const u = new Uint8Array(v.buffer, v.byteOffset, v.byteLength); let s = ""; for (let i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); };
+const b64ToF32 = s => { const b = atob(s), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return new Float32Array(u.buffer); };
+$("teach-export").onclick = () => {
+  const rows = refs.filter(r => r.src === "teach").map(r => ({ pid: r.pid, name: r.pid === BG ? "" : byId(r.pid)?.name || "", v: f32ToB64(r.v) }));
+  if (!rows.length) return toast("Belum ada contoh");
+  const blob = new Blob([JSON.stringify({ model: MODEL_TAG, samples: rows })], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "contoh-kamera-kasir.json"; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+};
+$("teach-import").onchange = async e => {
+  const file = e.target.files[0]; e.target.value = ""; if (!file) return;
+  let j; try { j = JSON.parse(await file.text()); } catch { return toast("File tidak valid"); }
+  if (j.model !== MODEL_TAG || !Array.isArray(j.samples)) return toast("File contoh tidak cocok");
+  let n = 0;
+  for (const s of j.samples) {
+    // cocokkan id produk; bila id berubah, pakai nama
+    const pid = s.pid === BG || byId(s.pid) ? s.pid : DATA.products.find(p => norm(p.name) === norm(s.name))?.id;
+    if (!pid) continue;
+    const v = b64ToF32(s.v); if (v.length !== refs[0]?.v.length && refs.length) continue;
+    const id = await idb.put("teach", { pid, v, t: Date.now() }); refs.push({ pid, v, src: "teach", id }); n++;
+  }
+  toast(`${n} contoh diimpor`); renderTeachList();
+};
+$("teach-reset").onclick = async () => {
+  if (!confirm("Hapus SEMUA contoh yang sudah diajarkan di HP ini?")) return;
+  await idb.clear("teach");
+  for (let i = refs.length - 1; i >= 0; i--) if (refs[i].src === "teach") refs.splice(i, 1);
+  renderTeachList();
+};
+
+/* ---------- mulai ---------- */
+(async function init() {
+  setMode(mode); renderCart(); renderHist();
+  try {
+    const r = await fetch("https://nyvwnpkhzkdtmbwigfoy.supabase.co/functions/v1/catalog/public", { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    DATA = await r.json();
+    document.title = "Kasir · " + (DATA.settings.title || "Tenongan");
+  } catch {
+    setStatus("Gagal memuat katalog"); $("cam-text").textContent = "Katalog gagal dimuat. Periksa koneksi lalu muat ulang halaman."; return;
+  }
+  if (!window.tf || !window.mobilenet) { setStatus("Pengenal gagal dimuat"); toast("Pengenal gambar gagal dimuat. Periksa koneksi."); return; }
+  try {
+    setStatus("Mengunduh model…");
+    await tf.ready();
+    model = await mobilenet.load({ version: 2, alpha: 1.0 });
+    await buildPhotoRefs();
+    await loadTeachRefs();
+    setStatus(`Siap · ${DATA.products.length} produk`);
+    renderDet([]);
+    if (stream && !scanning) startScan();
+  } catch (e) {
+    console.error(e); setStatus("Pengenal gagal dimuat");
+    toast("Model pengenal gagal diunduh. Cari produk manual masih bisa dipakai.");
+  }
+})();
+
+/* ---------- pasang sebagai aplikasi di HP (PWA) ---------- */
+// Service worker yang sama dengan katalog (/sw.js); manifest halaman ini membuatnya terpasang sebagai aplikasi terpisah.
+if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+(function installButton() {
+  const btn = document.getElementById("install");
+  if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) return; // sudah dibuka sebagai aplikasi
+  let prompt = null;
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); prompt = e; btn.hidden = false; });
+  window.addEventListener("appinstalled", () => { btn.hidden = true; prompt = null; });
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (ios) btn.hidden = false;
+  btn.onclick = async () => {
+    if (prompt) { prompt.prompt(); await prompt.userChoice; prompt = null; btn.hidden = true; }
+    else if (ios) alert("Cara memasang di iPhone:\n1. Ketuk tombol Bagikan (kotak dengan panah ke atas) di Safari.\n2. Pilih \"Tambah ke Layar Utama\".");
+  };
+})();
+</script>
+</body>
+</html>

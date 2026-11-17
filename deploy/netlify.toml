@@ -1,0 +1,51 @@
+# Pengunjung: /api/data -> data publik (hanya produk aktif)
+[[redirects]]
+  from = "/api/data"
+  to = "https://nyvwnpkhzkdtmbwigfoy.supabase.co/functions/v1/catalog/public"
+  status = 200
+  force = true
+
+# Admin: /adminxx/api/* -> fungsi admin (link admin ikut diperiksa oleh fungsi)
+[[redirects]]
+  from = "/adminxx/api/*"
+  to = "https://nyvwnpkhzkdtmbwigfoy.supabase.co/functions/v1/catalog/a/adminxx/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/adminxx/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/kasir/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
