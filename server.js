@@ -11,11 +11,21 @@ const crypto = require("crypto");
 const ROOT = __dirname;
 const IMG_DIR = path.join(ROOT, "images");
 const ICON_DIR = path.join(ROOT, "icons");
-const UPLOAD_DIR = path.join(IMG_DIR, "uploads");
-const DATA_FILE = path.join(ROOT, "data.json");
-const BACKUP_FILE = path.join(ROOT, "data.backup.json");
-const LABEL_FILE = path.join(ROOT, "gphotos-labels.json"); // label AI foto Google Photos: { id: { l: label, p: produk, m: koreksi manual } }
-const REFS_FILE = path.join(ROOT, "gphotos-refs.json");    // lembar contoh foto produk untuk AI: { at, names, sheets: [base64 JPEG] }
+// Data & foto unggahan disimpan di DATA_DIR (di luar folder aplikasi) supaya tidak tertimpa saat deploy ulang dari GitHub.
+// Tanpa DATA_DIR, semuanya tetap di folder aplikasi seperti biasa. Isi awal disalin dari repo saat DATA_DIR masih kosong.
+const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : ROOT;
+const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
+const DATA_FILE = path.join(DATA_DIR, "data.json");
+const BACKUP_FILE = path.join(DATA_DIR, "data.backup.json");
+const LABEL_FILE = path.join(DATA_DIR, "gphotos-labels.json"); // label AI foto Google Photos: { id: { l: label, p: produk, m: koreksi manual } }
+const REFS_FILE = path.join(DATA_DIR, "gphotos-refs.json");    // lembar contoh foto produk untuk AI: { at, names, sheets: [base64 JPEG] }
+
+if (DATA_DIR !== ROOT) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  if (!fs.existsSync(DATA_FILE)) fs.copyFileSync(path.join(ROOT, "data.json"), DATA_FILE);
+  const seedUp = path.join(IMG_DIR, "uploads");
+  if (fs.existsSync(seedUp)) for (const n of fs.readdirSync(seedUp)) if (!fs.existsSync(path.join(UPLOAD_DIR, n))) fs.copyFileSync(path.join(seedUp, n), path.join(UPLOAD_DIR, n));
+}
 
 const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, "config.json"), "utf8"));
 const PORT = +process.env.PORT || cfg.port || 8000;
@@ -251,8 +261,10 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 200, d);
       }
       if (p.startsWith("/images/")) {
-        const f = path.resolve(IMG_DIR, "." + p.slice("/images".length));
-        if (!f.startsWith(IMG_DIR + path.sep)) return notFound(res);
+        const isUp = p.startsWith("/images/uploads/");
+        const base = isUp ? UPLOAD_DIR : IMG_DIR;
+        const f = path.resolve(base, "." + p.slice(isUp ? "/images/uploads".length : "/images".length));
+        if (!f.startsWith(base + path.sep)) return notFound(res);
         return sendFile(res, f, { "Cache-Control": "public, max-age=3600" });
       }
       // PWA (pasang di HP): manifest, service worker, ikon

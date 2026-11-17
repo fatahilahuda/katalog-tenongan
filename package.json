@@ -1,0 +1,9 @@
+{
+  "name": "katalog-tenongan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Katalog Tenongan: katalog, admin, dan kasir (Node.js tanpa dependensi)",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
